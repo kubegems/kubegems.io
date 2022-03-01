@@ -1,0 +1,58 @@
+.whykubegems1 {
+  display: flex;
+  align-items: center;
+  height: calc(100vh - var(--ifm-navbar-height));
+
+  &__title {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    white-space: nowrap;
+  }
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform: translateX();
+  }
+
+  &__item {
+    display: flex;
+    padding: 1rem;
+
+    &:nth-child(1),
+    &:nth-child(2) {
+      margin-bottom: 2rem;
+    }
+  }
+
+  &__img {
+    min-width: 6rem;
+    height: 6rem;
+    margin-right: 2rem;
+  }
+
+  &__subtitle {
+    font-size: 1.5rem;
+  }
+
+  &__text {
+    height: 8rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__player {
+    display: flex;
+    align-items: center;
+
+    :global(.video-react .video-react-big-play-button) {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

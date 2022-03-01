@@ -1,0 +1,62 @@
+.kubegems {
+  color: #fff;
+
+  &__main {
+    position: relative;
+    background: linear-gradient(135deg,var(--ifm-color-primary-lightest) 0%, var(--ifm-color-primary) 76%);
+    background-size: 100% 100vh;
+    background-attachment: fixed;
+  }
+
+  &__pages {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__bg {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    
+    &-arc1,
+    &-arc2,
+    &-arc3 {
+      position: absolute;
+      border-radius: 50%;
+      box-shadow: 0 0 1rem rgba(#9cdbff, 0.2);
+      animation: bg-float 4s ease-in-out 0s infinite alternate;
+    }
+
+    &-arc1 {
+      top: 50%;
+      left: 30%;
+      width: 20rem;
+      height: 20rem;
+      background-color: rgba(#9cdbff, 0.2);
+    }
+    &-arc2 {
+      top: 30%;
+      left: 50%;
+      width: 10rem;
+      height: 10rem;
+      background-color: rgba(#9cdbff, 0.1);
+    }
+    &-arc3 {
+      top: 40%;
+      left: 20%;
+      width: 15rem;
+      height: 15rem;
+      background-color: rgba(#9cdbff, 0.2);
+    }
+  }
+}
+
+@keyframes bg-float {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-1.5rem, -3rem);
+  }
+}

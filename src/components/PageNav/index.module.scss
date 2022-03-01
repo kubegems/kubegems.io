@@ -1,0 +1,28 @@
+.pagenav {
+  list-style: none;
+  position: fixed;
+  z-index: 1001;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+
+  > li {
+    width: 8px;
+    height: 8px;
+    border-radius: 5px;
+    background: rgba(#fff, .3);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background .45s ease;
+  }
+
+  &__active {
+    background: #fff !important;
+    box-shadow: 0 0 .25rem rgba(#fff, .3);
+  }
+
+  &__document {
+    scroll-behavior: smooth;
+    overflow: hidden;
+  }
+}

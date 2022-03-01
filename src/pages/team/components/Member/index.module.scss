@@ -1,0 +1,43 @@
+.member {
+  display: flex;
+  box-shadow: 0 2px 16px rgb(0 0 0 / 8%);
+  background-color: #fff;
+  padding: 1rem;
+  transition: transform .5s ease;
+
+  &__avatar {
+    width: 8rem;
+    height: 8rem;
+    margin-right: 2rem;
+  }
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  &__name {
+    color: rgba(#000, 0.85);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  &__post {
+    color: rgba(#000, 0.65);
+    font-size: 0.875rem;
+  }
+
+  &__desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: rgba(#000, 0.5);
+  }
+
+  &:hover {
+    transform: translateY(-0.5rem);
+  }
+}

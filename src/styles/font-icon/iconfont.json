@@ -1,0 +1,44 @@
+{
+  "id": "3191864",
+  "name": "kubegems-docs",
+  "font_family": "kubegems-icon",
+  "css_prefix_text": "icon-",
+  "description": "kubegems-docs",
+  "glyphs": [
+    {
+      "icon_id": "59343",
+      "name": "arrow_right",
+      "font_class": "arrow-right",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "60978",
+      "name": "arrow_left",
+      "font_class": "arrow-left",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "999258",
+      "name": "太阳",
+      "font_class": "light",
+      "unicode": "e6ee",
+      "unicode_decimal": 59118
+    },
+    {
+      "icon_id": "15536243",
+      "name": "Scroll",
+      "font_class": "scroll",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "25555523",
+      "name": "暗黑模式",
+      "font_class": "dark",
+      "unicode": "e72f",
+      "unicode_decimal": 59183
+    }
+  ]
+}
