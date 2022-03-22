@@ -8,6 +8,6 @@ sidebar_position: 6
 
 --- 
 
-:::info 信息
-Comming in KubeGems 2.2 !!!
+:::tip  通知
+Comming in soon !!!
 :::

@@ -2,7 +2,7 @@
 title: KubeGems介绍
 hide_title: true
 sidebar_position: 1
-keywords: [kubegems,kubernetes,observablity,service mesh,istio,devops,ci/cd]
+keywords: [kubegems,kubernetes,observablity,istio,devops]
 ---
 
 ## 什么是 KubeGems
@@ -11,10 +11,18 @@ keywords: [kubegems,kubernetes,observablity,service mesh,istio,devops,ci/cd]
 
 ### 概述
 
-**KubeGems**是[达闼科技](https://cn.cloudminds.com/)根据多年云端机器人研发，运维经验以及围绕依托Kubernetes容器技术为主而构建的一个分布式系统。在达闼内部KubeGems已经支撑了全球首款面向机器人的[海睿操作系统（Harix OS）](https://cn.cloudminds.com/product-70.html)的稳定运行、作业调度和运营数据的分析。经过多年的迭代，KubeGems其架构目前已经完全具备多云、多集群的管理。通过插件化的方式，能够在前端灵活启用或关闭包括**监控**、**日志**、**微服务治理**等子系统。
+**KubeGems**是一款以围绕 Kubernetes 通过自研和集成云原生项目而构建的通用性开源 PaaS 云管理平台。经过我们内部近一年的持续迭代，当前 KubeGems 的核心功能已经初步具备多云多租户场景下的统一管理。并通过插件化的方式，在用户界面中灵活控制包括 **监控系统**、**日志系统**、**微服务治理** 等众多插件的启用和关闭。
 
-作为一个面向云原生的通用型容器云平台，KubeGems从设计之初就支持了面向多集群、多租户的架构，每个用户可以在KubeGems的租户空间内进行友好和人性化的操作，而不用担心自己的服务和数据出现错乱。为帮助企业快速实现容器化，控制IT成本，KubeGems提供提供了安装控制器（Installer Operator）来帮助用户对本产品有一个更好的部署体验。同时也为企业用户提供了功能丰富的支持，例如**多Kubernetes集群资源管理、租户访问权限控制、租户资源限制、租户网络隔离、租户网关、存储管理、监控告警、kubernetes事件、操作审计、TLS证书管理、DevOps CD、日志采集、日志分析、微服务治理、链路追逐、服务网格**等。
+作为一个面向云原生的通用型云平台，**KubeGems** 从立项开始就把支持多集群、多租户场景下的资源隔离作为其主要实现设计目标。用户可以对接入平台的 Kubernetes 集群做 *租户级* 的自定义资源规划。除此之外，我们提供了比原生 Dashboard 功能更加丰富且人性化操作的 UI 界面，让用户/企业根据自身场景规划平台元数据，而不用担心自己的业务和数据出现错乱。同时 KubeGems 也提供过了众多丰富的功能模块来为个人或企业用户带来更好的使用体验，例如 *访问控制、资源规划、网络隔离、租户网关、存储卷、可观察性、用户审计、证书管理、金丝雀发布、istio治理* 等功能。
 
 ### 功能概览
 
 <img src="/img/docs/kubegems.jpg" width="100%" align="center" />
+
+### 关于KubeGems
+
+坦率的讲 KubeGems 项目的发起时间比较晚，也已经过了各大企业建设私有云的红利期。也许看到这里，您会觉得*"KubeGems又是一个同质化的产品"*。不错！ 我们从来不否认您在使用 KubeGems 时可能会有些似曾相识的感觉，但之后又会感觉不一样。我们一直将云原生产品以`简单`、`直观`和`高效`为宗旨并纳入平台当中。 
+
+虽然时值 2022 年，我们在市场上看到仍旧有很多中小型企业在面临容器化后带来的一些管理上的困难和运维上的变化而驻足于当前。在人才方面，中小型公司在对云原生方面的投入往往也跟随着人员的流式而丧失。这类现象往往也是企业不愿再过多投入基础平台建设的底层逻辑。看到这里，相信您也知道 KubeGems 选择以开源模式运营项目的初衷。 我们主要服务于上述用户，让中小型企业从繁琐的云原生项目下解放，而更专注自身业务！KubeGems 的核心研发团队位于成都，虽然在版本 v1.20.0 发布之后，后续仍然有很多 Feature 要更新，但我们仍然希望您能参与 KubeGems 项目，并与它见证彼此的成长！
+<p align="right"> --- KubeGems 项目组</p>
+<p align="right">2022 年 3 月 22 日</p>
