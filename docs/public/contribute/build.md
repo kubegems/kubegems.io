@@ -8,28 +8,23 @@ sidebar_position: 2
 
 ---
 
-在为本站做贡献之后，要确保变更是符合预期的。可以通过做本地预览来确保没问题，我们提供了相应的工具让您方便地构建和查看。在把修改的内容放在一个合并请求（PR）中提交之前，您也应该在本地运行测试。
+本站采用 [Docusaurus 2](https://docusaurus.io/) 构建，为确保您的变更是符合预期的。我们提供了相应的工具让您方便地构建和查看。在把修改的内容放在一个合并请求（PR）中提交之前，最好也应该在本地运行测试。
 
 ### 准备环境
 
 KubeGems Docs采用Vuetify构建，在编写文档前，请先在本地准备一些基础环境：
 
-- **Nodejs   v15.14.0+** 
+- **NodeJS** &nbsp; &nbsp;&nbsp;   [Download v16.14.0+](https://nodejs.org/zh-cn/download/current/)
 
-[点我下载](https://nodejs.org/zh-cn/download/current/)
-
-- **yarn     1.22.11+**
-
-[yarn安装](https://classic.yarnpkg.com/en/docs/install/)
+- **Yarn** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    [Download 1.22.11+](https://classic.yarnpkg.com/en/docs/install/)
 
 
 ### 构建运行本站
 
-使用Git下载本站源码
+将 [kubegems.io](https://github.com/kubegems/kubegems.io) 仓库 fork 到自己名下,并将代码 clone 到本地
 
 ```bash
-mkdir kubegems_doc && cd kubegems_docs
-git clone https://src.cloudminds.com/kubegems/docs.git
+git clone git@github.com:<your_github_name>/kubegems.io.git
 ```
 
 **安装依赖**
@@ -41,14 +36,12 @@ yarn install
 **本地预览**
 
 ```bash
-yarn serve
+yarn run start
 
-
- DONE  Compiled successfully in 1352ms
-
-  App running at:
-  - Local:   http://localhost:8080/ 
-  - Network: http://10.12.96.171:8080/
+yarn run v1.22.11
+$ docusaurus start
+[INFO] Starting the development server...
+[SUCCESS] Docusaurus website is running at http://localhost:3000/.
 ```
 
-您可以打开本地浏览器，通过访问`http://localhost:8080`来浏览本站内容。
+您可以打开本地浏览器，通过访问`http://localhost:3000`来浏览本站内容。

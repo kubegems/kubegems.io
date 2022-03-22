@@ -2,6 +2,7 @@
 title: 文章头部
 hide_title: true
 sidebar_position: 3
+description: sgagsg      
 ---
 
 ## 文章头部
@@ -15,6 +16,7 @@ sidebar_position: 3
 ```yaml
 ---
 title: <title>
+sidebar_position: <number>
 description:  <description>
 keywords: [<keywords1>,<keywords2>,...]
 ---
@@ -31,5 +33,6 @@ keywords: [<keywords1>,<keywords2>,...]
 | 字段        | 说明                           |
 | ----------- | ------------------------------ |
 | title       | 该页面的标题。                 |
+| sidebar_position | 文章顺序 |
 | description | 对其该页面内容的一个简单描述。 |
 | keywords    | 页面上的关键字。               |
