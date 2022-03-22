@@ -24,12 +24,12 @@ kubegems会通过kubeconfig在目标集群上创建 上创建名字为`kubegems-
 
 1. 填写kubeconfig
 
-![添加集群1](./pics/add_cluste1.png)
+![添加集群1](/img/docs/tasks-cluster-manage-add-cluster1.png)
 
 
 2. 填写其他安装必要数据
 
-![添加集群2](./pics/add_cluste2.png)
+![添加集群2](/img/docs/tasks-cluster-manage-add-cluster2.png)
 
 
 |字段|作用|
