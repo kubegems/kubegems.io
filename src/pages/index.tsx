@@ -21,7 +21,7 @@ export default function Home(): JSX.Element {
         <div className={styles.kubegems__pages}>
           <Welcome />
           <WhyKubeGems1 />
-          <WhyKubeGems2 />
+          {/* <WhyKubeGems2 /> */}
           <Documents />
           <Resources />
         </div>
