@@ -14,9 +14,21 @@ const config = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'kubegems',
-  projectName: 'kubegems',
+  projectName: 'kubegems.io',
 
-  plugins: ['docusaurus-plugin-sass'],
+  plugins: [
+    'docusaurus-plugin-sass',
+    [
+      'content-docs',
+      /** @type {import('@docusaurus/plugin-content-docs').Options} */
+      ({
+        id: 'community',
+        path: 'community',
+        routeBasePath: 'community',
+        sidebarPath: require.resolve('./sidebarsCommunity.js'),
+      }),
+    ],
+  ],
   presets: [
     [
       '@docusaurus/preset-classic',
@@ -24,6 +36,12 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: 'v1.20.0-beta.1',
+            },
+          },
           // Please change this to your repo.
           // editUrl: 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
@@ -73,14 +91,16 @@ const config = {
             label: 'Blog',
           },
           {
-            to: 'team',
-            position: 'right',
-            label: 'Team',
+            to: '/community/support',
+            label: 'Community',
+            position: 'left',
+            activeBaseRegex: `/community/`,
           },
-          // {
-          //   type: 'docsVersionDropdown',
-          //   position: 'right',
-          // },
+          {
+            type: 'docsVersionDropdown',
+            position: 'right',
+            dropdownActiveClassDisabled: false,
+          },
           // {
           //   type: 'localeDropdown',
           //   position: 'right',
