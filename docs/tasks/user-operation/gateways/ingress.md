@@ -29,7 +29,7 @@ Kubegems 针对租户网关功能，提供了相对便捷的ingress服务路由�
 
 :::tip
 
-你可以在 **[配置中心-密钥](/docs/tasks/user-operation/workerloads/config.md)** 模块创建密钥
+你可以在 **[配置中心-密钥](/docs/tasks/user-operation/workerloads/config)** 模块创建密钥
 
 :::
 
