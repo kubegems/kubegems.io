@@ -14,7 +14,7 @@ KubeGems 采用前后端分离的架构设计，后端通过 `gem-sservice`服�
 为保持最佳的使用体验，KubeGems 推荐运行在 **Kubernetes v1.18.0 - 1.20.15** 之间的版本当中。
 :::
 
-<img src="/img/docs/architecture.jpg" width="90%" align="center" />
+![](./assets/architecture.jpg)
 
 ### 组件列表
 

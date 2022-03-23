@@ -22,15 +22,15 @@ keywords: [kubegems,KubeGems,kubernetes,appstore,helm,charts,schema]
 
 1. 点击 KubeGems 顶部横栏中的【应用商店】按钮，进入到应用商店列表
 
-<img src="/img/docs/example-appstore-list.jpg" width="100%" />
+![](./assets/example-appstore-list.jpg)
 
 1. 任意选择一个应用的卡片进入到应用的详情页，这里以 **mysql** 为例
 
-<img src="/img/docs/example-appstore-mysql.jpg" width="100%" />
+![](./assets/example-appstore-mysql.jpg)
 
 3. 点击右上角的【部署】按钮进入应用的部署界面，根据页面引导填写部署参数
 
-<img src="/img/docs/example-appstore-mysql-1.jpg" width="100%" />
+![](./assets/example-appstore-mysql-1.jpg)
 
 基本配置的主要参数为：
 
@@ -39,8 +39,8 @@ keywords: [kubegems,KubeGems,kubernetes,appstore,helm,charts,schema]
   - 项目：应用部署的目标项目
   - 环境：应用部署的目标环境
 
-<img src="/img/docs/example-appstore-mysql-table.jpg" width="100%" />
-<img src="/img/docs/example-appstore-mysql-values.jpg" width="100%" />
+![](./assets/example-appstore-mysql-table.jpg)
+![](./assets/example-appstore-mysql-values.jpg)
 
 详细配置主要分为 **表单模式** 和 **Values模式**
 
@@ -49,14 +49,14 @@ keywords: [kubegems,KubeGems,kubernetes,appstore,helm,charts,schema]
 
 4. 部署成功后会跳转到如下界面
 
-<img src="/img/docs/example-appstore-mysql-success.jpg" width="100%" />
+![](./assets/example-appstore-mysql-success.jpg)
 
 5. 点击【查看部署状态】可以进入应用的详细拓扑结构
 
-<img src="/img/docs/example-appstore-mysql-info.jpg" width="100%" />
+![](./assets/example-appstore-mysql-info.jpg)
 
 #### 查询应用
 
 1. 进入应用所在的环境空间，选择【应用中心】-【应用】-【应用商店应用】，查看应用基本状态
 
-<img src="/img/docs/example-appstore-mysql-status.jpg" width="100%" />
+![](./assets/example-appstore-mysql-status.jpg)

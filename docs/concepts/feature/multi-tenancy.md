@@ -32,7 +32,7 @@ KubeGems通过自定义 `CRD(Custom Resource Definitions)` 将租户资源抽象
 
 - TenantNetworkPolicys （网络策略）
 
-<img src="/img/docs/tenantCrds.jpg" width="80%" alt="CRDs" align="center" />
+![](./assets/tenantCrds.jpg)
 
 KubeGems的租户控制主要在`Tenant`和`Enviroments`两个CRD中实现管理，里面分别定义了租户以及环境（包含项目）等信息。
 
@@ -49,7 +49,7 @@ KubeGems的租户控制主要在`Tenant`和`Enviroments`两个CRD中实现管理
 
 下图表述了KubeGems平台中的空间与Kubernetes集群之间的逻辑关系：
 
-<img src="/img/docs/mutil-tenant-arch.jpg" width="80%" alt="KubeGems逻辑关系" align="center" />
+![](./assets/mutil-tenant-arch.jpg)
 
 ### 网络隔离
 
@@ -59,7 +59,11 @@ KubeGems定义了租户级别的CRD对象`TenantNetworkPolicys`，此对象**定
 KubeGems v1.20.0 版本暂不支持Pod级别的细粒度网络隔离策略。
 :::
 
-<img src="/img/docs/tnetpol.jpg" alt="TenantNetworkPlicys" align="center" />
+<img
+  src={require('./assets/tnetpol.jpg').default}
+  alt="Example banner"
+  align="center"
+/>
 
 ## 附录 
 
