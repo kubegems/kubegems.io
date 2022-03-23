@@ -5,9 +5,9 @@ authors: [zhanghe]
 tags: [ebpf, cilium, sidecarless]
 ---
 
-# 传统方案与sidecarless方案对比
+## 传统方案与sidecarless方案对比  
 
-![pic](./tranditional.webp)
+<img src="/img/docs/sidecarless-mesh.webp" width="100%" />
 
 ## kind 集群搭建步骤
    安装kind请参考[kind install](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-from-release-binaries),假定`GOPATH=$HOME/go`
