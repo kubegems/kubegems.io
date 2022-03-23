@@ -17,7 +17,7 @@ keywords: [kubegems,kubernetes,observablity,istio,devops]
 
 ### 功能概览
 
-![](/img/docs/kubegems.jpg)
+![](./assets/kubegems.jpg)
 
 ### 关于KubeGems
 
