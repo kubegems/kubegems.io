@@ -131,7 +131,7 @@ sudo reboot
     我目前提了一些相关issue,待进一步分析解决  
     [llvm](https://github.com/cilium/cilium/issues/18861)  
     [operator](https://github.com/cilium/cilium-service-mesh-beta/issues/25)  
-  - iptable模式的k8s限制
+  - iptable模式的k8s限制  
     cilium实现ingress方案较为特殊,没有和istio-gateway/nginx一样建立对应的真实的endpoint POD,只有一个loadbalancer service,这样
     直接在虚拟机环境上nodeport方式不工作,因为filter表中会有对应的REJECT规则, 参见k8s源代码  
     https://github.com/kubernetes/kubernetes/blob/18df5ad1fdce9d4f7c9c04a9ea4bdcc7a7400a16/pkg/proxy/iptables/proxier.go#L1177-L1253
