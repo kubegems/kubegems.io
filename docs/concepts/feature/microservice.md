@@ -9,7 +9,7 @@ sidebar_position: 5
 
 ### 服务治理
 
-<img src="/img/docs/service-mesh.jpg" width="100%" />
+![](./assets/service-mesh.jpg)
 
 #### 流量管理
 
@@ -42,7 +42,7 @@ KubeGems 的虚拟空间内生成了内部服务通信的详细遥测数据。�
 
 ### 微服务网关
 
-<img src="/img/docs/api-gateway-basic.jpg" width="90%" align="center" />
+![](./assets/api-gateway-basic.jpg)
 
 KubeGems 内置微服务网关控制器，以支持应用南北向流量的代理,网关类型分为**基础版(Basic Nginx)**和**微服务版(Mesh Istio)**。
 

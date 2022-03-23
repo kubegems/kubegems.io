@@ -22,7 +22,7 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
 
 1. 进入租户的环境空间，选择【容器服务】- 【工作负载】，创建一个名为 **nginx** 的无状态服务
 
-<img src="/img/docs/example-nginx-deploy.jpg" width="100%" />
+![](./assets/example-nginx-deploy.jpg)
 
 创建Nginx的主要参数为：
 
@@ -34,13 +34,13 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
 
 1. 您还可以在编排内切换成 `yaml` 格式，将 Kubernetes 原生的 **Deployment** 资源直接粘贴至文本框。
 
-<img src="/img/docs/example-nginx-deploy-yaml.jpg" width="100%" />
+![](./assets/example-nginx-deploy-yaml.jpg)
 
 #### 创建服务
 
 1. 进入租户的环境空间，选择【容器服务】- 【工作负载】，创建一个名为 **nginx** 的无状态服务
 
-<img src="/img/docs/example-nginx-service.jpg" width="100%" />
+![](./assets/example-nginx-service.jpg)
 
 创建Nginx服务的主要参数为：
 
@@ -58,7 +58,7 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
 
 1. 进入租户的环境空间，选择【容器服务】- 【网关】，创建一个名为 **demo-gateway** 的网关
 
-<img src="/img/docs/example-nginx-gateway.jpg" width="100%" />
+![](./assets/example-nginx-gateway.jpg)
 
 创建网关的主要参数为：
 
@@ -70,11 +70,14 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
 
 2. 网关创建成功后，可以在卡片中观察到网关的状态
 
-<img src="/img/docs/example-nginx-gateway-success.jpg" width="100%" />
+<img
+  src={require('./assets/example-nginx-gateway-success.jpg').default}
+  align="center"
+/>
 
 3. 进入 **demo-gateway** 网关，可以查看网关的地址
 
-<img src="/img/docs/example-nginx-gateway-info.jpg" width="100%" />
+![](./assets/example-nginx-gateway-info.jpg)
 
 更多设置请参考 [服务网关](/docs/tasks/user-operation/gateways/gateway)
 
@@ -82,7 +85,7 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
 
 1. 进入租户的环境空间，选择【容器服务】- 【路由】，创建一个名为 **nginx** 的路由规则
 
-<img src="/img/docs/example-nginx-ingress.jpg" width="100%" />
+![](./assets/example-nginx-ingress.jpg)
 
 创建路由的主要参数为：
 - 路由名称：输入 `ingress` 资源的名称
@@ -98,6 +101,6 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
 
 2. 进入 **nginx** 路由详情页，点击【路由规则】下的访问即可访问服务
 
-<img src="/img/docs/example-nginx-ingress.jpg" width="100%" />
+![](./assets/example-nginx-ingress.jpg)
 
-<img src="/img/docs/example-nginx-ingress-success.jpg" width="100%" />
+![](./assets/example-nginx-ingress-success.jpg)

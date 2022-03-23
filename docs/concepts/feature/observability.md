@@ -9,7 +9,7 @@ sidebar_position: 4
 --- 
 ### 监控与告警
 
-<img src="/img/docs/observability-monitoring.jpg" width="100%" />
+![](./assets/observability-monitoring.jpg)
 
 - **多维度监控：** KubeGems 内置了对`主机`、`Kubernetes集群`、`容器`和`中间件`等服务的监控模板，通过内置的查询器为用户提供精细化的监控；
 
@@ -32,7 +32,7 @@ sidebar_position: 4
 - **告警实时通知：** KubeGems 内置的实时消息组件，在发生告警时可将内容实时推送到用户界面；
 ### 日志与分析
 
-<img src="/img/docs/observability-logging.jpg" width="100%" />
+![](./assets/observability-logging.jpg)
 
 - **日志采集管理：** 支持多租户模式下的日志采集管理，利用 `CRD` 可在租户空间内进行自定义控制容器日志采集和解析规则；
 
@@ -52,7 +52,7 @@ sidebar_position: 4
 
 ### 分布式链路跟踪
 
-<img src="/img/docs/observability-tracing.jpg" width="100%" />
+![](./assets/observability-tracing.jpg)
 
 - 兼容 Jaeger
 
