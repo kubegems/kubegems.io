@@ -26,7 +26,7 @@ const Navbar = (): JSX.Element => {
   const colorModeToggle = useColorModeToggle();
 
   const { navbarRef, isNavbarVisible } = useHideableNavbar(hideOnScroll);
-  
+
   const { items, rightItems, leftItems } = useNavbarItems();
   const hasSearchNavbarItem = items.some((item) => item.type === 'search');
 
@@ -57,7 +57,7 @@ const Navbar = (): JSX.Element => {
           {rightItems.map(item => (
             <NavbarItem {...item as NavbarItemConfig} key={item.label} />
           ))}
-          
+
           <div className='navbar__items navbar__item--dock'>
             {!colorModeToggle.disabled && (
               <Toggle
@@ -68,17 +68,23 @@ const Navbar = (): JSX.Element => {
               />
             )}
             <Link
-              key='githu'
+              key='github'
               className='navbar__github'
-              to="https://github.com/kubegems/kubegems"
+              to="https://github.com/kubegems"
             />
 
             <Link
               key='console'
               className='navbar__login button button--primary'
-              to="https://console.cloud.iamidata.com">
+              to='https://demo.kubegems.io'
+            >
               登录控制台
             </Link>
+
+            <div className='navbar__login__account'>
+              <div>账号: admin</div>
+              <div>密码: demo!@#admin</div>
+            </div>
           </div>
         </div>
       </div>
