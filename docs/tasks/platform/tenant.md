@@ -18,4 +18,4 @@ kubegems没有限定租户的粒度，用户可以根据自己的实际情况来
 
 可以在租户详情页分配租户资源和管理租户成员
 
-![租户详情](./pics/tenant.png)
+![租户详情](/img/docs/tasks-platform-tenant-info.png)
