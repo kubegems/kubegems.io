@@ -82,8 +82,8 @@ const Navbar = (): JSX.Element => {
             </Link>
 
             <div className='navbar__login__account'>
-              <div>账号: admin</div>
-              <div>密码: demo!@#admin</div>
+              <div className='navbar__login__info'>账号: admin</div>
+              <div className='navbar__login__info'>密码: demo!@#admin</div>
             </div>
           </div>
         </div>
