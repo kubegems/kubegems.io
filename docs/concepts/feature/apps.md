@@ -19,7 +19,7 @@ KubeGems 内部提供了一个基于[Helm v3](https://helm.sh/)的应用仓库�
 
 - **资源可视化：** 用户可以在应用详情中对应用拓扑结构和生命周期进行完整管理
 
-<img src="/img/docs/appstore.jpg" width="100%" />
+![](./assets/appstore.jpg)
 
 ### 应用管理和编排
 
@@ -44,7 +44,7 @@ KubeGems 内部提供了一个基于[Helm v3](https://helm.sh/)的应用仓库�
 
 - **应用监控分析：** 灰度过程中全程监控应用请求的状态，用户可根据灰度监控数据进行流程控制；
 
-<img src="/img/docs/gray-deploy.jpg" width="100%" />
+![](./assets/gray-deploy.jpg)
 
 ####  蓝绿发布
 
@@ -54,4 +54,4 @@ KubeGems 内部提供了一个基于[Helm v3](https://helm.sh/)的应用仓库�
 
 - **应用监控：** 蓝绿过程中全程监控应用请求的状态，可根据应用监控数据进行流程控制；
 
-<img src="/img/docs/blue-green.jpg" width="100%" />
+![](./assets/blue-green.jpg)

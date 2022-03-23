@@ -11,41 +11,41 @@ keywords: [kubegems,kubernetes,jaeger,tracing，distributited,operator]
 
 ---
 
-KubeGems Installer 默认内置了安装了 Jaeger 控制器，用于管理集群内的 Jaeger 服务，用户可以在` kubernetes_plugins.jaeger` 中对 jaeger 进行个性化配置。
+KubeGems Installer 默认内置了 `Jaeger Operator`，用于管理集群内的 Jaeger 服务，用户可以在` core_plugins.jaeger` 中对 jaeger 进行个性化配置。
 
 样例：
 
 ```yaml
 core_plugins:
-  jaeger:
-    details:
-      catalog: 服务网格
-      description: 遵循OpenTracing标准的一套应用分布式链路追踪平台.
-      status: disable
-      version: v1.25.0
-    operator:
-      sampling:
-        # jaeger sampling type
-        type: probabilistic
-        # jaeger sampling
-        param: 0.5
-      elasticsearch:
-        enabled: true
-        persistent:
-          size: 100Gi
-        # If you need to interface to an external ElasticSearch service, disealed ElasticSearch and configured the external_urls fielda.
-        # external_urls: "http://172.16.0.1:9200"
-    enabled: true
-    namespace: observability
-    status:
-      deployment:
-      - jaeger-collector
-      - jaeger-query
+  details:
+    catalog: 服务网格
+    description: KubeGems平台服务追踪套件.
+    version: v1.25.0
+  enabled: false
+  namespace: observability
+  operator:
+    sampling:
+      type: probabilistic
+      param: 0.5
+    elasticsearch:
+      enabled: true
+      # Elasticsearch running mode, default is single node. <cluster> mode will be set 3 replicas as a cluster.
+      mode: single
+      persistent:
+        size: 100Gi
+        # storageclass: local-path
+
+      # If you need to interface to an external ElasticSearch service, disealed ElasticSearch and configured the external_urls fielda.
+      # external_urls: "http://172.16.0.1:9200"
+  status:
+    deployment:
+    - jaeger-collector
+    - jaeger-query
 ```
 
 ### 外部 ElasitcSearch
 
-Jaeger 如需对接外部 ElasticSearch 的场景下，需将`jaeger.operator.elasticsearch`设置为禁用，并将外部地址设置到 `external_urls`即可。
+Jaeger 如需对接外部 ElasticSearch 的场景下，需将 `jaeger.operator.elasticsearch.enabled` 设置为`false`，并将外部地址设置到 `external_urls`即可。
 
 样例：
 
@@ -58,8 +58,6 @@ core_plugins:
         # If you need to an external ElasticSearch service, disealed ElasticSearch and configured the external_urls fielda.
         external_urls: "http://172.16.0.1:9200"
 ```
-
-<br />
 
 ## 手动部署 Jaeger
 ---
@@ -90,14 +88,12 @@ spec:
         server-urls: http://elasticsearch:9200
 ```
 
-:::info 信息
-1.25 版本的 jaeger 默认未开启 zipkin 端口，虽然其设置了环境变量 "COLLECTOR_ZIPKIN_HTTP_PORT" 但似乎没有生效。所以需要手动设置 options: {"collector.zipkin.host-port":"9411"}，以便于 istio 使用。
+:::warning 注意
+1.25 版本的 Jaeger 默认未开启 zipkin 端口，虽然其设置了环境变量 `COLLECTOR_ZIPKIN_HTTP_PORT` 但似乎没有生效。所以需要手动设置 `options: {"collector.zipkin.host-port":"9411"}`，以便于 istio 使用。
 :::
 
-1.25 版本中升级了其 ingress 的版本为 network.k8s.io/v1 ,最低要求版本为 Kubernetes 1.19。 1.18 版本下需要修改 operator 源码。
-
 :::info 信息
-为了在 1.18 上正常使用 1.25版本，我们对 operator 做了改动，使其支持 v1beta1 ingress: https://src.cloudminds.com/gemscloud/jaeger-operator.git 。并生成了新镜像: harbor.cloudminds.com/jaegertracing/jaeger-operator:1.25.0-ingressv1beta1
+为了在 kubernetes 1.18 上正常使用 v1.25 版本，KubeGems 对 Jaeger Operator 做了改动，使其支持 v1beta1 ingress.
 :::
 
 ### 与 Istio 集成
@@ -106,7 +102,7 @@ istio 可以与 jaeger 集成，将服务网格内的 tracing 数据发送至 ja
 
 官方配置参见 ： [Configurability](https://istio.io/latest/docs/tasks/observability/distributed-tracing/configurability/#customizing-trace-sampling)
 
-主要有两个配置：
+主要有两个地方的配置：
 
 1. 采样方式
 2. tracing 服务器地址
@@ -133,7 +129,8 @@ spec:
 ```
 
 :::warning 注意
-这里使用的是 zipkin 协议，由于历史原因 istio 使用 zipkin 协议发送追踪数据，jaeger 也支持 zipkin.<br />
+由于历史原因 istio 使用 zipkin 协议发送追踪数据。<br />
 [backwards-compatibility-with-zipkin](https://github.com/jaegertracing/jaeger/tree/v1.24.0#backwards-compatibility-with-zipkin)
+
 虽然 jaeger 宣称后端适配 zipkin 协议，但在实际使用中依旧失败，继续使用 7411 端口。
 :::

@@ -16,33 +16,32 @@ KubeGems Installer 默认内置了安装了 Istio 控制器，用于管理集群
 样例：
 
 ```yaml
-kubernetes_plugins:
-  istio:
-    details:
-      catalog: 服务网格
-      description: An open platform to connect, secure, control and observe services.
-      version: v1.11.0
-    enabled: true
-    operator:
-      eastwestgateway:
-        enabled: true
-      dnsproxy:
-        enabled: true
-      istio-cni:
-        enabled: true
-      tracing:
-        enabled: true
-        param: 50
-        address: "jaeger-collector.observability.svc.cluster.local:9411"
-      kiali:
-        enabled: true
-        prometheus_urls: "http://prometheus.gemcloud-monitoring-system.svc.cluster.local:9090"
-        trace_urls: "http://jaeger-query.observability.svc.cluster.local:16685/jaeger"
-        grafana_urls: "http://grafana-service.gemcloud-monitoring-system.svc.cluster.local:3000"
-    namespace: istio-system
-    status:
-      deployment:
-      - istiod
+core_plugins:
+  details:
+    catalog: 服务网格
+    description: KubeGems平台服务治理套件.
+    version: v1.11.7
+  enabled: false
+  namespace: istio-system
+  operator:
+    eastwestgateway:
+      enabled: false
+    dnsproxy:
+      enabled: true
+    istio-cni:
+      enabled: true
+    tracing:
+      enabled: true
+      param: 50
+      address: "jaeger-collector.observability.svc.cluster.local:9411"
+    kiali:
+      enabled: true
+      prometheus_urls: "http://prometheus.gemcloud-monitoring-system.svc.cluster.local:9090"
+      trace_urls: "http://jaeger-query.observability.svc.cluster.local:16685/jaeger"
+      grafana_urls: "http://grafana-service.gemcloud-monitoring-system.svc.cluster.local:3000"
+  status:
+    deployment:
+    - istiod
 ```
 
 
@@ -51,7 +50,10 @@ kubernetes_plugins:
 ---
 
 ### 版本检查
-istio 依赖 kubernetes 功能，需要按照当前的 k8s 版本选择适合的 istio 版本。参考[Support status of Istio releases](https://istio.io/latest/docs/releases/supported-releases/#support-status-of-istio-releases)
+
+istio 依赖 kubernetes 功能，需要按照当前的 k8s 版本选择适合的 istio 版本。
+
+参考[Support status of Istio releases](https://istio.io/latest/docs/releases/supported-releases/#support-status-of-istio-releases)
 
 ### 安装 istioctl
 
@@ -59,9 +61,10 @@ istio 依赖 kubernetes 功能，需要按照当前的 k8s 版本选择适合的
 curl -L https://istio.io/downloadIstio | sh -
 ```
 
-:::info 信息
-实际使用的脚本为istio/istio/downloadIstioCandidate.sh<br />
-（推荐）通过 istioctl 安装 istio operator，后续的安装均由 operator CR 完成。
+:::tip 信息
+实际使用的脚本为istio/istio/downloadIstioCandidate.sh
+
+推荐通过 istioctl 安装 istio operator，后续的安装均由 operator CR 完成。
 :::
 
 ### 安装 istio operator
@@ -108,16 +111,13 @@ metadata:
   name: default-istiocontrolplane
 spec:
   profile: default
-  hub: example.com/istio # 第三方仓库（可选）
-  tag: 1.11.0 #指定tag(可选)，推荐不指定，与operator版本相同。
+  hub: example.com/istio    # 第三方仓库（可选）
+  tag: 1.11.0   #指定tag(可选)，推荐不指定，与operator版本相同。
 ```
 
-可配置字段参考IstioOperatorSpec
+可配置字段参考 [IstioOperatorSpec](https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/)
 
-不同 profile 的区别在于默认安装的组件不同，使用默认配置即可。参考 [Installation Configuration Profiles](https://istio.io/latest/docs/setup/additional-setup/config-profiles/)
 
-istio operator 以及 istioctl 均使用的 helm 方式安装 istio，所有配置均会发送至 helm ，详细的配置以及默认配置参考 helm value.yaml.
-不同的 profile 对应不同的 helm charts 中的默认 values，参考manifests/profiles
 
 ### 配置 istio gateway
 
@@ -169,11 +169,9 @@ istio 对 gateway 的注入方式与常规不同，无法使用 sidecar 方式�
 
 [install Istio with the Istio CNI plugin](https://istio.io/latest/docs/setup/additional-setup/cni/)
 
-istio cni 解决的问题是，由于 istio 会向 pod 注入 sidecar 和一个 initContainer,initContainer 用于改变 iptables 规则将流量导至 sidecar，这就需要要求 pod 有 NET_ADMIN 能力。
+istio cni 有效解决了 istio 往 pod 注入 sidecar 时要求 pod 有 `NET_ADMIN` 能力，用于在 initContainer 阶段来改变 iptables 规则将流量导至 sidecar 的问题。
 
-如此的 Pod 权限，可能让网络存在安全风险或者有其他的不便。
-
-istio cni 在 Pod 生命周期的创建网络阶段就进行了这个更改，在容器运行时就不再需要 NET_ADMIN 能力了
+因为此 Pod 权限，可能让网络存在安全风险或者有其他的隐患，istio cni 在 Pod 生命周期的创建网络阶段就进行了这个更改，在容器运行时就不再需要 `NET_ADMIN` 能力了
 
 ```yaml
 apiVersion: install.istio.io/v1alpha1
@@ -204,9 +202,8 @@ spec:
         injectionTemplate: "gateway" # enable gateway injection
 ```
 
-istio cni 不会与其他 cni 冲突，安装 istio cni 不会替换已存在的 cni 插件，cni 插件是链式执行的。calico cni 下启用 istio cni 后的 cni 配置类似如下：
-
-[example-configuration](https://github.com/containernetworking/cni/blob/master/SPEC.md#example-configuration)
+:::tip 提醒
+istio cni 不会与其他 cni 冲突，安装 istio cni 时它也不会替换已存在的 cni 插件，cni 插件是链式执行的。例如在 calico cni 下启用 istio cni 后的 cni 配置类似如下：
 
 ```json
 {
@@ -232,24 +229,22 @@ istio cni 不会与其他 cni 冲突，安装 istio cni 不会替换已存在的
   ]
 }
 ```
+更多关于 CNi 配置的可参考 [cni-example-configuration](https://github.com/containernetworking/cni/blob/master/SPEC.md#example-configuration)
+:::
 ## 安装 kiali
 
-kiali 是 mesh 的可视化工具，文档上推荐通过 istio addon 方式[安装](https://kiali.io/documentation/latest/quick-start/#_install_via_istio_addons)。
-
-[kiali-operator](https://github.com/kiali/kiali-operator)也有但是没有正式的易用的文档。
+kiali 是 mesh 的可视化工具，您可以通过 istio addon 方式 [手动安装](https://kiali.io/documentation/latest/quick-start/#_install_via_istio_addons) ，或者采用[ kiali-operator 安装](https://github.com/kiali/kiali-operator)。
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.11/samples/addons/kiali.yaml
 ```
 
-可以使用 istioctl 进行展示access_to_the_ui
-istioctl dashboard kiali
+kiali 在端口 20001 监听 webui 地址，可以访问其 service.
 
-使用 istioctl 是临时方案,若要持久化，kiali 在端口 20001 监听 webui 地址，可以访问其 service.
-kiali 默认部署与 istio-system 空间下，使用了名称为 kiali 的 configmap 作为配置。
-其文档上没有太多关于配置的说明，默认配置参考[config.go#L407](https://github.com/kiali/kiali/blob/f633c4382799d1784f14280808f04c4f5d460e90/config/config.go#L407)
 
-我们的部署使用了外部的 promethus 以及 jaeger 等，需要修改配置才能使 kiali 正常生效。主要涉及如下配置：
+### 配置 kiali 
+
+如使用了外部 promethus 以及 jaeger 等，需要修改配置才能使 kiali 正常生效。主要涉及如下配置：
 
 ```
 # configmap kiali
@@ -264,9 +259,9 @@ external_services:
 
 ### 与 prometheus 集成
 
-kiali 使用了 prometheus 数据来生成 kiali graph，为了能够正确的生成这些图，需要从 prometheus 获取 envoy sidecar 的指标。即需要保证 envoy 相关指标被 primetheus 采集到。
+kiali 使用了 prometheus 数据来生成 kiali graph，为了能够正确的生成这些图，需要从 prometheus 获取 `envoy sidecar` 的指标。即需要保证 envoy 相关指标被 primetheus 采集到。
 [prometheus/#configuration](https://istio.io/latest/docs/ops/integrations/prometheus/#configuration) 提供两种方式实现。
-sidecar 在注入的时候存在配置 meshConfig.enablePrometheusMerge , 其控制了 sidecar 的注入行为，如果为 true 则会将原 pod 的 prometheus 注解更换为聚合的 prometheus 注解（如下）。
+sidecar 在注入的时候存在配置 `meshConfig.enablePrometheusMerge`, 其控制了 sidecar 的注入行为，如果为 true 则会将原 pod 的 prometheus 注解更换为聚合的 prometheus 注解（如下）。
 
 ```yaml
 kind: Pod
@@ -279,9 +274,13 @@ metadata:
 
 一般来说有几种配置方式：
 
-1. sidecar 会为 pod 增加 prometheus.io/scrape: "true" 注解，这个注解约定为存在该注解的 pod 会被 prometheus 发现并采集。也就能够被 kiali 所使用。(目前使用了 prometheus operator 关闭了该功能)
+1. sidecar 会为 pod 增加 prometheus.io/scrape: "true" 注解，这个注解约定为存在该注解的 pod 会被 prometheus 发现并采集。也就能够被 kiali 所使用。
 
-2. 如果配置上没有对上述注解响应，即即使指定了注解也无法被发现。则需要主动设置采集规则[customized-scraping-configurations](https://istio.io/latest/docs/ops/integrations/prometheus/#option-2-customized-scraping-configurations)
+:::tip 提示
+如果您使用了 prometheus operator 这可以忽略该方式
+:::
+
+2. 如果配置上没有对上述注解响应，即使指定了注解也无法被发现。这是需要主动设置 prometheus 采集规则[customized-scraping-configurations](https://istio.io/latest/docs/ops/integrations/prometheus/#option-2-customized-scraping-configurations)
 
 ```yaml
 - job_name: "istiod"
@@ -309,31 +308,17 @@ metadata:
       regex: ".*-envoy-prom"
 ```
 
-对于使用 prometheus operator 的可以将上述配置添加至 additional-scrape-configs secret 中。
-参考[additional-scrape-config.md](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/additional-scrape-config.md)
+对于使用 `prometheus operator` 的可以将上述配置添加至 [secret/additional-scrape-configs]((https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/additional-scrape-config.md)) 。
 
-此外，还有一些 RecordRule 可以增加至 prometheus，参考[using-prometheus-for-production-scale-monitoring](https://istio.io/latest/docs/ops/best-practices/observability/#using-prometheus-for-production-scale-monitoring)
-
-### 与 grafana 集成
-
-[integrations/grafana/](https://istio.io/latest/docs/ops/integrations/grafana/)
-
-istio 可以在 grafana 生成许多 dashboard 以观察整个 istio 上的状态。
-
-istio 在 grafana 仓库中有 7639 11829 7636 7630 7645 等几个 dashboard 可以使用，可以通过 grafana ui 进行安装。
-对于使用 grafana operator 的方式，需要自行生成对应 CR。
+除此之外此外，为加快查询速度，您还可以配置 `RecordRule`,参考 [using-prometheus-for-production-scale-monitoring](https://istio.io/latest/docs/ops/best-practices/observability/#using-prometheus-for-production-scale-monitoring)
 
 ## 调优
 
-istio 默认安装下监听所有空间下的 service 以便于网格服务之间都能够互相通信。但在集群 workload 较多的情况下，istio sidecar 中会存在集群所有的服务配置，占用的内存甚至超过了部分业务内存。
+istio 默认安装下监听所有空间下的 service 以便于网格服务之间都能够互相通信。但在集群 workload 较多的情况下，istio sidecar 中会存在集群所有的服务配置，占用的内存甚至超过了部分业务内存。如果能够将 sidecar 中存储的配置项目缩减则可显著降低内存使用。
 
-如果能够将 sidecar 中存储的配置项目缩减则可显著降低内存使用。
+istio 提供了 `sidecars.networking.istio.io` 资源可以针对命名空间级别对服务条目进行限制。让该空间下的 envoy 仅能访问所配置的服务。
 
-istio 提供了 SideCar 资源可以针对命名空间级别对 sidecar 中的服务条目进行限制。让该空间下的 sidecar 仅能访问所配置的服务。
-
-sidecar 支持通过 ingress/egress 项目和 workloadSelector 选择需要配置的服务。
-
-更多参考官方文档： [istio/sidecar](https://istio.io/latest/docs/reference/config/networking/sidecar/)
+sidecar 支持通过 ingress/egress 项目和 workloadSelector 选择需要配置的服务。更多参考官方文档： [istio/sidecar](https://istio.io/latest/docs/reference/config/networking/sidecar/)
 
 **以 book-info 为例：**
 
@@ -349,9 +334,7 @@ spec:
         - "./*"
 ```
 
-hosts 中的条目以 namespace/dnsName 格式
-
-调整前后对比：
+调整前后 envoy 的内存占用对比：
 
 ```
 $ kubectl -n istio-demo top pod
@@ -392,16 +375,10 @@ spec:
 EOF
 ```
 
-### 2.jager-operator 报错：
-
-```
-time="2021-08-18T05:50:49Z" level=error msg="failed to apply the changes" error="no matches for kind \"Ingress\" in version \"networking.k8s.io/v1\"" execution="2021-08-18 05:50:35.415271683 +0000 UTC" instance=istio-jaeger namespace=observability
-```
-
 因当前集群为 1.18 ，ingress版本尚未支持 v1，目前为 v1beta1;可选择降低 operator 版本，选择则 1.22.0 版本。
-### 3.无法访问 jaeger.observability:9411
+### 2.无法访问 jaeger.observability:9411
 istio 使用 zipkin 协议进行 tracing 数据发送，jaeger 支持该协议，但是默认 jaeger 配置未开启该功端口。参见[collectors](https://www.jaegertracing.io/docs/1.25/deployment/#collectors)
 
 jaeger 将在相同的端口支持 zipkin 协议，参见[backwards-compatibility-with-zipkin](https://github.com/jaegertracing/jaeger#backwards-compatibility-with-zipkin)。
-### 4.istio gateway 没有追踪数据发送
+### 3.istio gateway 没有追踪数据发送
  istio gateway 默认不发送追踪数据，需要为其配置 sidecar。并建议不要将其放置在 istio-system 空间
