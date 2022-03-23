@@ -12,21 +12,21 @@ sidebar_position: 7
 
 ### 概述
 
-随着 HTTPS 不断普及，大多数网站开始由 HTTP 升级到 HTTPS。使用 HTTPS 需要向权威机构申请证书，并且需要付出一定的成本，如果需求数量多，则开支也相对增加。`cert-manager` 是 Kubernetes 上的全能证书管理工具，支持利用cert-manager基于[ACME](https://tools.ietf.org/html/rfc8555)协议与[Let's Encrypt](https://letsencrypt.org/) 签发免费证书并为证书自动续期，实现永久免费使用证书。
+随着 HTTPS 不断普及，大多数网站开始由 HTTP 升级到 HTTPS。使用 HTTPS 需要向权威机构申请证书，并且需要付出一定的成本，如果需求数量多，则开支也相对增加。**cert-manager** 是 Kubernetes 上的全能证书管理工具，支持利用cert-manager基于[ACME](https://tools.ietf.org/html/rfc8555)协议与[Let's Encrypt](https://letsencrypt.org/) 签发免费证书并为证书自动续期，实现永久免费使用证书。
 
-KubeGems平台内置`cert-manager`服务，用于集中管理管理Kubernetes内部的自签名TLS证书。
+KubeGems 平台内置 **cert-manager** 服务，用于集中管理管理Kubernetes内部的自签名TLS证书。
 
 ### Cert-manager工作机制
 
-`cert-manager` 部署到 Kubernetes 集群后会查阅其所支持的自定义资源 CRD，可通过创建 CRD 资源来指示 cert-manager 签发证书并为证书自动续期。如下图所示：
+cert-manager 部署到 Kubernetes 集群后会查阅其所支持的自定义资源 CRD，可通过创建 CRD 资源来指示 cert-manager 签发证书并为证书自动续期。如下图所示：
 
 ![](https://main.qcloudimg.com/raw/f4e57b54c56515446c86ba05e7bc8f6c.svg)
 
 - Issuer/ClusterIssuer：用于指示 cert-manager 签发证书的方式，本文主要讲解签发免费证书的 ACME 方式。
 说明：
 
-:::info 信息
-Issuer 与 ClusterIssuer 之间的区别是：Issuer 只能用来签发自身所在 namespace 下的证书，ClusterIssuer 可以签发任意 namespace 下的证书。
+:::tip 信息
+Issuer 与 ClusterIssuer 的主要区别为，Issuer 只能用来签发自身所在 namespace 下的证书，ClusterIssuer 可以签发任意 namespace 下的证书。
 :::
 
 - Certificate：用于向 cert-manager 传递域名证书的信息、签发证书所需要的配置，以及对 Issuer/ClusterIssuer 的引用。
@@ -41,11 +41,11 @@ Issuer 与 ClusterIssuer 之间的区别是：Issuer 只能用来签发自身所
 
 1、进入 【环境空间】，展开【配置中心】选择进入 【证书】 页面。
 
-![](/img/docs/certs.jpg)
+![](./assets/certs.jpg)
 
 2、点击页面右上角 【创建证书】
 
-![](/img/docs/create_certificats.jpg)
+![](./assets/certs_create_certificats.jpg)
 
 - 名称：证书资源名称
 
@@ -63,12 +63,12 @@ Issuer 与 ClusterIssuer 之间的区别是：Issuer 只能用来签发自身所
 
 3、创建完成后，在 【证书】 列表里面查到证书的有效期，也可以在 【密钥】 中查看证书详情
 
-![](/img/docs/certs-list.jpg)
+![](./assets/certs-list.jpg)
 
-![](/img/docs/certs-info.jpg)
+![](./assets/certs-info.jpg)
 
-:::info 信息
-[小技巧]<br />当密钥类型是TLS/SSL时，鼠标移动到 【证书信息】 将浮动展现该证书的有效信息！
+:::info 小技巧
+当密钥类型是TLS/SSL时，鼠标移动到 【证书信息】 将浮动展现该证书的有效信息！
 :::
 
 ### Let's encrypt免费证书
@@ -83,7 +83,7 @@ HTTP-01 的校验原理是给域名指向的 HTTP 服务增加一个临时 locat
 **DNS-01 校验原理**
 
 DNS-01 的校验原理是利用 DNS 提供商的 API Key 拿到用户 DNS 控制权限。此方法不需要使用 Ingress，并且支持泛域名证书。
-在 Let’s Encrypt 为 ACME 客户端提供令牌后，ACME 客户端 **\(cert-manager\)** 将创建从该令牌和帐户密钥派生的 TXT 记录，并将该记录放在 **_acme-challenge.<YOUR_DOMAIN>**。Let’s Encrypt 将向 DNS 系统查询该记录，找到匹配项即可颁发证书。
+在 Let’s Encrypt 为 ACME 客户端提供令牌后，ACME 客户端 **\(cert-manager\)** 将创建从该令牌和帐户密钥派生的 TXT 记录，并将该记录放在 `_acme-challenge.<YOUR_DOMAIN>`。Let’s Encrypt 将向 DNS 系统查询该记录，找到匹配项即可颁发证书。
 
 **操作步骤**
 
@@ -155,7 +155,7 @@ metadata:
   namespace: gemcloud-system
 spec:
   rules:
-  - host: console.cloud.iamidata.com
+  - host: console.kubegems.io
     http:
       paths:
       - backend:
@@ -163,7 +163,7 @@ spec:
           servicePort: 8000
         path: /
         pathType: ImplementationSpecific
-  - host: docs.cloud.iamidata.com
+  - host: docs.kubegems.io
     http:
       paths:
       - backend:
@@ -173,7 +173,7 @@ spec:
         pathType: ImplementationSpecific
   tls:
   - hosts: 
-    - console.cloud.iamidata.com
-    - docs.cloud.iamidata.com
+    - console.kubegems.io
+    - docs.kubegems.io
     secretName: gems-letencrypt-tls
 ```
