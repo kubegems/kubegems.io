@@ -83,16 +83,16 @@ const config = {
             type: 'doc',
             docId: 'concepts/what-is-kubegems',
             position: 'left',
-            label: 'Docs',
+            label: '文档',
           },
           {
             to: 'blog',
             position: 'left',
-            label: 'Blog',
+            label: '博客',
           },
           {
             to: '/community/support',
-            label: 'Community',
+            label: '社群',
             position: 'left',
             activeBaseRegex: `/community/`,
           },
@@ -101,10 +101,10 @@ const config = {
             position: 'right',
             dropdownActiveClassDisabled: false,
           },
-          // {
-          //   type: 'localeDropdown',
-          //   position: 'right',
-          // },
+          {
+            type: 'localeDropdown',
+            position: 'right',
+          },
         ],
       },
       footer: {
