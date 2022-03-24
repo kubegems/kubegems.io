@@ -1,6 +1,6 @@
 ---
 title: 应用编排
-sidebar_position: 1
+sidebar_position: 0
 description: 本文用于指导用户使用 应用编排 功能
 keywords: [application,argocd,kustomize,manifests]
 ---
@@ -51,6 +51,9 @@ _资源_ 为 Kubernetes 中的对象(resource)，通常是一个 `yaml` 格式�
 **资源编排** 页面展示了当前的资源文件,对于新创建的应用编排，默认添加了一个最小化的对应应用类型的资源文件。您从这里开始完善您的应用。
 
 **添加资源** 用于添加新的资源定义，我们对常用的资源类型提供了可视化的编辑界面，若需要编排其他类型，可以将添加资源页面上方的 **Yaml** 开关打开来手动编辑。
+
+<img src={require('./assets/edit1.png').default} width="50%" align="left" />
+<img src={require('./assets/edit2.png').default} width="50%" align="left" />
 
 支持的常用资源类型：
 
