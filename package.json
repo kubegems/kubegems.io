@@ -15,8 +15,11 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-beta.15",
-    "@docusaurus/preset-classic": "2.0.0-beta.15",
+    "@docusaurus/core": "^2.0.0-beta.17",
+    "@docusaurus/mdx-loader": "^2.0.0-beta.17",
+    "@docusaurus/preset-classic": "^2.0.0-beta.17",
+    "@docusaurus/theme-classic": "^2.0.0-beta.17",
+    "@docusaurus/theme-common": "^2.0.0-beta.17",
     "@mdx-js/react": "^1.6.21",
     "clsx": "^1.1.1",
     "docusaurus-plugin-image-zoom": "^0.0.2",
@@ -33,7 +36,7 @@
     "video-react": "^0.15.0"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "2.0.0-beta.15",
+    "@docusaurus/module-type-aliases": "^2.0.0-beta.17",
     "@tsconfig/docusaurus": "^1.0.4",
     "typescript": "^4.5.2"
   },
