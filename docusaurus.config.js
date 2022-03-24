@@ -17,6 +17,7 @@ const config = {
   projectName: 'kubegems.io',
 
   plugins: [
+    require.resolve('docusaurus-plugin-image-zoom'),
     'docusaurus-plugin-sass',
     [
       'content-docs',
@@ -72,6 +73,16 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      zoom: {
+        selector: 'img',
+        config: {
+          // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
+          background: {
+            light: 'rgb(255, 255, 255)',
+            dark: 'rgb(50, 50, 50)'
+          }
+        }
+      },
       navbar: {
         hideOnScroll: true,
         logo: {
