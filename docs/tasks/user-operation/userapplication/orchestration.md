@@ -51,6 +51,13 @@ _资源_ 为 Kubernetes 中的对象(resource)，通常是一个 `yaml` 格式�
 **资源编排** 页面展示了当前的资源文件,对于新创建的应用编排，默认添加了一个最小化的对应应用类型的资源文件。您从这里开始完善您的应用。
 
 **添加资源** 用于添加新的资源定义，我们对常用的资源类型提供了可视化的编辑界面，若需要编排其他类型，可以将添加资源页面上方的 **Yaml** 开关打开来手动编辑。
+## 应用编排
+
+kubegems 应用部署是机遇[argocd](https://argo-cd.readthedocs.io/en/stable/), Argo CD 是用于 Kubernetes 的声明式 GitOps 持续交付工具。
+
+kubegems 内置了一个git server用于存储应用的编排数据;
+
+kubernetes 的各种资源编排信息较多，对于研发人员而言，有一定的学习成本，为了降低这个学习成本，kubegems针对常用的几种资源对象提供了ui界面，可以让用户按照流程提示，一步一步生成资源yaml；对于运维人员，可能有复杂的编排，也可以直接切换成yaml模式，直接编辑; 
 
 <img src={require('./assets/edit1.png').default} width="50%" align="left" />
 <img src={require('./assets/edit2.png').default} width="50%" align="left" />
@@ -86,3 +93,10 @@ _资源_ 为 Kubernetes 中的对象(resource)，通常是一个 `yaml` 格式�
 
 **NOTE**: 由于镜像的安全报告需要从镜像仓库获取(目前仅支持harbor仓库)，在使用该功能前，您需要在 **应用中心** - **[镜像仓库](image-registry)** 下添加仓库配置，
 系统才能够正确的从镜像仓库获取镜像的安全报告。
+---
+
+
+:::tip
+1. 项目下的应用模版关联到一个环境下,相当于是将项目下的模版数据拷贝了一份，所以再修改原始模版数据，是不会对环境下的数据生效的；
+2. 由于是基于git的文件管理，所以用户也可以查看到编排文件的历史变更情况;
+:::

@@ -7,3 +7,7 @@ sidebar_position: 2
 ---
 
 ## 快照
+
+TODO:
+
+通常对于重要数据，都会选择定期对数据进行备份；`CSI`的`Capacity`提供了是否支持卷快照; kubegems 采用了外部快照的方案;
