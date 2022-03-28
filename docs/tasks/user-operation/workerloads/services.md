@@ -7,3 +7,11 @@ sidebar_position: 4
 ---
 
 ## 服务
+
+`服务(Service)`是一个非常重要的kubernetes原生对象，它提供了访问一组Pod的定义，kubegems自然也提供了这针对服务的管理面板;
+
+用户可以在此**创建** **修改** **删除** 服务；
+
+![service](./assets/services1.png)
+
+![service](./assets/services2.png)

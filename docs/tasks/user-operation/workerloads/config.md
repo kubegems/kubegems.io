@@ -8,3 +8,4 @@ sidebar_position: 6
 
 ## 配置
 
+`ConfigMap`是kubernetes提供的管理配置的对象，kubegems提供了针对它的管理面板；用户可以在这儿**查看** **创建** **修改** **删除** 该对象；
