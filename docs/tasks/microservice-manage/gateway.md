@@ -42,8 +42,8 @@ metadata:
   name: bookinfo-gateway
 spec:
   selector:
-    gems.cloudminds.com/virtualSpace: test
-    gems.cloudminds.com/istioGateway: bookinfo-gateway
+    networking.kubegems.io/virtualspace: test
+    networking.kubegems.io/istioGateway: bookinfo-gateway
   servers:
     - port:
         number: 80
@@ -79,3 +79,11 @@ spec:
             port:
               number: 9080
 ```            
+
+5. 在网关详情页，你可以看到：
+   
+- 网关实例关联的`gateway`、`virtualservice`资源
+- 网关实例 pod
+- 网关监控信息: qps、响应时间
+
+![](assets/gateway-detail.png)
