@@ -15,6 +15,7 @@ const config = {
   favicon: 'img/favicon.ico',
   organizationName: 'kubegems',
   projectName: 'kubegems.io',
+  trailingSlash: false,
 
   plugins: [
     require.resolve('docusaurus-plugin-image-zoom'),
