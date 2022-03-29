@@ -6,7 +6,7 @@ import styles from './index.module.scss';
 const PAGE_IDS = [
   'welcome',
   'whykubegems1',
-  'whykubegems2',
+  // 'whykubegems2',
   'documents',
   'resources',
   'footer'

@@ -37,7 +37,6 @@ kubegems-installer-manager-8649bd7fcb-j286g    2/2     Running   0          15m 
 kubectl apply -f https://github.com/kubegems/installer-operator/releases/download/v1.20.0-beta.0/centrol.installer.yaml
 ```
 
-[更多Installer CRD相关信息](/docs/installation/more-install-guides/install-operator-config)
 
 2.观察Installer部署状态
 

@@ -20,10 +20,10 @@ export default function Home(): JSX.Element {
       <main className={styles.kubegems__main}>
         <div className={styles.kubegems__pages}>
           <Welcome />
-          <WhyKubeGems1 />
-          <WhyKubeGems2 />
-          <Documents />
-          <Resources />
+          {/* <WhyKubeGems1 /> */}
+          {/* <WhyKubeGems2 /> */}
+          {/* <Documents /> */}
+          {/* <Resources /> */}
         </div>
 
         <div className={styles.kubegems__bg}>
@@ -32,7 +32,7 @@ export default function Home(): JSX.Element {
           <div className={styles['kubegems__bg-arc3']}></div>
         </div>
       </main>
-      <PageNav />
+      {/* <PageNav /> */}
     </Layout>
   );
 }

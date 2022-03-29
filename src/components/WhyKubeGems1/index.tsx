@@ -12,25 +12,25 @@ const WhyKubeGems1 = (): JSX.Element => {
       key: 'install',
       img: '/img/pages/install.png',
       title: '便捷安装',
-      content: '便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装便捷安装',
+      content: '提供installer，一键安装',
     },
     {
       key: 'cloud',
       img: '/img/pages/cloud.png',
       title: '多云管理',
-      content: '多云管理多云管理多云管理多云管理多云管理多云管理多云管理多云管理多云管理多云管理多云管理多云管理多云管理多云管理多云管理',
+      content: '支持自建k8s和公有云，多云混部',
     },
     {
       key: 'governance',
       img: '/img/pages/governance.png',
       title: '服务治理',
-      content: '服务治理服务治理服务治理服务治理服务治理服务治理服务治理服务治理服务治理服务治理服务治理服务治理服务治理服务治理服务治理',
+      content: '基于istio的服务治理',
     },
     {
       key: 'ai',
       img: '/img/pages/ai.png',
       title: '服务AI',
-      content: '服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI服务AI',
+      content: '模型管理',
     },
   ]
 

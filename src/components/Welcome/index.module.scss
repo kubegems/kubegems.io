@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'pmzdbtt';  
+  src: url('/static/font/PangMenZhengDaoBiaoTiTi-1.ttf');
+}
+
 .welcome {
   width: 100%;
   height: calc(100vh - var(--ifm-navbar-height));
@@ -16,6 +21,8 @@
     font-size: 5rem;
     font-weight: 400;
     margin-bottom: 1rem;
+    font-family: pmzdbtt;
+    font-weight: normal;
   }
 
   &__subtitle {

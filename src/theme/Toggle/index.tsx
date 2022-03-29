@@ -1,5 +1,5 @@
 import React, { useState, useRef, memo } from 'react';
-import { useThemeConfig, ColorModeConfig } from '@docusaurus/theme-common';
+import { useThemeConfig  } from '@docusaurus/theme-common';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import clsx from 'clsx';
 import type { Props } from '@theme/Toggle'; 
@@ -13,17 +13,11 @@ const ToggleComponent = memo(
     disabled,
     onChange,
   }: Props & {
-    switchConfig: ColorModeConfig['switchConfig'];
     disabled: boolean;
   }): JSX.Element => {
-    const { darkIcon, darkIconStyle, lightIcon, lightIconStyle } = switchConfig;
     const styles = {
-      unchecked: lightIconStyle,
-      checked: darkIconStyle,
     };
     const icons = {
-      unchecked: lightIcon,
-      checked: darkIcon,
     };
     const [checked, setChecked] = useState(defaultChecked);
     const [focused, setFocused] = useState(false);
@@ -41,12 +35,10 @@ const ToggleComponent = memo(
       >
         <div
           className='toggle__icon toggle__icon--unchecked kubegems-icon icon-light'
-          style={styles.unchecked}
         >
         </div>
         <div
           className='toggle__icon toggle__icon--checked kubegems-icon icon-dark'
-          style={styles.checked}
         >
         </div>
 
@@ -74,12 +66,10 @@ const ToggleComponent = memo(
 ToggleComponent.displayName = 'ToggleComponent';
 
 export default function Toggle(props: Props): JSX.Element {
-  const { colorMode: { switchConfig }} = useThemeConfig();
   const isBrowser = useIsBrowser();
 
   return (
     <ToggleComponent
-      switchConfig={switchConfig}
       disabled={!isBrowser}
       {...props}
     />
