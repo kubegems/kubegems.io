@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[2713],{147:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","slug":"/blog/tags/sidecarless","name":"sidecarless","count":1,"permalink":"/blog/tags/sidecarless"}')}}]);
