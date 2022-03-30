@@ -308,7 +308,7 @@ metadata:
       regex: ".*-envoy-prom"
 ```
 
-对于使用 `prometheus operator` 的可以将上述配置添加至 [secret/additional-scrape-configs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/additional-scrape-config.md) 。
+对于使用 `prometheus operator` 的可以将上述配置添加至 [secret/additional-scrape-configs]((https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/additional-scrape-config.md)) 。
 
 除此之外此外，为加快查询速度，您还可以配置 `RecordRule`,参考 [using-prometheus-for-production-scale-monitoring](https://istio.io/latest/docs/ops/best-practices/observability/#using-prometheus-for-production-scale-monitoring)
 

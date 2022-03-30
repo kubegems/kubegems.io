@@ -1,8 +1,11 @@
 ---
-title: Kubeadm（集群模式）
+title: 使用 Kubeadm 安装集群
 hide_title: true
 sidebar_position: 1
 ---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 ## 使用Kubeadm安装
 
@@ -30,24 +33,173 @@ sidebar_position: 1
 **操作系统推荐使用**Ubuntu Server 1804**以上版本**
 :::
 
-**下载kuberentes安装包**
+### 允许 iptables 检查桥接流量
+
+确保 `br_netfilter` 模块被加载。这一操作可以通过运行 `lsmod | grep br_netfilter` 来完成。若要显式加载该模块，可执行 `sudo modprobe br_netfilter`。
+
+为了让 Linux 节点上的 iptables 能够正确地查看桥接流量，需要确保在您的 `sysctl` 配置中将 `net.bridge.bridge-nf-call-iptables` 设置为 1。例如：
 
 ```bash
-wget https://dumps.cloudminds.com/DOCKERFILE/kubelet/kubernetes.1.18.16-with-containerd.tar.gz
-tar xf kubernetes.1.18.16-with-containerd.tar.gz 
-rm -rf kubernetes.1.18.16-with-containerd.tar.gz
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+br_netfilter
+EOF
+
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sudo sysctl --system
 ```
 
-**安装kubernetes组件和containerd**
+### 安装运行时
+
+为了在 Pod 中运行容器，Kubernetes 使用 容器运行时（Container Runtime）。
+
+<Tabs >
+  <TabItem value="Linux" label="Linux" default>
+默认情况下，Kubernetes 使用容器运行时接口 Container Runtime Interface 来与你所选择的容器运行时交互。
+
+如果不指定运行时，则 kubeadm 会自动尝试检测到系统上已经安装的运行时， 方法是扫描一组众所周知的 Unix 域套接字。 下面的表格列举了一些容器运行时及其对应的套接字路径：
+
+| 运行时 |	域套接字 |
+| --- | --- |
+|Docker	|/var/run/dockershim.sock |
+|containerd |	/run/containerd/containerd.sock |
+|CRI-O	| /var/run/crio/crio.sock |
+
+如果同时检测到 Docker 和 containerd，则优先选择 Docker。 如果检测到其他两个或多个运行时，kubeadm 输出错误信息并退出。
+
+:::tip 提示
+kubelet 通过内置的 dockershim CRI 实现与 Docker 集成。
+:::
+参阅容器运行时 以了解更多信息。
+  </TabItem>
+  <TabItem value="Other" label="Other">
+默认情况下， kubeadm 使用 Docker 作为容器运行时。 kubelet 通过内置的 dockershim CRI 实现与 Docker 集成。 
+  </TabItem>
+</Tabs> 
+
+### 安装 kubeadm
+
+您需要在每台机器上安装以下的软件包：
+
+- kubeadm：用来初始化集群的指令。
+
+- kubelet：在集群中的每个节点上用来启动 Pod 和容器等。
+
+- kubectl：用来与集群通信的命令行工具。
+
+kubeadm 不能 帮您安装或者管理 kubelet 或 kubectl，所以您需要 确保它们与通过 kubeadm 安装的控制平面的版本相匹配。 如果不这样做，则存在发生版本偏差的风险，可能会导致一些预料之外的错误和问题。
+
+<Tabs>
+  <TabItem value="debian" label=" 基于 Debian 的发行版" default>
+1.更新 apt 包索引并安装使用 Kubernetes apt 仓库所需要的包
 
 ```bash
-cd root
-apt install -y ./libseccomp2_2.4.3-1ubuntu3.18.04.3_amd64.deb
-dpkg -i containerd.io_1.4.4-1_amd64.deb
-apt install -y ./*.deb
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl
+```
+2.下载 Google Cloud 公开签名秘钥：
+
+```bash
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+```
+3.添加 Kubernetes apt 仓库：
+
+```bash
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+4.更新 apt 包索引，安装 kubelet、kubeadm 和 kubectl，并锁定其版本：
+
+```bash
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
-**配置containerd和cri工**具
+
+  </TabItem>
+  <TabItem value=" redhat" label=" 基于 RedHat 的发行版">
+
+```bash
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+exclude=kubelet kubeadm kubectl
+EOF
+
+# 将 SELinux 设置为 permissive 模式（相当于将其禁用）
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+
+sudo systemctl enable --now kubelet
+```
+
+:::warning 注意
+- 通过运行命令 setenforce 0 和 sed ... 将 SELinux 设置为 permissive 模式 可以有效地将其禁用。 这是允许容器访问主机文件系统所必需的，而这些操作时为了例如 Pod 网络工作正常。您必须这么做，直到 kubelet 做出对 SELinux 的支持进行升级为止。
+
+- 如果你知道如何配置 SELinux 则可以将其保持启用状态，但可能需要设定 kubeadm 不支持的部分配置
+:::
+
+  </TabItem>
+  <TabItem value="source" label="二进制">
+安装 CNI 插件（大多数 Pod 网络都需要）：
+
+```bash
+CNI_VERSION="v0.8.2"
+ARCH="amd64"
+sudo mkdir -p /opt/cni/bin
+curl -L "https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz" | sudo tar -C /opt/cni/bin -xz
+```
+定义要下载命令文件的目录。
+:::tip 说明
+DOWNLOAD_DIR 变量必须被设置为一个可写入的目录。 如果你在运行 Flatcar Container Linux，可将 DOWNLOAD_DIR 设置为 /opt/bin。
+:::
+
+```bash
+DOWNLOAD_DIR=/usr/local/bin
+sudo mkdir -p $DOWNLOAD_DIR
+```
+安装 crictl（kubeadm/kubelet 容器运行时接口（CRI）所需
+
+```bash
+CRICTL_VERSION="v1.22.0"
+ARCH="amd64"
+curl -L "https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz" | sudo tar -C $DOWNLOAD_DIR -xz
+```
+
+安装 kubeadm、kubelet、kubectl 并添加 kubelet 系统服务：
+
+```bash
+RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
+ARCH="amd64"
+cd $DOWNLOAD_DIR
+sudo curl -L --remote-name-all https://storage.googleapis.com/kubernetes-release/release/${RELEASE}/bin/linux/${ARCH}/{kubeadm,kubelet,kubectl}
+sudo chmod +x {kubeadm,kubelet,kubectl}
+
+RELEASE_VERSION="v0.4.0"
+curl -sSL "https://raw.githubusercontent.com/kubernetes/release/${RELEASE_VERSION}/cmd/kubepkg/templates/latest/deb/kubelet/lib/systemd/system/kubelet.service" | sed "s:/usr/bin:${DOWNLOAD_DIR}:g" | sudo tee /etc/systemd/system/kubelet.service
+sudo mkdir -p /etc/systemd/system/kubelet.service.d
+curl -sSL "https://raw.githubusercontent.com/kubernetes/release/${RELEASE_VERSION}/cmd/kubepkg/templates/latest/deb/kubeadm/10-kubeadm.conf" | sed "s:/usr/bin:${DOWNLOAD_DIR}:g" | sudo tee /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+```
+
+激活并启动 kubelet：
+
+```bash
+systemctl enable --now kubelet
+```
+
+  </TabItem>
+</Tabs>
+
+### 配置 container d和 cri 工具
 
 ```bash
 cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
@@ -80,53 +232,34 @@ sed -i 's#root = "/var/lib/containerd"#root = "/data/containerd"#' /etc/containe
 systemctl restart containerd
 ```   
 
-**配置kubelet**
+
+### 部署 etcd 高可用集群
+
+1. 将 kubelet 配置为 etcd 的服务管理器
+
+由于 etcd 是首先创建的，因此你必须通过创建具有更高优先级的新文件来覆盖 kubeadm 提供的 kubelet 单元文件。
 
 ```bash
-cat << \EOF | sudo tee /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-# Note: This dropin only works with kubeadm and kubelet v1.11+
+cat << EOF > /etc/systemd/system/kubelet.service.d/20-etcd-service-manager.conf
 [Service]
-Environment="KUBELET_KUBECONFIG_ARGS=--pod-manifest-path=/etc/kubernetes/manifests --container-runtime=remote --container-runtime-endpoint=/run/containerd/containerd.sock"
-#Environment="KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml"
-# This is a file that "kubeadm init" and "kubeadm join" generates at runtime, populating the KUBELET_KUBEADM_ARGS variable dynamically
-EnvironmentFile=-/var/lib/kubelet/kubeadm-flags.env
-# This is a file that the user can use for overrides of the kubelet args as a last resort. Preferably, the user should use
-# the .NodeRegistration.KubeletExtraArgs object in the configuration files instead. KUBELET_EXTRA_ARGS should be sourced from this file.
-EnvironmentFile=-/etc/default/kubelet
 ExecStart=
-ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS
+# 将下面的 "systemd" 替换为你的容器运行时所使用的 cgroup 驱动。
+# kubelet 的默认值为 "cgroupfs"。
+ExecStart=/usr/bin/kubelet --address=127.0.0.1 --pod-manifest-path=/etc/kubernetes/manifests --cgroup-driver=systemd
+Restart=always
 EOF
 
 systemctl daemon-reload
 systemctl restart kubelet
+```
+
+检查 kubelet 的状态以确保其处于运行状态：
+
+```bash
 systemctl status kubelet
 ```
 
-**导入kuberentes master和etcd镜像**
-
-```bash
-mkdir image
-cd image
-wget https://dumps.cloudminds.com/DOCKERFILE/kubelet/kubernetes-1.18.16-images.tar.gz
-tar xf kubernetes-1.18.16-images.tar.gz
-rm -rf kubernetes-1.18.16-images.tar.gz
-ctr ns create k8s.io
-ctr -n k8s.io images import api.18.tar.gz
-ctr -n k8s.io images import etcd.tar.gz
-ctr -n k8s.io images import manager.18.tar.gz
-ctr -n k8s.io images import proxy.18.tar.gz
-ctr -n k8s.io images import scheduler.18.tar.gz
-ctr -n k8s.io images import coredns.18.tar.gz
-
-wget https://dumps.cloudminds.com/DOCKERFILE/kubelet/pause.tar.gz
-ctr -n k8s.io images import pause.tar.gz
-```
-
----
-
-### 部署etcd高可用集群
-
-**master1节点上创建etcd配置文件**
+2. 为 kubeadm 创建配置文件。
 
 ```bash
 # HOST地址根据自己的实际服务器地址进行更换
@@ -160,7 +293,7 @@ EOF
 done
 ```
 
-**生成etcd集群的证书**
+3. 生成etcd集群的证书
 
 ```bash
 kubeadm init phase certs etcd-ca
@@ -184,7 +317,7 @@ find /tmp/${HOST2} -name ca.key -type f -delete
 find /tmp/${HOST1} -name ca.key -type f -delete
 ```
 
-**拷贝etcd集群证书**
+4. 拷贝etcd集群证书
 
 将目录/tmp/\${HOST1}和/tmp/\${HOST2}下的文件分别拷贝到对应master节点的/etc/kubernetes目录下
 保证文件结构如下
@@ -209,7 +342,7 @@ find /tmp/${HOST1} -name ca.key -type f -delete
           └── server.key
 ```
 
-**创建etcd实例**
+5. 创建etcd实例
 
 - master1节点
 
@@ -223,23 +356,30 @@ kubeadm init phase etcd local --config=/tmp/${HOST0}/kubeadmcfg.yaml
 kubeadm init phase etcd local --config=/etc/kubernetes/kubeadmcfg.yaml
 ```
 
+6. 查看 etcd 集群状态
 
-**查看etcd集群状态**
+<Tabs>
+  <TabItem value="docker" label="docker" default>
 
-```bash
-pod_id=`crictl ps |grep etcd | awk '{print $1}'`
-crictl exec -it ${pod_id} etcdctl \
---cert /etc/kubernetes/pki/etcd/peer.crt \
---key /etc/kubernetes/pki/etcd/peer.key \
---cacert /etc/kubernetes/pki/etcd/ca.crt \
---endpoints https://10.36.0.68:2379 endpoint health --cluster
-```
+    docker run --rm -it <etcd_pod_id> etcdctl \
+    --cert /etc/kubernetes/pki/etcd/peer.crt \
+    --key /etc/kubernetes/pki/etcd/peer.key \
+    --cacert /etc/kubernetes/pki/etcd/ca.crt \
+    --endpoints https://10.36.0.68:2379 endpoint health --cluster
+  </TabItem>
+  <TabItem value="containerd" label="containerd">
 
----
+    crictl exec -it <etcd_pod_id> etcdctl \
+    --cert /etc/kubernetes/pki/etcd/peer.crt \
+    --key /etc/kubernetes/pki/etcd/peer.key \
+    --cacert /etc/kubernetes/pki/etcd/ca.crt \
+    --endpoints https://10.36.0.68:2379 endpoint health --cluster
+  </TabItem>
+</Tabs>
 
-### 部署Master集群
+### 部署 Master 集群
 
-**修改kubelet配置文件**
+1. 修改kubelet配置文件
 
 ```bash
 cat << \EOF | sudo tee /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
@@ -261,49 +401,36 @@ systemctl restart kubelet
 systemctl status kubelet
 ```
 
-**生成kubeadm配置**
+2. 生成kubeadm配置
 
 ```bash
 cat << EOF | sudo tee /root/kubeadm.conf
 apiVersion: kubeadm.k8s.io/v1beta2
-bootstrapTokens:
-- groups:
-  - system:bootstrappers:kubeadm:default-node-token
-  token: abcdef.0123456789abcdef
-  ttl: 24h0m0s
-  usages:
-  - signing
-  - authentication
 kind: InitConfiguration
 localAPIEndpoint:
-### 必配，选着Kubnernetes api的暴露地址，一般为管理网段，地址根据实际情况修改
   advertiseAddress: 10.36.0.68
   bindPort: 6443
 nodeRegistration:
   criSocket: /run/containerd/containerd.sock
-### 必配，选着Kubnernetes master的hostname
-  name: l-010036000068-k8s.cloudminds.com
-  taints:
-  - effect: NoSchedule
-    key: node-role.kubernetes.io/master
 
 ---
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
-kubernetesVersion: v1.18.16
-imageRepository: k8s.gcr.io
-clusterName: kubernetes
+kubernetesVersion: v1.20.15
+imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers/
+FeatureGates:
+  EphemeralContainers: true
+  ServiceAppProtocol: true
+clusterName: cloud-m8
 certificatesDir: /etc/kubernetes/pki
 dns:
   type: CoreDNS
 etcd:
   external:
     endpoints:
-### 必配, 外部etcd集群的连接地址,地址根据实际情况修改
     - https://10.36.0.68:2379
     - https://10.36.0.69:2379
     - https://10.36.0.70:2379
-### 必配，保持默认路径
     caFile: "/etc/kubernetes/pki/etcd/ca.crt"
     certFile: "/etc/kubernetes/pki/apiserver-etcd-client.crt"
     keyFile: "/etc/kubernetes/pki/apiserver-etcd-client.key"
@@ -311,25 +438,9 @@ networking:
   dnsDomain: cluster.local
   serviceSubnet: 10.96.0.0/12
 ### 必配，calico后期如果要用bgp协议，需要提前规划
-  podSubnet: "172.16.0.0/16"
+  podSubnet: "10.59.0.0/16"
 
 apiServer:
-  # 打开apiserver的审计日志
-  extraArgs:
-    audit-log-path: /var/log/kube-apiserver.audit.log
-    audit-policy-file: /etc/kubernetes/audit.yaml
-    audit-log-maxage: "1"
-    audit-log-maxsize: "100"
-    audit-log-maxbackup: "1"
-  extraVolumes:
-    - name: audit
-      hostPath: /etc/kubernetes/audit.yaml
-      mountPath: /etc/kubernetes/audit.yaml
-      readOnly: true
-      pathType: File
-    - name: audit-log
-      hostPath: /var/log
-      mountPath: /var/log
   timeoutForControlPlane: 4m0s
   certSANs:
 ### 必配，api服务的证书签名ip和域名,地址根据实际情况修改
@@ -337,9 +448,8 @@ apiServer:
   - 10.36.0.68
   - 10.36.0.69
   - 10.36.0.70
-  - 10.36.13.145
-  - 10.36.13.146
-  - 10.36.13.147
+  - 10.96.0.1
+  - "*.kubegems.io"
 controllerManager: {}
 scheduler: {}
 
@@ -354,12 +464,11 @@ mode: "ipvs"
 nodePortAddresses: null
 
 # nodeport的端口范围
-portRange:
 configSyncPeriod: 0s
 
 ### 必配
 # 容器的CIDR网段，用来做snat地址伪装
-clusterCIDR: 10.156.0.0/16
+clusterCIDR: 10.59.0.0/16
 
 # 关闭设置conntrack跟踪表
 conntrack:
@@ -383,41 +492,15 @@ ipvs:
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
 maxPods: 250
-# 此配置保证了 kubelet 能在 swap 开启的情况下启动
 failSwapOn: false
-
-# 初始镜像GC的磁盘占比触发
-imageGCLowThresholdPercent: 75
-
-# 超过85¥后一直运行镜像GC
-imageGCHighThresholdPercent: 85
-
-# kubelet预留资源，根据配置设置
-#kubeReserved:
-#  "cpu": "500m"
-#  "memory": "512Mi"
-#  "ephemeral-storage": "1Gi"
-
-# kubelet证书轮转
 rotateCertificates: true
 featureGates:
   EphemeralContainers: true
-EOF
+  ServiceAppProtocol: true
 ```
 
-```bash
-mkdir /etc/kubernetes
-cat << EOF | sudo tee /etc/kubernetes/audit.yaml
-apiVersion: audit.k8s.io/v1
-kind: Policy
-omitStages:
-  - "ResponseStarted"
-rules:
-  - level: RequestResponse
-EOF
-```
 
-**初始化kubernets master1节点**
+3. 初始化kubernets master1节点
 
 ```bash
 swapoff -a
@@ -429,7 +512,7 @@ kubeadm  init \
 ```
 
 
-**拷贝kubectl配置文件**
+4. 拷贝kubectl配置文件
 
 ```bash
 mkdir /root/.kube
@@ -439,7 +522,7 @@ chown -R root.root/root/.kube/config
 kubeadm token create --ttl 0
 ```
 
-**master2/master3 节点安装**
+5. master2/master3 节点安装
 
 - 加入kubernetes集群
 
@@ -470,21 +553,7 @@ mv api.config.tar.gz /etc/kubernetes
 tar xf api.config.tar.gz
 ```
 
-- 创建Kubernetes auth规则
-
-```bash
-mkdir /etc/kubernetes
-cat << EOF | sudo tee /etc/kubernetes/audit.yaml
-apiVersion: audit.k8s.io/v1
-kind: Policy
-omitStages:
-  - "ResponseStarted"
-rules:
-  - level: RequestResponse
-EOF
-```
-
-**拷贝api组件manifest文件**
+6. 拷贝api组件manifest文件
 
 ```bash
 cat /etc/kubernetes/manifests/kube-apiserver.yaml
@@ -500,7 +569,7 @@ cat /etc/kubernetes/manifests/kube-scheduler.yaml
 
 ### 部署Kubelet节点
 
-**容器数据盘**
+1. 容器数据盘 （可选）
 
 根据服务器上的硬盘灵活规划数据盘的挂载，通常将sdb设备格式化后挂在到`/data`目录下
 
@@ -515,7 +584,7 @@ echo "/dev/sdb    none            xfs   defaults      0       0" >> /etc/fstab
 **sdb设备要灵活选择，要保证数据的安全性，如果服务器有多块硬盘的话，至少要做RAID1以上的模式**
 :::
 
-**配置nginx，反向代理到kubernets api**
+2. 配置nginx apiserver
 
 ```bash
 apt install -y nginx
@@ -556,24 +625,10 @@ nginx -t && nginx -s reload
 ```
 
 
-**下载kubernetes安装包**
+3. 安装运行时
 
-```bash
-wget https://dumps.cloudminds.com/DOCKERFILE/kubelet/kubernetes.1.18.16-with-containerd.tar.gz
-tar xf kubernetes.1.18.16-with-containerd.tar.gz 
-rm -rf kubernetes.1.18.16-with-containerd.tar.gz
-cd root
-```
 
-**安装kubernetes和containerd**
-
-```bash
-apt install -y ./libseccomp2_2.4.3-1ubuntu3.18.04.3_amd64.deb
-dpkg -i containerd.io_1.4.4-1_amd64.deb
-apt install -y --allow-change-held-packages ./*.deb
-```
-
-**配置containerd和cri工具**
+4. 配置containerd和cri工具**
 
 ```bash
 cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
@@ -602,31 +657,15 @@ EOF
 
 sudo mkdir -p /etc/containerd
 sudo containerd config default | sudo tee /etc/containerd/config.toml
+
+# 将 containerd 的数据持久化到 sdb 设备
 sed -i 's#root = "/var/lib/containerd"#root = "/data/containerd"#' /etc/containerd/config.toml
 systemctl restart containerd
-```   
-
-**导入Container镜像**
-
-```bash 
-mkdir image
-cd image
-wget https://dumps.cloudminds.com/DOCKERFILE/kubelet/kubernetes-1.18.16-images.tar.gz
-tar xf kubernetes-1.18.16-images.tar.gz
-rm -rf kubernetes-1.18.16-images.tar.gz
-ctr ns create k8s.io
-ctr -n k8s.io images import proxy.18.tar.gz
-```
-
-**清除安装文件**
-
-```bash
-cd /root && rm -rf root
-```
+```  
 
 ---
 
-**加入kuernetes集群**
+5.加入kuernetes集群
 
 ```bash
 kubeadm join 127.0.0.1:6443 \
@@ -636,126 +675,44 @@ kubeadm join 127.0.0.1:6443 \
 --ignore-preflight-errors all
 ```
 
-:::warning 注意
-`token`为kubeadm初始化后提供.<br />
-`discovery-token-ca-cert-hash`为kubeadm初始化后提供。
+:::tip 提示
+`token`为kubeadm初始化后提供，如果您没有这个数据，可以通过下述命令获取
+
+```bash
+kubeadm token ls
+
+TOKEN                    TTL  EXPIRES              USAGES           DESCRIPTION            EXTRA GROUPS
+8ewj1p.9r9hcjoqgajrj4gi  23h  2018-06-12T02:51:28Z authentication,  The default bootstrap  system:
+                                                   signing          token generated by     bootstrappers:
+                                                                    'kubeadm init'.        kubeadm:
+                                                                                           default-node-token
+```
+
+`discovery-token-ca-cert-hash`为kubeadm初始化后提供。如果您没有这个数据，可以通过执行下述命令获取
+
+```bash
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | \
+   openssl dgst -sha256 -hex | sed 's/^.* //'
+```
 :::
 
 ---
 
-### 部署Kubelet节点(GPU)
+### 配置Containerd for GPU
 
-**容器数据盘**
-
-根据服务器上的硬盘灵活规划数据盘的挂载，通常将sdb设备格式化后挂在到`/data`目录下
+1. 安装contaienrd nvidia runtime
 
 ```bash
-mkfs.xfs /dev/sdb -f
-mkdir /data
-mount /dev/sdb /data
-echo "/dev/sdb    /data xfs   defaults      0       0" >> /etc/fstab
+curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | sudo apt-key add -
+
+curl -s -L https://nvidia.github.io/nvidia-container-runtime/$(. /etc/os-release;echo $ID$VERSION_ID)/nvidia-container-runtime.list | sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
+
+apt install nvidia-container-runtime -y
 ```
 
-:::info 信息
-**sdb设备要灵活选择，要保证数据的安全性，如果服务器有多块硬盘的话，至少要做RAID1以上的模式**
-:::
-
-**配置nginx，反向代理到kubernets api**
+2. 配置containerd和cri工具
 
 ```bash
-apt install -y nginx
-
-cat << EOF | sudo tee /etc/nginx/nginx.conf
-user root;
-worker_processes 2;
-worker_cpu_affinity auto;
-pid /run/nginx.pid;
-load_module  /usr/share/nginx/modules/ngx_stream_module.so;
-worker_rlimit_nofile 64512;
-worker_shutdown_timeout 10s;
-events {
-    multi_accept        on;
-    worker_connections  16384;
-    use                 epoll;
-}
-stream {
-    upstream upstream_balancer {
-            least_conn;
-            # kubernetes master的api地址
-            server 172.16.13.134:6443 max_fails=2 fail_timeout=20s;
-            server 172.16.13.135:6443 max_fails=2 fail_timeout=20s;
-            server 172.16.13.136:6443 max_fails=2 fail_timeout=20s;
-        }
-    log_format log_stream [$time_local] $protocol $status $bytes_sent $bytes_received $session_time;
-    access_log /var/log/nginx/access.log log_stream ;
-    error_log  /var/log/nginx/error.log;
-    server {
-            listen 127.0.0.1:6443;
-            proxy_timeout 1200s;
-            proxy_pass upstream_balancer;
-        }
-}
-EOF
-
-nginx -t && nginx -s reload 
-```
-
-**下载kubernetes安装包**
-
-```bash
-wget https://dumps.cloudminds.com/DOCKERFILE/kubelet/kubernetes.1.18.16-with-containerd.tar.gz
-tar xf kubernetes.1.18.16-with-containerd.tar.gz 
-rm -rf kubernetes.1.18.16-with-containerd.tar.gz
-cd root
-```
-
-**安装kubernetes和containerd**
-
-```bash
-apt install -y ./libseccomp2_2.4.3-1ubuntu3.18.04.3_amd64.deb
-dpkg -i containerd.io_1.4.4-1_amd64.deb
-apt install -y ./*.deb
-```
-
-**安装contaienrd nvidia runtime**
-
-```bash
-mkdir nvidia
-wget https://dumps.cloudminds.com/DOCKERFILE/kubelet/containerd-nvidia-1.18.16.tar.gz
-tar xf containerd-nvidia-1.18.16.tar.gz
-rm -rf containerd-nvidia-1.18.16.tar.gz
-apt install -y ./*.deb
-```
-
-**配置containerd和cri工具**
-
-```bash
-cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
-overlay
-br_netfilter
-EOF
-
-sudo modprobe overlay
-sudo modprobe br_netfilter
-
-cat << EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
-net.bridge.bridge-nf-call-iptables  = 1
-net.ipv4.ip_forward                 = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-EOF
-
-# Apply sysctl params without reboot
-sudo sysctl --system
-
-cat << EOF | sudo tee /etc/crictl.yaml
-runtime-endpoint: unix:///run/containerd/containerd.sock
-image-endpoint: unix:///run/containerd/containerd.sock
-timeout: 10
-debug: false
-EOF
-
-sudo mkdir -p /etc/containerd
-
 cat << EOF | sudo tee /etc/containerd/config.toml
 version = 2
 root = "/data/containerd"
@@ -886,37 +843,4 @@ oom_score = 0
 EOF
 
 systemctl restart containerd
-```   
-
-**导入Container镜像**
-
-``` 
-mkdir image
-cd image
-wget https://dumps.cloudminds.com/DOCKERFILE/kubelet/kubernetes-1.18.16-images.tar.gz
-tar xf kubernetes-1.18.16-images.tar.gz
-rm -rf kubernetes-1.18.16-images.tar.gz
-ctr ns create k8s.io
-ctr -n k8s.io images import proxy.18.tar.gz
 ```
-
-**清除安装文件**
-
-```
-cd /root && rm -rf root
-```
-
-**加入kuernetes集群**
-
-```
-kubeadm join 127.0.0.1:6443 \
---token k9brva.g7vj4109keb0c093 \
---discovery-token-ca-cert-hash sha256:72986af040b0dc8e251ee85f774120844e9b64c26bfff547348ef0e669a0f208 \
---cri-socket /run/containerd/containerd.sock \
---ignore-preflight-errors all
-```
-
-:::warning 注意
-`token`为kubeadm初始化后提供。<br />
-`discovery-token-ca-cert-hash`为kubeadm初始化后提供。
-:::

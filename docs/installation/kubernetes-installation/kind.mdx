@@ -1,0 +1,133 @@
+---
+title: 使用 Kind 部署
+hide_title: true
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## 使用 Kind 部署
+
+---
+
+kind是一个使用Docker容器 "节点 "运行本地Kubernetes集群的工具。kind主要是为测试Kubernetes本身而设计，但也可用于本地开发或CI。本文通过介绍kind的使用，指导用户在本地环境快速启动一个kubernetes服务用于部署 kubegems。
+
+### installation
+
+:::tip 信息
+`kind` 无需依赖 [`kubectl`](https://kubernetes.io/docs/reference/kubectl/overview/)，但您仍然需要安装 kubectl 工具用于操作 kubernetes 资源。安装参考 [kubectl installation docs](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+:::
+
+<Tabs >
+  <TabItem value="linux" label="使用 Linux 安装" default>
+
+```bash
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/{{< stableVersion >}}/kind-linux-amd64
+chmod +x ./kind
+mv ./kind /some-dir-in-your-PATH/kind
+```
+  </TabItem>
+  <TabItem value="mac" label="使用 MacOS 安装" default>
+
+```bash
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/{{< stableVersion >}}/kind-darwin-amd64
+chmod +x ./kind
+mv ./kind /some-dir-in-your-PATH/kind
+```
+  </TabItem>
+  <TabItem value="windows" label="使用 Windows 安装" default>
+
+```bash
+curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/{{< stableVersion >}}/kind-windows-amd64
+Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
+```
+  </TabItem>
+</Tabs >
+
+
+### 创建集群
+```
+kind create cluster --name my-cluster
+Creating cluster "my-cluster" ...
+ ✓ Ensuring node image (kindest/node:v1.15.3) 🖼
+ ✓ Preparing nodes 📦
+ ✓ Creating kubeadm config 📜
+ ✓ Starting control-plane 🕹️
+Cluster creation complete. You can now use the cluster with:
+
+export KUBECONFIG="$(kind get kubeconfig-path --name="my-cluster")"
+kubectl cluster-info
+```
+
+### 删除集群
+
+```bash
+kind delete cluster
+```
+
+### 高级模式
+
+
+#### 配置 kind
+
+您可以通过指定参数`--config`，在 kind 创建集群阶段来自定义配置 kubernetes 集群安装
+
+```
+kind create cluster --config kind-example-config.yaml
+```
+
+#### 创建多节点集群
+
+您可以在 node 中添加 worker 对象来定义 kind 在创建 kubernetes 集群时的node 数量，配置如下
+
+```yaml
+# three node (two workers) cluster config
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+```
+
+### 设置控制节点集群
+
+您可以配置多个 `control-plane` 用于创建高可用的 kubernetes 集群
+
+```yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: control-plane
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+```
+
+### 指定 Kubernetes 版本
+
+您可以通过在 nodes 对象中定义 kind 的 nodeimage 版本来指定安装的 kubernetes 版本。您可以在 [releases page](https://github.com/kubernetes-sigs/kind/releases)中查阅 kind 支持的 kubernetes 发行版镜像列表。
+
+```yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  image: kindest/node:v1.16.4@sha256:b91a2c2317a000f3a783489dfb755064177dbc3a0b2f4147d50f04825d016f55
+- role: worker
+  image: kindest/node:v1.16.4@sha256:b91a2c2317a000f3a783489dfb755064177dbc3a0b2f4147d50f04825d016f55
+```
+
+###  启用 Feature Gates 
+
+Feature gates 是一对 kv 键值对用于定义 kubernetes 是否开启某些特性，你可以在 featureGates 中启用它们
+
+```yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+featureGates:
+  FeatureGateName: true
+```
