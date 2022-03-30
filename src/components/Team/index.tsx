@@ -17,7 +17,7 @@ const Team = () => {
       id: '2',
       avatar: 'https://github.com/LinkMaq.png',
       name: 'Link Ma',
-      post: 'PM',
+      post: 'PM / SOFTWARE ENGINEER',
     },
     {
       id: '3',

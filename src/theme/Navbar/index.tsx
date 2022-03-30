@@ -78,7 +78,7 @@ const Navbar = (): JSX.Element => {
               className='navbar__login button button--primary'
               to='https://demo.kubegems.io'
             >
-              登录控制台
+              体验 Demo 
             </Link>
 
             <div className='navbar__login__account'>

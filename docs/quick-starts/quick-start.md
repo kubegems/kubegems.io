@@ -107,7 +107,6 @@ keywords: [kubegems,KubeGems,kubernetes]
 - 监控
 
 更多配置请参考【运行时管理】
-//TODO
 
 #### 创建 Service
 
@@ -117,7 +116,6 @@ keywords: [kubegems,KubeGems,kubernetes]
 ![](./assets/admin-first-demo-env-service-2.jpg)
 
 更多配置请参考【运行时管理】
-//TODO
 
 #### 创建 Ingress
 
