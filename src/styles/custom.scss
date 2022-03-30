@@ -117,3 +117,7 @@ html[data-theme='dark'] {
 .h-24 {
   height: 100%;
 }
+
+.tabs__item--active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
