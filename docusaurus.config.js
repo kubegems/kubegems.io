@@ -75,7 +75,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       zoom: {
-        selector: 'img',
+        selector: '.markdown :not(em) > img',
         config: {
           // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
           background: {

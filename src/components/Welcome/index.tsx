@@ -5,6 +5,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import Texty from 'rc-texty';
 import TweenOne from 'rc-tween-one';
 import styles from './index.module.scss';
+import style from 'tween-one/es/plugins/StylePlugin';
 
 const Welcome = (): JSX.Element => {
   return (
@@ -13,7 +14,7 @@ const Welcome = (): JSX.Element => {
         <div className='row'>
           <div className='col col--6'>
             <h1 className={styles.welcome__title}>
-              <Texty>KubeGems</Texty>
+              <Texty delay={1000}>KubeGems</Texty>
             </h1>
             <div className={styles.welcome__subtitle}>
               <Texty type='bottom' delay={500}>面向云原生的通用型容器云平台</Texty>
@@ -40,7 +41,7 @@ const Welcome = (): JSX.Element => {
         </div>
         <i className={clsx('kubegems-icon icon-scroll', styles.welcome__scroll)} />
       </div>
-      
+
     </section>
   )
 }
