@@ -3,9 +3,20 @@ title: 配置Istio
 hide_title: true
 sidebar_position: 5
 description: 本文将介绍用户如何将 KubeGems 与 Istio 服务的集成。
-keywords: [kubegems,kubernetes,jaeger,tracing，distributited,operator,istio,servicemesh,mesh,envoy,gateway]
+keywords:
+  [
+    kubegems,
+    kubernetes,
+    jaeger,
+    tracing，distributited,
+    operator,
+    istio,
+    servicemesh,
+    mesh,
+    envoy,
+    gateway,
+  ]
 ---
-
 
 ## 配置 Istio
 
@@ -41,9 +52,8 @@ core_plugins:
       grafana_urls: "http://grafana-service.gemcloud-monitoring-system.svc.cluster.local:3000"
   status:
     deployment:
-    - istiod
+      - istiod
 ```
-
 
 ## 手动部署 Istio
 
@@ -62,7 +72,7 @@ curl -L https://istio.io/downloadIstio | sh -
 ```
 
 :::tip 信息
-实际使用的脚本为istio/istio/downloadIstioCandidate.sh
+实际使用的脚本为 istio/istio/downloadIstioCandidate.sh
 
 推荐通过 istioctl 安装 istio operator，后续的安装均由 operator CR 完成。
 :::
@@ -111,13 +121,11 @@ metadata:
   name: default-istiocontrolplane
 spec:
   profile: default
-  hub: example.com/istio    # 第三方仓库（可选）
-  tag: 1.11.0   #指定tag(可选)，推荐不指定，与operator版本相同。
+  hub: example.com/istio # 第三方仓库（可选）
+  tag: 1.11.0 #指定tag(可选)，推荐不指定，与operator版本相同。
 ```
 
 可配置字段参考 [IstioOperatorSpec](https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/)
-
-
 
 ### 配置 istio gateway
 
@@ -229,8 +237,10 @@ istio cni 不会与其他 cni 冲突，安装 istio cni 时它也不会替换已
   ]
 }
 ```
+
 更多关于 CNi 配置的可参考 [cni-example-configuration](https://github.com/containernetworking/cni/blob/master/SPEC.md#example-configuration)
 :::
+
 ## 安装 kiali
 
 kiali 是 mesh 的可视化工具，您可以通过 istio addon 方式 [手动安装](https://kiali.io/documentation/latest/quick-start/#_install_via_istio_addons) ，或者采用[ kiali-operator 安装](https://github.com/kiali/kiali-operator)。
@@ -241,8 +251,7 @@ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.11/samp
 
 kiali 在端口 20001 监听 webui 地址，可以访问其 service.
 
-
-### 配置 kiali 
+### 配置 kiali
 
 如使用了外部 promethus 以及 jaeger 等，需要修改配置才能使 kiali 正常生效。主要涉及如下配置：
 
@@ -291,10 +300,7 @@ metadata:
           - istio-system
   relabel_configs:
     - source_labels:
-        [
-          __meta_kubernetes_service_name,
-          __meta_kubernetes_endpoint_port_name,
-        ]
+        [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
       action: keep
       regex: istiod;http-monitoring
 
@@ -308,7 +314,7 @@ metadata:
       regex: ".*-envoy-prom"
 ```
 
-对于使用 `prometheus operator` 的可以将上述配置添加至 [secret/additional-scrape-configs]((https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/additional-scrape-config.md)) 。
+对于使用 `prometheus operator` 的可以将上述配置添加至 [secret/additional-scrape-configs](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/additional-scrape-config.md) 。
 
 除此之外此外，为加快查询速度，您还可以配置 `RecordRule`,参考 [using-prometheus-for-production-scale-monitoring](https://istio.io/latest/docs/ops/best-practices/observability/#using-prometheus-for-production-scale-monitoring)
 
@@ -356,7 +362,7 @@ reviews-v3-755bf5cf76-lk829      140m         192Mi
 ```
 
 ## 常见问题
-  
+
 ### 1.无法拉取镜像
 
 建议更换镜像源，因默认从`docker.io`拉取；
@@ -375,10 +381,14 @@ spec:
 EOF
 ```
 
-因当前集群为 1.18 ，ingress版本尚未支持 v1，目前为 v1beta1;可选择降低 operator 版本，选择则 1.22.0 版本。
+因当前集群为 1.18 ，ingress 版本尚未支持 v1，目前为 v1beta1;可选择降低 operator 版本，选择则 1.22.0 版本。
+
 ### 2.无法访问 jaeger.observability:9411
+
 istio 使用 zipkin 协议进行 tracing 数据发送，jaeger 支持该协议，但是默认 jaeger 配置未开启该功端口。参见[collectors](https://www.jaegertracing.io/docs/1.25/deployment/#collectors)
 
 jaeger 将在相同的端口支持 zipkin 协议，参见[backwards-compatibility-with-zipkin](https://github.com/jaegertracing/jaeger#backwards-compatibility-with-zipkin)。
+
 ### 3.istio gateway 没有追踪数据发送
- istio gateway 默认不发送追踪数据，需要为其配置 sidecar。并建议不要将其放置在 istio-system 空间
+
+istio gateway 默认不发送追踪数据，需要为其配置 sidecar。并建议不要将其放置在 istio-system 空间
