@@ -33,4 +33,4 @@ jobs:
       - run: yarn install && yarn build
         
       - if: github.event_name != 'pull_request'
-        run: USE_SSH=true yarn deploy
+        run: GIT_USER=${{ secrets.PAGE_PUSH_USER }} GIT_PASS=${{ secrets.PAGE_PUSH_PASS }} yarn deploy
