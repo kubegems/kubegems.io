@@ -32,8 +32,8 @@ const Welcome = (): JSX.Element => {
                   'button button--primary button--lg',
                   styles.welcome__getstart,
                 )}
-                to={useBaseUrl('docs/concepts/what-is-kubegems')}>
-                了解更多
+                to={useBaseUrl('docs/installation/quick-install')}>
+                Kubernetes 安装 
               </Link>
             </TweenOne>
           </div>
