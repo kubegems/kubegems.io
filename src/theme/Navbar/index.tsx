@@ -49,13 +49,13 @@ const Navbar = (): JSX.Element => {
             titleClassName='navbar__title'
           />
           {leftItems.map(item => (
-            <NavbarItem {...item as NavbarItemConfig} key={item.label} />
+            <NavbarItem {...item as NavbarItemConfig} key={item.key} />
           ))}
         </div>
 
         <div className='navbar__items navbar__items--right'>
           {rightItems.map(item => (
-            <NavbarItem {...item as NavbarItemConfig} key={item.label} />
+            <NavbarItem {...item as NavbarItemConfig} key={item.key} />
           ))}
 
           <div className='navbar__items navbar__item--dock'>

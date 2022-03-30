@@ -75,7 +75,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       zoom: {
-        selector: 'img',
+        selector: '.markdown :not(em) > img',
         config: {
           // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
           background: {
@@ -96,26 +96,31 @@ const config = {
             docId: 'concepts/what-is-kubegems',
             position: 'left',
             label: '文档',
+            key: 'doc'
           },
           {
             to: 'blog',
             position: 'left',
             label: '博客',
+            key: 'blog'
           },
           {
             to: '/community/support',
             label: '社群',
             position: 'left',
             activeBaseRegex: `/community/`,
+            key: 'community'
           },
           {
             type: 'docsVersionDropdown',
             position: 'right',
             dropdownActiveClassDisabled: false,
+            key: 'version'
           },
           {
             type: 'localeDropdown',
             position: 'right',
+            key: 'locale'
           },
         ],
       },
