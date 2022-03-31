@@ -20,7 +20,7 @@ const Welcome = (): JSX.Element => {
               <Texty type='bottom' delay={500}>面向云原生的通用型容器云平台</Texty>
             </div>
             <div className={styles.welcome__desc}>
-              <Texty type='alpha' mode='sync' delay={1000}>作为一个面向云原生的通用型容器云平台，KubeGems从设计之初就支持了面向多集群、多租户的架构，每个用户可以在KubeGems的租户空间内进行友好和人性化的操作，而不用担心自己的服务和数据出现错乱。为帮助企业快速实现容器化，控制IT成本，KubeGems提供提供了安装控制器（Installer Operator）来帮助用户对本产品有一个更好的部署体验。同时也为企业用户提供了功能丰富的支持，例如多Kubernetes集群资源管理、租户访问权限控制、租户资源限制、租户网络隔离、租户网关、存储管理、监控告警、kubernetes事件、操作审计、TLS证书管理、DevOps CD、日志采集、日志分析、微服务治理、链路追逐、服务网格等。 </Texty>
+              <Texty type='alpha' mode='sync' delay={1000}>KubeGems 是一款开源的企业级多租户容器云平台。围绕云原生社区，KubeGems 提供了多 Kubernetes 集群接入能力，并具备丰富的组件管理和资源成本分析功能，能够帮助企业快速的构建和打造一个本地化、功能强大且低成本的云管理平台。 </Texty>
             </div>
             <TweenOne
               style={{ opacity: 0, marginBottom: -100 }}
