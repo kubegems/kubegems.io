@@ -30,7 +30,12 @@ jobs:
         with:
           node-version: '16'
 
-      - run: yarn install && yarn build
-        
-      - if: github.event_name != 'pull_request'
-        run: GIT_USER=${{ secrets.PAGE_PUSH_USER }} GIT_PASS=${{ secrets.PAGE_PUSH_PASS }} yarn deploy
+      - name: Build dist
+        run: yarn install && yarn build
+      
+      - name: Deploy to pages
+        if: github.event_name != 'pull_request'
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          branch: gh-pages
+          folder: dist
