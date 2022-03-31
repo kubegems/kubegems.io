@@ -14,13 +14,13 @@ const Welcome = (): JSX.Element => {
         <div className='row'>
           <div className='col col--6'>
             <h1 className={styles.welcome__title}>
-              <Texty delay={1000}>KubeGems</Texty>
+              <Texty delay={100}>KubeGems</Texty>
             </h1>
             <div className={styles.welcome__subtitle}>
-              <Texty type='bottom' delay={500}>面向云原生的通用型容器云平台</Texty>
+              <Texty type='bottom' delay={100}>面向云原生的通用型容器云平台</Texty>
             </div>
             <div className={styles.welcome__desc}>
-              <Texty type='alpha' mode='sync' delay={1000}>KubeGems 是一款开源的企业级多租户容器云平台。围绕云原生社区，KubeGems 提供了多 Kubernetes 集群接入能力，并具备丰富的组件管理和资源成本分析功能，能够帮助企业快速的构建和打造一个本地化、功能强大且低成本的云管理平台。 </Texty>
+              <Texty type='alpha' mode='sync' delay={200}>KubeGems 是一款开源的企业级多租户容器云平台。围绕云原生社区，KubeGems 提供了多 Kubernetes 集群接入能力，并具备丰富的组件管理和资源成本分析功能，能够帮助企业快速的构建和打造一个本地化、功能强大且低成本的云管理平台。 </Texty>
             </div>
             <TweenOne
               style={{ opacity: 0, marginBottom: -100 }}
@@ -33,7 +33,7 @@ const Welcome = (): JSX.Element => {
                   styles.welcome__getstart,
                 )}
                 to={useBaseUrl('docs/installation/quick-install')}>
-                Kubernetes 安装 
+                Kubernetes 安装
               </Link>
             </TweenOne>
           </div>

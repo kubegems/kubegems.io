@@ -1,0 +1,22 @@
+.member {
+  // box-shadow: 0 2px 16px rgb(0 0 0 / 8%);
+  // background-color: #fff;
+  padding: .5rem;
+  transition: transform .5s ease;
+  text-align: center;
+
+  &__avatar {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 5rem;
+  }
+
+  &__name {
+    font-size: 0.5rem;
+    font-weight: 500;
+  }
+
+  &:hover {
+    transform: translateY(-0.5rem);
+  }
+}
