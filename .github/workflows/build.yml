@@ -24,9 +24,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.3
-
-      - name: Setup Git Config
-        run: git config user.email "imchensl@163.com" && git config user.name "leon.chen"
       
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -35,7 +32,11 @@ jobs:
 
       - name: Build dist
         run: yarn install && yarn build
-        
-      - name: Deploy Github Pages
+      
+      - name: Deploy to pages
         if: github.event_name != 'pull_request'
-        run: GIT_USER=${{ secrets.PAGE_PUSH_USER }} GIT_PASS=${{ secrets.PAGE_PUSH_PASS }} yarn deploy
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
+        with:
+          branch: gh-pages
+          folder: dist
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
