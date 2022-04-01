@@ -6,7 +6,7 @@
 <meta name="generator" content="Docusaurus v2.0.0-beta.17">
 <link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="KubeGems RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="KubeGems Atom Feed"><title data-rh="true">One post tagged with &quot;ebpf&quot; | KubeGems</title><meta data-rh="true" property="og:title" content="One post tagged with &quot;ebpf&quot; | KubeGems"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://kubegems.io/blog/tags/ebpf"><meta data-rh="true" name="docusaurus_locale" content="zh-CN"><meta data-rh="true" name="docusaurus_tag" content="blog_tags_posts"><meta data-rh="true" name="docsearch:language" content="zh-CN"><meta data-rh="true" name="docsearch:docusaurus_tag" content="blog_tags_posts"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://kubegems.io/blog/tags/ebpf"><link data-rh="true" rel="alternate" href="https://kubegems.io/blog/tags/ebpf" hreflang="zh-CN"><link data-rh="true" rel="alternate" href="https://kubegems.io/blog/tags/ebpf" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.ee4f1784.css">
-<link rel="preload" href="/assets/js/runtime~main.7f9553c6.js" as="script">
+<link rel="preload" href="/assets/js/runtime~main.42d7c1a0.js" as="script">
 <link rel="preload" href="/assets/js/main.8ce99dc0.js" as="script">
 </head>
 <body class="navigation-with-keyboard">
@@ -21,7 +21,7 @@
 目前我使用的ubuntu21.04,clang-14是有问题的,内核版本较低,但编译器版本较高,推荐ubuntu20.04 LTS + clang-10
 我目前提了一些相关issue,待进一步分析解决<br><a href="https://github.com/cilium/cilium/issues/18861" target="_blank" rel="noopener noreferrer">llvm</a><br><a href="https://github.com/cilium/cilium-service-mesh-beta/issues/25" target="_blank" rel="noopener noreferrer">operator</a>  </li><li>iptable模式的k8s限制<br>cilium实现ingress方案较为特殊,没有和istio-gateway/nginx一样建立对应的真实的endpoint POD,只有一个loadbalancer service,这样
 直接在虚拟机环境上nodeport方式不工作,因为filter表中会有对应的REJECT规则, 参见k8s源代码<br><a href="https://github.com/kubernetes/kubernetes/blob/18df5ad1fdce9d4f7c9c04a9ea4bdcc7a7400a16/pkg/proxy/iptables/proxier.go#L1177-L1253" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes/kubernetes/blob/18df5ad1fdce9d4f7c9c04a9ea4bdcc7a7400a16/pkg/proxy/iptables/proxier.go#L1177-L1253</a></li></ul></div><footer class="row docusaurus-mt-lg"><div class="col col--9"><b>Tags:</b><ul class="tags_XVD_ padding--none margin-left--sm"><li class="tag_JSN8"><a class="tag_hD8n tagRegular_D6E_" href="/blog/tags/ebpf">ebpf</a></li><li class="tag_JSN8"><a class="tag_hD8n tagRegular_D6E_" href="/blog/tags/cilium">cilium</a></li><li class="tag_JSN8"><a class="tag_hD8n tagRegular_D6E_" href="/blog/tags/sidecarless">sidecarless</a></li></ul></div><div class="col text--right col--3"><a aria-label="Read more about sidecarless-mesh方案可行性验证" href="/blog/sidecarless-mesh"><b>Read More</b></a></div></footer></article><nav class="pagination-nav" aria-label="Blog list page navigation"><div class="pagination-nav__item"></div><div class="pagination-nav__item pagination-nav__item--next"></div></nav></main></div></div></div><footer class="footer" id="footer"><div class="text--center">Copyright © 2022 KubeGems, Inc.</div></footer></div>
-<script src="/assets/js/runtime~main.7f9553c6.js"></script>
+<script src="/assets/js/runtime~main.42d7c1a0.js"></script>
 <script src="/assets/js/main.8ce99dc0.js"></script>
 </body>
 </html>
