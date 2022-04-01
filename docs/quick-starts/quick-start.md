@@ -66,7 +66,7 @@ keywords: [kubegems,KubeGems,kubernetes]
 
 ![](./assets/admin-first-demo-env.jpg)
 
-:::warning 注意
+:::caution 注意
 注意：环境空间的删除策略为 `仅删除关联` 和 `删除整个命名空间`，它们之间的主要区别控制删除环境时，控制器的行为。
 :::
 

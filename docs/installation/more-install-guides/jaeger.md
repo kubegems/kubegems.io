@@ -88,7 +88,7 @@ spec:
         server-urls: http://elasticsearch:9200
 ```
 
-:::warning 注意
+:::caution 注意
 1.25 版本的 Jaeger 默认未开启 zipkin 端口，虽然其设置了环境变量 `COLLECTOR_ZIPKIN_HTTP_PORT` 但似乎没有生效。所以需要手动设置 `options: {"collector.zipkin.host-port":"9411"}`，以便于 istio 使用。
 :::
 
@@ -128,7 +128,7 @@ spec:
           address: jaeger-collector.observability:9411
 ```
 
-:::warning 注意
+:::caution 注意
 由于历史原因 istio 使用 zipkin 协议发送追踪数据。<br />
 [backwards-compatibility-with-zipkin](https://github.com/jaegertracing/jaeger/tree/v1.24.0#backwards-compatibility-with-zipkin)
 
