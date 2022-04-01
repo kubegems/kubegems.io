@@ -3,7 +3,7 @@ title: 快速开始
 hide_title: true
 sidebar_position: 1
 description: 本文用于指导用户在KubeGems快速使用，并对Kubernetes相关的资源进行操作
-keywords: [kubegems,KubeGems,kubernetes]
+keywords: [kubegems, KubeGems, kubernetes]
 ---
 
 ## 快速开始
@@ -12,8 +12,8 @@ keywords: [kubegems,KubeGems,kubernetes]
 
 ### 导入集群
 
-- 使用 `admin` 账号登录KubeGems管理后台，点击右下角 【工具箱】 图标，进入 【系统管理】
-![](./assets/admin-first-login.jpg)
+- 使用 `admin` 账号登录 KubeGems 管理后台，点击右下角 【工具箱】 图标，进入 【系统管理】
+  ![](./assets/admin-first-login.jpg)
 
 - 点击 【创建集群】，将集群的 `kubeconfig` 文件粘贴至文本框。
 
@@ -36,7 +36,7 @@ keywords: [kubegems,KubeGems,kubernetes]
 
 ### 租户管理
 
-- 使用 `admin` 账号登录KubeGems管理后台，点击左上角【集群资源】卡片，进入【平台管理】
+- 使用 `admin` 账号登录 KubeGems 管理后台，点击左上角【集群资源】卡片，进入【平台管理】
 
 ![](./assets/admin-first-tenant-list.jpg)
 
@@ -123,8 +123,8 @@ keywords: [kubegems,KubeGems,kubernetes]
 
 ![](./assets/admin-first-demo-env-ingress-1.jpg)
 
-- 创建完成后点击 **demo-http** ,进入 ingress 详情页，在路由【路由规则】处，点击【访问】可以直接访问服务Web 页面
+- 创建完成后点击 **demo-http** ,进入 ingress 详情页，在路由【路由规则】处，点击【访问】可以直接访问服务 Web 页面
 
 ![](./assets/admin-first-demo-env-ingress-info.jpg)
 
-更多设置请参考 [服务路由](/docs/tasks/user-operation/gateways/ingress)
+更多设置请参考 [服务路由](/docs/tasks/appservice/gateways/ingress)
