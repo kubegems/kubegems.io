@@ -1,7 +1,7 @@
 ---
 title: 创建应用商店服务
 hide_title: true
-sidebar_position: 3
+sidebar_position: 2
 description: 本文用于指导用户在KubeGems快速通过应用商店部署一个服务
 keywords: [kubegems,KubeGems,kubernetes,appstore,helm,charts,schema]
 ---

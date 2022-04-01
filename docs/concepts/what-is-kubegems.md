@@ -1,5 +1,5 @@
 ---
-title: KubeGems介绍
+title: KubeGems项目
 hide_title: true
 sidebar_position: 1
 keywords: [kubegems,kubernetes,observablity,istio,devops]

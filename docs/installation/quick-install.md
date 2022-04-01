@@ -17,7 +17,8 @@ sidebar_position: 1
 1.执行以下命令安装KubeGems Installer控制器
 
 ```bash
-kubectl apply -n kubegems-installer -f https://github.com/kubegems/installer-operator/releases/download/v1.20.0-beta.0/centrol.yaml
+KUBEGEMS_VERSION=v1.20.0-beta.1
+kubectl apply -n kubegems-installer -f https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.yaml
 ```
 
 2.执行以下命令验证部署结果
@@ -34,7 +35,7 @@ kubegems-installer-manager-8649bd7fcb-j286g    2/2     Running   0          15m 
 1.执行以下命令提交 installer 资源
 
 ```bash
-kubectl apply -f https://github.com/kubegems/installer-operator/releases/download/v1.20.0-beta.0/centrol.installer.yaml
+kubectl apply -f https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.installer.yaml
 ```
 
 

@@ -142,7 +142,7 @@ sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 sudo systemctl enable --now kubelet
 ```
 
-:::warning 注意
+:::caution 注意
 - 通过运行命令 setenforce 0 和 sed ... 将 SELinux 设置为 permissive 模式 可以有效地将其禁用。 这是允许容器访问主机文件系统所必需的，而这些操作时为了例如 Pod 网络工作正常。您必须这么做，直到 kubelet 做出对 SELinux 的支持进行升级为止。
 
 - 如果你知道如何配置 SELinux 则可以将其保持启用状态，但可能需要设定 kubeadm 不支持的部分配置
@@ -534,7 +534,7 @@ kubeadm join 10.36.0.68:6443 \
 --ignore-preflight-errors all
 ```
 
-:::warning 注意
+:::caution 注意
 `token`为kubeadm初始化后提供.<br />
 `discovery-token-ca-cert-hash`为kubeadm初始化后提供。
 :::
@@ -561,7 +561,7 @@ cat /etc/kubernetes/manifests/kube-controller-manager.yaml
 cat /etc/kubernetes/manifests/kube-scheduler.yaml
 ```
 
-:::warning 注意
+:::caution 注意
 `kube-apiserver.yaml` 文件拷贝到master2和master3上时，需要将文件中的master1节点ip信息换成对应机器上的ip。
 :::
 

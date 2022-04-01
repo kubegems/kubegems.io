@@ -167,7 +167,7 @@ spec:
         injectionTemplate: "gateway" # enable gateway injection
 ```
 
-:::warning 注意
+:::caution 注意
 istio 对 gateway 的注入方式与常规不同，无法使用 sidecar 方式注入 gateway，需要指定 injectionTemplate 为 gateway。
 :::
 

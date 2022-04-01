@@ -9,12 +9,12 @@ sidebar_position: 2
 ## 高级语法
   点击`高级查询`按钮,界面进入高级查询模式,这种方式下可以直接使用logql进行查询  
 
-![pic](./log-query-advanced.png)
+![pic](./assets/log-query-advanced.png)
 
   日志系统后端为loki, 因此支持完整的loki logql查询方式, 一条完整的logql由两大部分构成
   `steam selector`选择对应的series, `pipeline`对应日志记录的处理,参考下图  
 
-![pic](./query_components.png)
+![pic](./assets/query_components.png)
 
  可以看出, `pipeline`由多种表达式构成,可以由`label filter`来过滤series,可以由`line filter`
  来过滤特定记录,以及可以对日志进行后续的格式化及选择特定的`parser`来解析日志,因此,功能十分丰富.  

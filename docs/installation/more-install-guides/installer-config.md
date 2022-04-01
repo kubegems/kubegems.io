@@ -10,7 +10,7 @@ sidebar_position: 2
 
 Installer operator通过`Ansible`向Kubernetes提交`Artifact`，为了保证资源的一致性，Controller会定时循环执行任务。
 
-:::warning
+:::caution 注意
 **被托管的资源有任何的修改都会被Operator还原**。
 :::
 
