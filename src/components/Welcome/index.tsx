@@ -39,7 +39,7 @@ const Welcome = (): JSX.Element => {
           </div>
           <div className='col col--6'></div>
         </div>
-        <i className={clsx('kubegems-icon icon-scroll', styles.welcome__scroll)} />
+        {/* <i className={clsx('kubegems-icon icon-scroll', styles.welcome__scroll)} /> */}
       </div>
 
     </section>

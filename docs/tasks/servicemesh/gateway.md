@@ -7,7 +7,8 @@ sidebar_position: 4
 ---
 
 ## 微服务网关
-微服务与[租户网关](../user-operation/gateways/gateway.md)有些许不同，在基本属性上：
+
+微服务与[租户网关](../appservice/gateways/gateway.md)有些许不同，在基本属性上：
 
 | 网关类型   | 代理实例      | 路由配置                           | 纳入服务网格 | 代理范围 |
 | ---------- | ------------- | ---------------------------------- | ------------ | -------- |
@@ -16,16 +17,16 @@ sidebar_position: 4
 
 在功能上：
 
-| 网关类型   | 副本控制方式   | 是否支持非ssl的http2/grpc代理 |
-| ---------- | -------------- | ----------------------------- |
-| 微服务网关 | hpa 自动伸缩   | √                             |
-| 租户网关   | 手动管理副本数 | x                             |
+| 网关类型   | 副本控制方式   | 是否支持非 ssl 的 http2/grpc 代理 |
+| ---------- | -------------- | --------------------------------- |
+| 微服务网关 | hpa 自动伸缩   | √                                 |
+| 租户网关   | 手动管理副本数 | x                                 |
 
 ### 管理微服务网关
 
 1. 点击左上角菜单栏，选择 **服务治理**
 2. 在侧边栏找到 **空间配置**，点击 **微服务网关**
-![](assets/istio-gateway.jpg)
+   ![](assets/istio-gateway.jpg)
 3. 创建微服务网关
 
 创建时只需指定网关名
@@ -34,7 +35,8 @@ sidebar_position: 4
 
 4. 创建网关代理策略
 
-需要通过`gateway+virtualservice`资源来创建网关代理策略，eg. 
+需要通过`gateway+virtualservice`资源来创建网关代理策略，eg.
+
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -78,10 +80,10 @@ spec:
             host: productpage
             port:
               number: 9080
-```            
+```
 
 5. 在网关详情页，你可以看到：
-   
+
 - 网关实例关联的`gateway`、`virtualservice`资源
 - 网关实例 pod
 - 网关监控信息: qps、响应时间

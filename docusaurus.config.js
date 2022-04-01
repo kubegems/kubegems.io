@@ -132,7 +132,7 @@ const config = {
       },
       footer: {
         style: 'light',
-        copyright: `Copyright © ${new Date().getFullYear()} KubeGems, Inc.`,
+        copyright: `Copyright © ${new Date().getFullYear()} KubeGems.io .`,
       },
       // hideableSidebar: true,
       prism: {

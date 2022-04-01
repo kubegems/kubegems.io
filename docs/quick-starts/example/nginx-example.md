@@ -3,10 +3,10 @@ title: 创建Nginx服务
 hide_title: true
 sidebar_position: 1
 description: 本文用于指导用户在KubeGems快速创建一个Nginx服务，让用户更快掌握平台的核心功能。
-keywords: [kubegems,KubeGems,kubernetes,nginx]
+keywords: [kubegems, KubeGems, kubernetes, nginx]
 ---
 
-## 创建Nginx服务
+## 创建 Nginx 服务
 
 ---
 
@@ -24,7 +24,7 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
 
 ![](./assets/example-nginx-deploy.jpg)
 
-创建Nginx的主要参数为：
+创建 Nginx 的主要参数为：
 
 - 工作负载名称：输入 Nginx 工作负载的名称
 - 副本数： Nginx 服务后台运行的副本数量
@@ -42,7 +42,7 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
 
 ![](./assets/example-nginx-service.jpg)
 
-创建Nginx服务的主要参数为：
+创建 Nginx 服务的主要参数为：
 
 - 服务名称： 输入 `Service` 资源的名称
 - 关联工作负载： 选择 **Nginx** 服务与之关联的工作负载，这里为上文创建的 **Nginx**
@@ -71,15 +71,15 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
 2. 网关创建成功后，可以在卡片中观察到网关的状态
 
 <img
-  src={require('./assets/example-nginx-gateway-success.jpg').default}
-  align="center"
+src={require('./assets/example-nginx-gateway-success.jpg').default}
+align="center"
 />
 
 3. 进入 **demo-gateway** 网关，可以查看网关的地址
 
 ![](./assets/example-nginx-gateway-info.jpg)
 
-更多设置请参考 [服务网关](/docs/tasks/user-operation/gateways/gateway)
+更多设置请参考 [服务网关](/docs/tasks/appservice/gateways/gateway)
 
 #### 创建 Ingress
 
@@ -88,6 +88,7 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
 ![](./assets/example-nginx-ingress.jpg)
 
 创建路由的主要参数为：
+
 - 路由名称：输入 `ingress` 资源的名称
 - 声明网关： 选择该路由规则生效的网关，与上文中的租户网关相关联
 - 路由规则
@@ -97,7 +98,7 @@ keywords: [kubegems,KubeGems,kubernetes,nginx]
   - 服务：选择上游服务
   - 端口：选择上游服务的端口
 
-更多设置请参考 [服务路由](/docs/tasks/user-operation/gateways/ingress)
+更多设置请参考 [服务路由](/docs/tasks/appservice/gateways/ingress)
 
 2. 进入 **nginx** 路由详情页，点击【路由规则】下的访问即可访问服务
 
