@@ -20,4 +20,8 @@ keywords: [kubegems, KubeGems, kubernetes, appstore, helm, charts, schema]
 
 ### 应用部署
 
-参考此文档开始 [应用编排](/docs/tasks/appservice/userapplication/orchestration)
+参考此文档开始 [应用部署](/docs/tasks/appservice/userapplication/user-app)
+
+### 高级部署
+
+参考此文档开始 [蓝绿发布、金丝雀发布](/docs/tasks/appservice/userapplication/advance-deploy)
