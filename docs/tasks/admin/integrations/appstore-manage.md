@@ -1,12 +1,12 @@
 ---
-title: 设置应用商店
+title: 设置三方应用商店
 hide_title: true
 sidebar_position: 5
 # description: 本文用于指导用户在KubeGems快速使用，并对Kubernetes相关的资源进行操作
 # keywords: [kubegems,KubeGems,kubernetes]
 ---
 
-## 设置应用商店
+## 设置三方应用商店
 
 通常业务都会依赖很多常用的中间价，例如mysql,redis等等； kubegems默认提供了一个内置的应用商店，里面已经内置了一部分的常用中间价，但是并不完全；kubegems允许系统管理员添加第三方的应用商店；
 
