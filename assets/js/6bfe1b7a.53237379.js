@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[929],{2561:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","slug":"/blog/tags/\u767b\u9646\u8ba4\u8bc1","name":"\u767b\u9646\u8ba4\u8bc1","count":1,"permalink":"/blog/tags/\u767b\u9646\u8ba4\u8bc1"}')}}]);
