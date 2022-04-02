@@ -10,7 +10,7 @@ sidebar_position: 3
 
 kubegems 内置了一个应用商城,包含了许多开箱可用的资源编排，其内容为 helm charts。里面内置了一部分常用的应用，例如mysql, redis等；
 
-如何设置应用商店，请移步[这里，设置应用商店](/docs/tasks/platform/appstore-manage)
+#如何设置应用商店，请移步[这里，设置应用商店](/docs/tasks/admin/integrations/appstore-manage)
 
 ![应用商城](./assets/appstore.png)
 
