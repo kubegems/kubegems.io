@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[2215],{62797:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","slug":"/blog/tags/\u65e5\u5fd7\u91c7\u96c6\u8bbe\u8ba1","name":"\u65e5\u5fd7\u91c7\u96c6\u8bbe\u8ba1","count":1,"permalink":"/blog/tags/\u65e5\u5fd7\u91c7\u96c6\u8bbe\u8ba1"}')}}]);

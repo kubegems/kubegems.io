@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[2535],{45641:function(e){e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"\u767b\u9646\u548c\u8ba4\u8bc1\u8bbe\u8ba1","permalink":"/blog/kubegems-auth"}]}')}}]);
