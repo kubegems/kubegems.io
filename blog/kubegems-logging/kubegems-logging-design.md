@@ -6,7 +6,7 @@ tags: [日志采集设计]
 ---
 
 ## 整体思路
-整体交互类似 [监控采集器](../docs/tasks/observability/monitor/monitors#指标采集)
+整体交互类似 [监控采集器](/docs/tasks/observability/monitoring/monitors)
 
 1. 不再由前端直接管理`flow`和`output`资源，由后端提供简化、统一的`日志采集器`接口
 2. 每个集群共用同一个`kubegems-container-clusteroutput`的`ClusterOutput`资源，由`installer`管理:
@@ -59,7 +59,7 @@ spec:
 | max_per_minute    | 每分钟最多采集的日志条数                                                 |
 
 界面和字段都类似监控采集器:
-![](assets/logging-collector.jpg)
+![](logging-collector.jpg)
 
 1. 后端拼凑出对应的的`flow`:
 
