@@ -6,6 +6,9 @@ sidebar_position: 2
 # keywords: [kubegems,KubeGems,kubernetes]
 ---
 
+## 资源管理
+
+---
 ## Kubernetes 中的资源单位 
 
 ### CPU 资源单位 

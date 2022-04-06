@@ -6,9 +6,10 @@ sidebar_position: 5
 # keywords: [kubegems,KubeGems,kubernetes]
 ---
 
-## 概述
+## 设置三方应用商店
 
 ---
+## 概述
 
 **Helm** 是 kubernetes 生态系统中的一个软件包管理工具，类似 ubuntu 的 apt , centos 的 yum 或 python 的 pip 一样，Helm 专门负责管理 kubernetes 中的应用资源；使用 helm 可以对kubernetes 应用进行统一打包、分发、安装、升级以及回退等操作。Helm 利用 `Chart` 来封装 kubernetes 原生应用程序的一些列 yaml 文件，可以在部署应用的时候自定义应用程序的一些Metadata，以便于应用程序的分发。
 
@@ -17,8 +18,8 @@ sidebar_position: 5
 :::tip
 应用商店的本质是基于 Helm Chart Repositsry， 只要是兼容 Helm Chart Index 的服务，都可以作为第三方应用商店被添加到 KubeGems 中。
 :::
-## 设置三方应用商店
 
+## 配置 Charts 仓库
 
 :::important
 KubeGems 不提供扫描第三方应用商店的安全性，作为系统管理员需要谨慎添加第三方仓库，避免引入安全问题；
