@@ -5,7 +5,9 @@ sidebar_position: 1
 # description: 本文用于指导用户在KubeGems快速使用，并对Kubernetes相关的资源进行操作
 # keywords: [kubegems,KubeGems,kubernetes]
 ---
+## Kubernetes 管理
 
+---
 ## 概述
 
 KubeGems 本身不会维护 Kubernetes 集群，而是通过 `kubeconfig` 对集群进行管理。KubeGems 在导入集群中，会创建名称为 `kubegems-installer` 的命名空间，并下发`CRD/installers.plugins.kubegems.io` 以及关联的 `CR/installer` 资源。

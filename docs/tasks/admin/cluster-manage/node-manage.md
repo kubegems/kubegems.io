@@ -8,6 +8,8 @@ sidebar_position: 3
 
 ## 节点管理
 
+---
+
 进入【平台设置】，点击导航栏的【节点管理】的 “节点” 按钮进入node 管理功能
 
 ![](/img/docs/tasks-cluster-manage-node-manage.png)

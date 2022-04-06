@@ -6,6 +6,9 @@ sidebar_position: 4
 # keywords: [kubegems,KubeGems,kubernetes]
 ---
 
+## 自定义资源
+
+---
 ## CustomResourceDefinition
 
 `CustomResourceDefinition` 是用户拓展Kubernetes API的一个途径。同理，KubeGems 内部对资源的抽象也是你用 CRD 来实现。
