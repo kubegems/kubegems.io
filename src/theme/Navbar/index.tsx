@@ -6,6 +6,7 @@ import NavbarItem, { type Props as NavbarItemConfig } from "@theme/NavbarItem";
 import Link from "@docusaurus/Link";
 import NavbarMobileSidebar from '@theme/Navbar/MobileSidebar';
 import NavbarMobileSidebarToggle from '@theme/Navbar/MobileSidebar/Toggle';
+import NavbarColorModeToggle from '@theme/Navbar/ColorModeToggle';
 import {
   useThemeConfig,
   useHideableNavbar,
@@ -35,8 +36,6 @@ const Navbar = (): JSX.Element => {
 
   const { items, rightItems, leftItems } = useNavbarItems();
 
-  const isDesktop = typeof window !== 'undefined' && window.innerWidth > 996;
-
   const mobileSidebar = useNavbarMobileSidebar();
 
   return (
@@ -55,7 +54,7 @@ const Navbar = (): JSX.Element => {
     >
       <div className="navbar__inner">
         <div className="navbar__items">
-          {!isDesktop && <NavbarMobileSidebarToggle />}
+          {<NavbarMobileSidebarToggle />}
 
           <Logo
             className="navbar__brand"
@@ -73,16 +72,16 @@ const Navbar = (): JSX.Element => {
           ))}
 
           <div className="navbar__items navbar__item--dock">
-            {isDesktop && !colorModeToggle.disabled && (
+            {!colorModeToggle.disabled && (
               <Toggle
                 key="toggle"
-                className="navbar__toggle"
+                className="navbar__dark"
                 checked={colorModeToggle.colorMode === "dark"}
                 onChange={colorModeToggle.toggle}
               />
             )}
 
-            {isDesktop &&
+            {
               <Link
                 key="github"
                 className="navbar__github"
