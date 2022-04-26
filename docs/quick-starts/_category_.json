@@ -1,4 +1,8 @@
 {
   "label": "快速入门",
-  "position": 3
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "快速入门"
+  }
 }

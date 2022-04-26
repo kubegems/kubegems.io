@@ -1,4 +1,8 @@
 {
   "label": "运行时管理",
-  "position": 3
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "运行时管理"
+  }
 }

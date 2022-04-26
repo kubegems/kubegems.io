@@ -80,6 +80,8 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      hideableSidebar: true,
+      autoCollapseSidebarCategories: true,
       zoom: {
         selector: '.markdown :not(em) > img',
         config: {

@@ -17,6 +17,10 @@
   &__toggle {
     display: block;
     margin-right: 1.5rem;
+
+    @media (max-width: 996px) {
+      margin-right: 1rem;
+    }
   }
 
   &__github {

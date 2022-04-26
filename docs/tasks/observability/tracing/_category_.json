@@ -1,4 +1,8 @@
 {
   "label": "链路跟踪",
-  "position": 3
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "链路跟踪"
+  }
 }

@@ -3,12 +3,12 @@ import { useThemeConfig, useColorMode } from '@docusaurus/theme-common';
 
 function useColorModeToggle () {
   const { colorMode: { disableSwitch }} = useThemeConfig();
-  const { isDarkTheme, setLightTheme, setDarkTheme } = useColorMode();
+  const { colorMode, setColorMode } = useColorMode();
   const toggle = useCallback(
-    (e) => (e.target.checked ? setDarkTheme() : setLightTheme()),
-    [setLightTheme, setDarkTheme],
+    (e) => (e.target.checked ? setColorMode("dark") : setColorMode("light")),
+    [setColorMode],
   );
-  return { isDarkTheme, toggle, disabled: disableSwitch };
+  return { colorMode, toggle, disabled: disableSwitch };
 }
 
 export default useColorModeToggle
