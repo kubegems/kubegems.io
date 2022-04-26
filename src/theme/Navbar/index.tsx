@@ -1,4 +1,4 @@
-import React, { type ComponentProps } from "react";
+import React, { type ComponentProps, useEffect } from "react";
 import clsx from "clsx";
 import Toggle from "@theme/Toggle";
 import Logo from "@theme/Logo";
@@ -35,7 +35,8 @@ const Navbar = (): JSX.Element => {
 
   const { items, rightItems, leftItems } = useNavbarItems();
 
-  const isDesktop = window.innerWidth > 996;
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth > 996;
+
   const mobileSidebar = useNavbarMobileSidebar();
 
   return (
