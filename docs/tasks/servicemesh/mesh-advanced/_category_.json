@@ -1,4 +1,8 @@
 {
   "label": "告警功能",
-  "position": 5
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "title": "告警功能"
+  }
 }

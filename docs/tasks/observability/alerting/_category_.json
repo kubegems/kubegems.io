@@ -1,4 +1,8 @@
 {
-  "label": " 告警中心",
-  "position": 5
+  "label": "告警中心",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "title": "告警中心"
+  }
 }

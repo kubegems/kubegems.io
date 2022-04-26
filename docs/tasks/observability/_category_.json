@@ -1,4 +1,8 @@
 {
   "label": "可观测性",
-  "position": 4
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "title": "可观测性"
+  }
 }

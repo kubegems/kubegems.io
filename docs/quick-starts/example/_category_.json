@@ -1,4 +1,8 @@
 {
   "label": "入门示例",
-  "position": 2
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "入门示例"
+  }
 }

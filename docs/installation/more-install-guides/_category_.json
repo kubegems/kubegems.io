@@ -1,4 +1,8 @@
 {
   "label": "更多配置",
-  "position": 3
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "更多配置"
+  }
 }
