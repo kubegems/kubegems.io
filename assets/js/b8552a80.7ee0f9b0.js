@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[8510],{65362:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","slug":"/blog/tags/auth","name":"Auth","count":1,"permalink":"/blog/tags/auth"}')}}]);

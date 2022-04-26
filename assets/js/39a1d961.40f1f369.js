@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[1433],{12821:function(e){e.exports=JSON.parse('{"title":"\u4ea7\u54c1\u4ecb\u7ecd","slug":"/category/\u4ea7\u54c1\u4ecb\u7ecd","permalink":"/docs/category/\u4ea7\u54c1\u4ecb\u7ecd","navigation":{"next":{"title":"KubeGems\u9879\u76ee","permalink":"/docs/concepts/what-is-kubegems"}}}')}}]);
