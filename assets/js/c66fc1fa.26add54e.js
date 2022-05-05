@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[4776],{18515:function(e){e.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"logging-operator","count":1,"permalink":"/blog/tags/logging-operator"}')}}]);
