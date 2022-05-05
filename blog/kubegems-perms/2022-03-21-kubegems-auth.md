@@ -1,6 +1,6 @@
 ---
 slug: kubegems-auth
-title: 登陆和认证设计
+title: KubeGems 用户认证和登录设计
 authors: [pepesi]
 tags: [登陆认证, Auth]
 ---

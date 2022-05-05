@@ -23,7 +23,7 @@ import TabItem from '@theme/TabItem';
   <TabItem value="dockerhub" label="DockerHub 源" default>
 
 ```bash
-KUBEGEMS_VERSION=v1.20.0-beta.1
+KUBEGEMS_VERSION=v1.20.0-beta.2
 
 kubectl apply -n kubegems-installer -f \
 https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.yaml
@@ -32,7 +32,7 @@ https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERS
   <TabItem value="aliyun" label="阿里云镜像源（中国大陆地区推荐）" default>
 
 ```bash
-KUBEGEMS_VERSION=v1.20.0-beta.1
+KUBEGEMS_VERSION=v1.20.0-beta.2
 
 wget -O- https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.yaml \
 | sed "s#image: kubegems#image: registry.cn-beijing.aliyuncs.com/kubegems#g"  \
@@ -42,7 +42,7 @@ wget -O- https://github.com/kubegems/installer-operator/releases/download/${KUBE
   <TabItem value="windows" label="GitHub 源" default>
 
 ```bash
-KUBEGEMS_VERSION=v1.20.0-beta.1
+KUBEGEMS_VERSION=v1.20.0-beta.2
 
 wget -O- https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.yaml \
 | sed "s#image: kubegems#image: ghcr.io/kubegems#g" \
@@ -137,6 +137,7 @@ metadata:
   name: gems-dashboard
   namespace: gemcloud-system
 spec:
+  ingressClassName: default-gateway
   rules:
   - host: console.kubegems.io
     http:
