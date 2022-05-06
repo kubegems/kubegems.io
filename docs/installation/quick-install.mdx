@@ -151,11 +151,62 @@ spec:
 
 此时，您需要将域名`console.kubegems.io`解析到 Kubernetes 集群内任意节点后，即可通过 `http://console.kubegems.io:<NodePort>` 访问页面。
 
+![](./assets/gems-first-dashbaord.jpg)
+
 您可以通过如下用户名与密码登录控制台：
+
 ```
 user: admin 
 password: demo!@#admin
 ```
+
+### 添加管理集群
+
+使用 admin 身份登录 KubeGems 平台后，点击右下角 “工具” 图标，进入【平台管理】，点击 “添加集群”。
+
+:::info
+初次安装完成后，KubeGems 内无集群数据，需要用户自信将当前集群添加到 KubeGems 当中。
+:::
+
+- 将您的 kubeconfig 内容粘贴至文本框，点击“下一步”
+
+![](./assets/gems-first-centrol-cluster.jpg)
+
+- 当 kubeconfig 校验成功，您可以看到如下界面后，点击“下一步”
+
+<img
+  src={require('./assets/cluster-check-success.jpg').default}
+  alt="Example banner"
+  width="80%"
+  align="center"
+/>
+
+- 勾选 “控制集群”，并端着控制集群中的一些基本信息，如“镜像仓库”、“存储类型”等。
+
+<img
+  src={require('./assets/gems-first-centrol-info.jpg').default}
+  alt="Example banner"
+  width="80%"
+  align="center"
+/>
+
+:::caution
+如无法确定如何选择上述信息，保持默认即可。
+:::
+
+- 提交保存成功，您在“集群资源”页面即可看到新加的控制集群。
+
+![](./assets/gems-first-centrol.jpg)
+
+- 点击控制集群的“详情”，即可看到集群的详细信息。
+
+![](./assets/gems-first-centrol-dash.jpg)
+
+
+:::tip
+想更进一步了解 KubeGems 使用 ?
+请跳转至 [快速开始](/docs/quick-starts/quick-start) 开始学习。
+:::
 
 ### 附录 
 
@@ -163,13 +214,13 @@ password: demo!@#admin
 
 | 命名空间 | 用途 |
 | --- | --- |
-| cert-manager | 证书管理所在空间 |
-| kubegems-installer | KubeGems installer 所在空间 |
-| gemcloud-system| KubeGems系统服务所在空间|
-| gemcloud-monitoring-system| 监控告警服务所在空间|
-| gemcloud-logging-system| 日志服务所在空间 |
-| gemcloud-gateway-system| 租户网关所在空间 |
-| gemcloud-workflow-system | ci/cd引擎所在空间 |
-| observability | 可观察组件所在空间 |
-| istio-system | istio 组件所在空间 |
-| local-path-storage | host pv服务所在空间 |
+| cert-manager | 证书管理所在空间,KubeGems 安装过程中会向 cert-manager 申请 tls 证书 |
+| kubegems-installer | KubeGems installer  operator 所在空间 |
+| gemcloud-system| KubeGems 系统核心服务所在空间|
+| gemcloud-monitoring-system| KubeGems 监控告警服务所在空间 |
+| gemcloud-logging-system| KubeGems 日志服务所在空间 |
+| gemcloud-gateway-system| KubeGems 租户Ingress网关和 Istio 网关所在空间 |
+| gemcloud-workflow-system | KubeGems 持续部署引擎 ArgoCD 所在空间 |
+| observability | KubeGems Jaeger 应用链路跟踪服务所在空间 |
+| istio-system |  Kubegems istio 服务治理套件所在空间 |
+| local-path-storage |  local-path-provisioner所在空间，用于创建本地文件系统的 pvc |
