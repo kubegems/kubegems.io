@@ -124,6 +124,10 @@ html[data-theme='dark'] {
 
 @media (min-width: 997px) {
   .docSidebarContainer_node_modules-\@docusaurus-theme-classic-lib-next-theme-DocPage-styles-module {
-    height: calc(100vh);
+    height: calc(100vh) !important;
+  }
+  
+  .theme-doc-sidebar-container {
+    height: calc(100vh) !important;
   }
 }
