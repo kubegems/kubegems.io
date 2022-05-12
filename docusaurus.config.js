@@ -80,6 +80,16 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      metadata: [
+        {
+          name: 'go-import', 
+          content: 'kubegems.io/$repo git https://github.com/kubegems/$repo'
+        },
+        {
+          name: 'go-source', 
+          content: 'kubegems.io/$repo https://github.com/kubegems/$repo https://github.com/kubegems/$repo/tree/master{/dir} https://github.com/kubegems/$repo/blob/master{/dir}/{file}#L{line}'
+        },
+      ],
       hideableSidebar: true,
       autoCollapseSidebarCategories: true,
       zoom: {
