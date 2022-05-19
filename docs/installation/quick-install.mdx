@@ -23,7 +23,7 @@ import TabItem from '@theme/TabItem';
   <TabItem value="dockerhub" label="DockerHub 源" default>
 
 ```bash
-KUBEGEMS_VERSION=v1.20.0-beta.2
+KUBEGEMS_VERSION="${KUBEGEMS_VERSION:-v1.20.0-beta.2}"
 
 kubectl apply -n kubegems-installer -f \
 https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.yaml
@@ -32,7 +32,7 @@ https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERS
   <TabItem value="aliyun" label="阿里云镜像源（中国大陆地区推荐）" default>
 
 ```bash
-KUBEGEMS_VERSION=v1.20.0-beta.2
+KUBEGEMS_VERSION="${KUBEGEMS_VERSION:-v1.20.0-beta.2}"
 
 wget -O- https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.yaml \
 | sed "s#image: kubegems#image: registry.cn-beijing.aliyuncs.com/kubegems#g"  \
@@ -42,7 +42,7 @@ wget -O- https://github.com/kubegems/installer-operator/releases/download/${KUBE
   <TabItem value="windows" label="GitHub 源" default>
 
 ```bash
-KUBEGEMS_VERSION=v1.20.0-beta.2
+KUBEGEMS_VERSION="${KUBEGEMS_VERSION:-v1.20.0-beta.2}"
 
 wget -O- https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.yaml \
 | sed "s#image: kubegems#image: ghcr.io/kubegems#g" \
@@ -68,23 +68,73 @@ kubegems-installer-manager-8649bd7fcb-j286g    2/2     Running   0          15m 
   <TabItem value="dockerhub" label="DockerHub 源" default>
 
 ```bash
-kubectl apply -f https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.installer.yaml
+# Kubernetes 集群的容器运行时，默认是 docker，支持 containerd
+CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
+# 部署 KubeGems 服务使用的镜像源，默认 docker.io
+REPOSITORY="${REPOSITORY:-docker.io/kubegems}"
+# Kubernetes 集群中默认的 StorageClass。如没有，默认采用 local-path，所有数据将存在主机 /data 路径下
+STORAGECLASS="${STORAGECLASS:-local-path}"
+# Kubernetes 集群名称
+CLUSTER_NAME="${CLUSTER_NAME:-kubegems-centrol}"
+
+# 设置 Installer 环境变量，并提交开始部署
+kubectl apply -f <( \
+    wget -O - https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.installer.template.yaml | \
+        KUBEGEMS_VERSION="${KUBEGEMS_VERSION}" \
+        CONTAINER_RUNTIME="${CONTAINER_RUNTIME}" \
+        REPOSITORY="${REPOSITORY}" \
+        STORAGECLASS="${STORAGECLASS}" \
+        CLUSTER_NAME="${CLUSTER_NAME}" \
+        envsubst \
+)
 ```
   </TabItem>
   <TabItem value="aliyun" label="阿里云镜像源（中国大陆地区推荐）" default>
 
 ```bash
-wget -O - https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.installer.yaml \
-| sed "s#repository: docker.io#repository: registry.cn-beijing.aliyuncs.com#g" \
-| kubectl apply -f -
+# Kubernetes 集群的容器运行时，默认是 docker，支持 containerd
+CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
+# 部署 KubeGems 服务使用的镜像源，默认 docker.io
+REPOSITORY="${REPOSITORY:-registry.cn-beijing.aliyuncs.com/kubegems}"
+# Kubernetes 集群中默认的 StorageClass。如没有，默认采用 local-path，所有数据将存在主机 /data 路径下
+STORAGECLASS="${STORAGECLASS:-local-path}"
+# Kubernetes 集群名称
+CLUSTER_NAME="${CLUSTER_NAME:-kubegems-centrol}"
+
+# 设置 Installer 环境变量，并提交开始部署
+kubectl apply -f <( \
+    wget -O - https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.installer.template.yaml | \
+        KUBEGEMS_VERSION="${KUBEGEMS_VERSION}" \
+        CONTAINER_RUNTIME="${CONTAINER_RUNTIME}" \
+        REPOSITORY="${REPOSITORY}" \
+        STORAGECLASS="${STORAGECLASS}" \
+        CLUSTER_NAME="${CLUSTER_NAME}" \
+        envsubst \
+)
 ```
   </TabItem>
   <TabItem value="windows" label="GitHub 源" default>
 
 ```bash
-wget -O - https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.installer.yaml \
-| sed "s#repository: docker.io#repository: ghcr.io#g" \
-| kubectl apply -f -
+# Kubernetes 集群的容器运行时，默认是 docker，支持 containerd
+CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
+# 部署 KubeGems 服务使用的镜像源，默认 docker.io
+REPOSITORY="${REPOSITORY:-ghcr.io/kubegems}"
+# Kubernetes 集群中默认的 StorageClass。如没有，默认采用 local-path，所有数据将存在主机 /data 路径下
+STORAGECLASS="${STORAGECLASS:-local-path}"
+# Kubernetes 集群名称
+CLUSTER_NAME="${CLUSTER_NAME:-kubegems-centrol}"
+
+# 设置 Installer 环境变量，并提交开始部署
+kubectl apply -f <( \
+    wget -O - https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.installer.template.yaml | \
+        KUBEGEMS_VERSION="${KUBEGEMS_VERSION}" \
+        CONTAINER_RUNTIME="${CONTAINER_RUNTIME}" \
+        REPOSITORY="${REPOSITORY}" \
+        STORAGECLASS="${STORAGECLASS}" \
+        CLUSTER_NAME="${CLUSTER_NAME}" \
+        envsubst \
+)
 ```
   </TabItem>
 </Tabs >
