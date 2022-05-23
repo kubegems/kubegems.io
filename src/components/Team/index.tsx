@@ -17,13 +17,13 @@ const Team = () => {
       id: '2',
       avatar: 'https://github.com/LinkMaq.png',
       name: 'Link Ma',
-      post: 'PM / SOFTWARE ENGINEER',
+      post: 'PM / Software Engineer',
     },
     {
       id: '3',
       avatar: 'https://github.com/pepesi.png',
       name: 'Deng Yu',
-      post: 'SOFTWARE ENGINEER',
+      post: 'Software Engineer',
     },
     {
       id: '4',
@@ -35,25 +35,25 @@ const Team = () => {
       id: '5',
       avatar: 'https://github.com/cnfatal.png',
       name: 'Likun Zhang',
-      post: 'SOFTWARE ENGINEER',
+      post: 'Software Engineer',
     },
     {
       id: '6',
       avatar: 'https://github.com/jojotong.png',
       name: 'Lintong Sun',
-      post: 'SOFTWARE ENGINEER',
+      post: 'Software Engineer',
     },
     {
       id: '7',
-      avatar: 'https://github.com/kubegems.png',
+      avatar: 'https://github.com/taozix.png',
       name: 'Ruitao Liu',
-      post: 'SOFTWARE ENGINEER',
+      post: 'Software Engineer',
     },
     {
       id: '8',
       avatar: 'https://github.com/zhanghe9702.png',
       name: 'He Zhang',
-      post: 'SOFTWARE ENGINEER',
+      post: 'Software Engineer',
     },
   ]
 

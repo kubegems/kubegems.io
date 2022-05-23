@@ -12,12 +12,17 @@ const Contribution = () => {
       avatar: 'https://github.com/jwSmlion.png',
       name: 'jwSmlion',
     },
+    {
+      id: '2',
+      avatar: 'https://github.com/liutao-east.png',
+      name: 'liutao-east',
+    },
   ]
 
   return (
     <QueueAnim
       type='bottom'
-      className={styles.row}>
+      className='row'>
       {contributions.map(item => (
         <div key={item.id} className={clsx(styles.team__item, 'col col--2')}>
           <Member {...item} />
