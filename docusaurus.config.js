@@ -83,11 +83,11 @@ const config = {
       metadata: [
         {
           name: 'go-import', 
-          content: 'kubegems.io/$repo git https://github.com/kubegems/$repo'
+          content: 'github.com/kubegems/kubegems git https://github.com/kubegems/kubegems'
         },
         {
           name: 'go-source', 
-          content: 'kubegems.io/$repo https://github.com/kubegems/$repo https://github.com/kubegems/$repo/tree/master{/dir} https://github.com/kubegems/$repo/blob/master{/dir}/{file}#L{line}'
+          content: 'github.com/kubegems/kubegems https://github.com/kubegems/kubegems https://github.com/kubegems/kubegems/tree/master{/dir} https://github.com/kubegems/kubegems/blob/master{/dir}/{file}#L{line}'
         },
       ],
       hideableSidebar: true,
