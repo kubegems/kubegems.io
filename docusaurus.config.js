@@ -83,11 +83,19 @@ const config = {
       metadata: [
         {
           name: 'go-import', 
-          content: 'github.com/kubegems/kubegems git https://github.com/kubegems/kubegems'
+          content: 'kubegems.io/kubegems git https://github.com/kubegems/kubegems'
+        },
+        {
+          name: 'go-import', 
+          content: 'kubegems.io/bundle-controller git https://github.com/kubegems/bundle-controller'
         },
         {
           name: 'go-source', 
-          content: 'github.com/kubegems/kubegems https://github.com/kubegems/kubegems https://github.com/kubegems/kubegems/tree/master{/dir} https://github.com/kubegems/kubegems/blob/master{/dir}/{file}#L{line}'
+          content: 'kubegems.io/kubegems https://github.com/kubegems/kubegems https://github.com/kubegems/kubegems/tree/master{/dir} https://github.com/kubegems/kubegems/blob/master{/dir}/{file}#L{line}'
+        },
+        {
+          name: 'go-source', 
+          content: 'kubegems.io/bundle-controller https://github.com/kubegems/bundle-controller https://github.com/kubegems/bundle-controller/tree/master{/dir} https://github.com/kubegems/bundle-controller/blob/master{/dir}/{file}#L{line}'
         },
       ],
       hideableSidebar: true,
