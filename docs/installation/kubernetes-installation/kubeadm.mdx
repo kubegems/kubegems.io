@@ -702,13 +702,32 @@ openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outfor
 
 1. 安装contaienrd nvidia runtime
 
-```bash
-curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | sudo apt-key add -
+<Tabs >
+  <TabItem value="debian" label="Debian系列" default>
 
-curl -s -L https://nvidia.github.io/nvidia-container-runtime/$(. /etc/os-release;echo $ID$VERSION_ID)/nvidia-container-runtime.list | sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
+```bash
+curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | \
+  sudo apt-key add -
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidia-container-runtime.list | \
+  sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
+sudo apt-get update
 
 apt install nvidia-container-runtime -y
 ```
+
+  </TabItem>
+  <TabItem value="rhel" label="RHEL系列" default>
+
+```bash
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidia-container-runtime.repo | \
+  sudo tee /etc/yum.repos.d/nvidia-container-runtime.repo
+
+yum -y install nvidia-container-runtime
+```
+  </TabItem>
+</Tabs>
 
 2. 配置containerd和cri工具
 
@@ -843,4 +862,30 @@ oom_score = 0
 EOF
 
 systemctl restart containerd
+```
+
+3. 验证安装结果
+
+```
+ ctr image pull docker.io/nvidia/cuda:11.0.3-base-ubuntu20.04
+ ctr run --rm --gpus 0 -t docker.io/nvidia/cuda:11.0.3-base-ubuntu20.04 cuda-11.0.3-base-ubuntu20.04 nvidia-smi
+
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 450.80.02    Driver Version: 450.80.02    CUDA Version: 11.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla T4            On   | 00000000:00:1E.0 Off |                    0 |
+| N/A   34C    P8     9W /  70W |      0MiB / 1µ5109MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
 ```
