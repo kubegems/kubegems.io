@@ -90,12 +90,20 @@ const config = {
           content: 'kubegems.io/bundle-controller git https://github.com/kubegems/bundle-controller'
         },
         {
+          name: 'go-import', 
+          content: 'kubegems.io/configer git https://github.com/kubegems/configer'
+        },
+        {
           name: 'go-source', 
           content: 'kubegems.io/kubegems https://github.com/kubegems/kubegems https://github.com/kubegems/kubegems/tree/master{/dir} https://github.com/kubegems/kubegems/blob/master{/dir}/{file}#L{line}'
         },
         {
           name: 'go-source', 
           content: 'kubegems.io/bundle-controller https://github.com/kubegems/bundle-controller https://github.com/kubegems/bundle-controller/tree/master{/dir} https://github.com/kubegems/bundle-controller/blob/master{/dir}/{file}#L{line}'
+        },
+        {
+          name: 'go-source', 
+          content: 'kubegems.io/configer https://github.com/kubegems/configer https://github.com/kubegems/configer/tree/master{/dir} https://github.com/kubegems/configer/blob/master{/dir}/{file}#L{line}'
         },
       ],
       hideableSidebar: true,
