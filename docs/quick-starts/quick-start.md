@@ -19,13 +19,9 @@ keywords: [kubegems, KubeGems, kubernetes]
 
 ![](./assets/admin-first-cluster.jpg)
 
-输入`集群名称`和集群容器运行时类型，勾选上 `控制集群`。
+输入`集群名称`等其他选项。
 
 ![](./assets/admin-first-import-cluster.jpg)
-
-:::info 信息
-控制集群不会注入 `gem-insatller-manager` 服务。
-:::
 
 - 集群导入成功，并且状态正常后，点击 【详情】进入集群信息管理页面
 
