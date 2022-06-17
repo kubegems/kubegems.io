@@ -13,6 +13,8 @@ import TabItem from "@theme/TabItem";
 
 安装 kubegems 需要具备**集群管理员**权限，所以在部署前需要联系您的集群管理员，以保证有足够的授权执行以下操作。
 
+> 如果您想尝试我们正在开发的版本，可以参考[这里](https://github.com/kubegems/kubegems/blob/main/deploy/README-zh.md)进行部署。
+
 ## 前置需求
 
 - kubernetes 1.20 及以上版本( 1.23+最佳 )
@@ -58,7 +60,7 @@ kubegems-installer-6fb7495c4d-8rqwn   0/1     Running   0          12s
   如果没有 CSI 插件，可以安装 local-path-provisioner
 
   ```sh
-  kubectl create namespace local-path-provisioner
+  kubectl create namespace local-path-storage
   kubectl apply -f https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/addon-local-path-provisioner.yaml
   ```
 
