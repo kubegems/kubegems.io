@@ -4,218 +4,183 @@ hide_title: true
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 ## 快速安装
 
----
+**KubeGems**通过与 [bundle-controller](https://github.com/kubegems/bundle-controller) 相同的方式进行安装，通过下发 plugin 类型的 CR 来安装对应的 helm/kustomize 包。
 
-**KubeGems Installer Operator**是一个通过 [Operator SDK](https://sdk.operatorframework.io/) 构建的Ansible Kubernetes控制器。通过CRD中的定义的字段对Ansible进行变量传递。Installer Operator的运行需要具备集群管理员的RBAC权限，所以在部署前需要联系您的集群管理员，以保证有足够的授权执行以下操作。
+安装 kubegems 需要具备**集群管理员**权限，所以在部署前需要联系您的集群管理员，以保证有足够的授权执行以下操作。
 
-![](./assets/installer.jpg)
+## 前置需求
 
-### Installation
+- kubernetes 1.20 及以上版本( 1.23+最佳 )
 
-1.执行以下命令安装KubeGems Installer控制器
+如果没有可用集群可以参考 [安装 kubernetes](../category/安装kubernetes)。
 
-<Tabs >
+## 主要部分
+
+kubegems 包含以下主要部分：
+
+| 名称                 | 描述                                                        |
+| -------------------- | ----------------------------------------------------------- |
+| `kubegems-installer` | kubegems 安装程序，安装 kubegems 组件及依赖组件             |
+| `kubegems`           | kubegems 核心组件，包含 UI 界面及相关 API 服务              |
+| `kubegems-local`     | kubegems 边缘组件，安装在托管集群上，获取集群信息和执行操作 |
+
+## 部署 KubeGems
+
+### 部署 installer
+
+installer 是用于安装 kubegems 主要组件和插件的控制器。
+其通过监听类型为 `plugins.plugins.kubegems.io` 的 CR，并根据其定义来下载和安装相应的 helm chart 或者 kustomize 文件。
+
+详情参考:[bundle-controller](https://github.com/kubegems/bundle-controller)。
+
+```sh
+kubectl create namespace kubegems-installer
+kubectl apply -f https://github.com/kubegems/kubegems/raw/main/deploy/installer.yaml
+```
+
+等待安装程序准备就绪。
+
+```sh
+$ kubectl -n kubegems-installer get po
+NAME                                  READY   STATUS    RESTARTS   AGE
+kubegems-installer-6fb7495c4d-8rqwn   0/1     Running   0          12s
+```
+
+### (可选)安装依赖
+
+- kubegems 需要持久化一些重要数据，需要集群有可用的 CSI 插件
+
+  如果没有 CSI 插件，可以安装 local-path-provisioner
+
+  ```sh
+  kubectl create namespace local-path-provisioner
+  kubectl apply -f https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/addon-local-path-provisioner.yaml
+  ```
+
+- 使用 ingress 访问 kubegems ui 界面，您也可以无需安装 ingress 转而使用 NodePort 或者 PortForward 方式访问。
+
+  如果没有 ingress controller，可以安装 nginx-ingress-controller。
+
+  ```sh
+  kubectl create namespace ingress-nginx
+  kubectl apply -f https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/addon-nginx-ingress.yaml
+  ```
+
+### 部署 kubegems 核心组件
+
+默认使用 dockerhub 镜像，但如果您的网络在获取 docker.io quay.io gcr.io 上的镜像时较为缓慢，可以使用我们在阿里云上的镜像。
+
+注意：kubegems 默认使用名称为 local-path 的 storageClass 以及 tag 为 latest 的版本。
+如果您想自定义 kubegems 版本或使用不同的 storageClass，您需要在 apply 前下载并编辑 `kubegems.yaml` 文件。
+
+<Tabs>
   <TabItem value="dockerhub" label="DockerHub 源" default>
 
 ```bash
-KUBEGEMS_VERSION="${KUBEGEMS_VERSION:-v1.20.0-beta.2}"
+kubectl create namespace kubegems
 
-kubectl apply -n kubegems-installer -f \
-https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.yaml
+export STORAGE_CLASS=local-path  # 改为您使用的 storageClass
+export KUBEGEMS_VERSION=v1.21.0  # change to specify kubegems version
+curl -sL https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/kubegems.yaml \
+| sed -e "s/local-path/${STORAGE_CLASS}/g" -e "s/latest/${KUBEGEMS_VERSION}/g" \
+> kubegems.yaml
+
+kubectl apply -f kubegems.yaml
 ```
+
   </TabItem>
   <TabItem value="aliyun" label="阿里云镜像源（中国大陆地区推荐）" default>
 
 ```bash
-KUBEGEMS_VERSION="${KUBEGEMS_VERSION:-v1.20.0-beta.2}"
+kubectl create namespace kubegems
 
-wget -O- https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.yaml \
-| sed "s#image: kubegems#image: registry.cn-beijing.aliyuncs.com/kubegems#g"  \
-| kubectl apply -f -
+export STORAGE_CLASS=local-path  # 改为您使用的 storageClass
+export KUBEGEMS_VERSION=v1.21.0  # change to specify kubegems version
+curl -sL https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/kubegems-mirror.yaml \
+| sed -e "s/local-path/${STORAGE_CLASS}/g" -e "s/latest/${KUBEGEMS_VERSION}/g" \
+> kubegems.yaml
+
+kubectl apply -f kubegems.yaml
 ```
+
   </TabItem>
-  <TabItem value="windows" label="GitHub 源" default>
+</Tabs>
+
+** kubegems CR 下发后，大约需要 5 分钟才会一切正常，这取决于您的具体配置。**
+
+:::info
+在启动完成之前会有许多 Pod 的状态为 `CrashLoopBackOff`，这是由于其依赖的服务（mysql、redis、gitea、argocd 等）还在启动中，这是正常的，请耐心等待。
+:::
+
+kubegems 所有服务部署并启动完成后会有如下 pod：
 
 ```bash
-KUBEGEMS_VERSION="${KUBEGEMS_VERSION:-v1.20.0-beta.2}"
-
-wget -O- https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.yaml \
-| sed "s#image: kubegems#image: ghcr.io/kubegems#g" \
-| kubectl apply -f -
+kubectl -n kubegems get pod
+NAME                                               READY   STATUS      RESTARTS      AGE
+kubegems-api-6d45f656f8-lfk7j                      1/1     Running     0             21h
+kubegems-argo-cd-app-controller-5b849bfb49-ltvdz   1/1     Running     0             21h
+kubegems-argo-cd-repo-server-7dddd8f57d-ldj5k      1/1     Running     0             21h
+kubegems-argo-cd-server-76745cc657-v8dx9           1/1     Running     0             21h
+kubegems-chartmuseum-6c546b4d-qxfjj                1/1     Running     0             21h
+kubegems-charts-init-main-lmtwt                    0/1     Completed   0             21h
+kubegems-dashboard-6bcd7f65f-89gsk                 1/1     Running     0             21h
+kubegems-gitea-0                                   1/1     Running     0             21h
+kubegems-init-main-vjxnq                           0/1     Completed   3             21h
+kubegems-msgbus-7c58548497-pqwht                   1/1     Running     5 (21h ago)   21h
+kubegems-mysql-0                                   1/1     Running     0             21h
+kubegems-redis-master-0                            1/1     Running     0             21h
+kubegems-worker-7d67974f4c-cj65l                   1/1     Running     5 (21h ago)   21h
 ```
-  </TabItem>
-</Tabs >
 
-2.执行以下命令验证部署结果
+### 访问 kubegems 仪表板
+
+此时您可以临时的通过端口转发的方式访问 kubegems 界面：
+
+```sh
+# 使用端口转发
+kubectl -n kubegems port-forward svc/kubegems-dashboard 8080:80
+```
+
+如果作为正式使用您可能需要使用 ingress 或其他方式访问。
+
+kubegems 默认创建了 hostname 为 `dashboard.kubegems.io` 的 ingress。
+如果您想更改为其他域名，可以编辑 `kubegems` 空间下名称为 `kubegems` 的 plugin CR。
+
+```sh
+kubectl -n kubegems edit plugins.plugins.kubegems.io kubegems
+```
+
+您需要将该域名解析到 Kubernetes 集群内任意节点或者 Ingress LoadBanlancer IP 后，才可通过该域名访问页面。
+
+获取 ingress 访问地址：
 
 ```bash
-kubectl get pod -n kubegems-installer
-
-NAME                                           READY   STATUS    RESTARTS   AGE     IP                NODE              NOMINATED NODE   READINESS GATES
-kubegems-installer-manager-8649bd7fcb-j286g    2/2     Running   0          15m     192.169.15.92     k8s-master3-123   <none>           <none>
+# 使用 nginx ingress nodeport
+PORT=$(kubectl -n ingress-nginx get svc nginx-ingress-controller -ojsonpath='{.spec.ports[0].nodePort}')
+ADDRESS=$(kubectl -n kubegems get ingress kubegems -ojsonpath='{.spec.rules[*].host}')
+echo http://$ADDRESS:$PORT
 ```
-
-### Installer
-
-1.执行以下命令提交 installer 资源
-
-<Tabs >
-  <TabItem value="dockerhub" label="DockerHub 源" default>
-
-```bash
-# Kubernetes 集群的容器运行时，默认是 docker，支持 containerd
-CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
-# 部署 KubeGems 服务使用的镜像源，默认 docker.io
-REPOSITORY="${REPOSITORY:-docker.io/kubegems}"
-# Kubernetes 集群中默认的 StorageClass。如没有，默认采用 local-path，所有数据将存在主机 /data 路径下
-STORAGECLASS="${STORAGECLASS:-local-path}"
-# Kubernetes 集群名称
-CLUSTER_NAME="${CLUSTER_NAME:-kubegems-centrol}"
-
-# 设置 Installer 环境变量，并提交开始部署
-kubectl apply -f <( \
-    wget -O - https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.installer.template.yaml | \
-        KUBEGEMS_VERSION="${KUBEGEMS_VERSION}" \
-        CONTAINER_RUNTIME="${CONTAINER_RUNTIME}" \
-        REPOSITORY="${REPOSITORY}" \
-        STORAGECLASS="${STORAGECLASS}" \
-        CLUSTER_NAME="${CLUSTER_NAME}" \
-        envsubst \
-)
-```
-  </TabItem>
-  <TabItem value="aliyun" label="阿里云镜像源（中国大陆地区推荐）" default>
-
-```bash
-# Kubernetes 集群的容器运行时，默认是 docker，支持 containerd
-CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
-# 部署 KubeGems 服务使用的镜像源，默认 docker.io
-REPOSITORY="${REPOSITORY:-registry.cn-beijing.aliyuncs.com/kubegems}"
-# Kubernetes 集群中默认的 StorageClass。如没有，默认采用 local-path，所有数据将存在主机 /data 路径下
-STORAGECLASS="${STORAGECLASS:-local-path}"
-# Kubernetes 集群名称
-CLUSTER_NAME="${CLUSTER_NAME:-kubegems-centrol}"
-
-# 设置 Installer 环境变量，并提交开始部署
-kubectl apply -f <( \
-    wget -O - https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.installer.template.yaml | \
-        KUBEGEMS_VERSION="${KUBEGEMS_VERSION}" \
-        CONTAINER_RUNTIME="${CONTAINER_RUNTIME}" \
-        REPOSITORY="${REPOSITORY}" \
-        STORAGECLASS="${STORAGECLASS}" \
-        CLUSTER_NAME="${CLUSTER_NAME}" \
-        envsubst \
-)
-```
-  </TabItem>
-  <TabItem value="windows" label="GitHub 源" default>
-
-```bash
-# Kubernetes 集群的容器运行时，默认是 docker，支持 containerd
-CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
-# 部署 KubeGems 服务使用的镜像源，默认 docker.io
-REPOSITORY="${REPOSITORY:-ghcr.io/kubegems}"
-# Kubernetes 集群中默认的 StorageClass。如没有，默认采用 local-path，所有数据将存在主机 /data 路径下
-STORAGECLASS="${STORAGECLASS:-local-path}"
-# Kubernetes 集群名称
-CLUSTER_NAME="${CLUSTER_NAME:-kubegems-centrol}"
-
-# 设置 Installer 环境变量，并提交开始部署
-kubectl apply -f <( \
-    wget -O - https://github.com/kubegems/installer-operator/releases/download/${KUBEGEMS_VERSION}/centrol.installer.template.yaml | \
-        KUBEGEMS_VERSION="${KUBEGEMS_VERSION}" \
-        CONTAINER_RUNTIME="${CONTAINER_RUNTIME}" \
-        REPOSITORY="${REPOSITORY}" \
-        STORAGECLASS="${STORAGECLASS}" \
-        CLUSTER_NAME="${CLUSTER_NAME}" \
-        envsubst \
-)
-```
-  </TabItem>
-</Tabs >
-
-2.观察Installer部署状态
-
-在提交CR后，可是使用以下命令观察installer的日志输出
-
-```bash
-kubectl logs -n kubegems-installer  <installer-operator容器> -c manager -f
-```
-
-指导出现类似下面日志，则表示初始化完成。
-
-![](./assets/installer-complete.jpg)
-
-3.运行以下命令进行部署验证
-
-```
-kubectl get pod --all-namespaces |grep gems
-```
-KubeGems部署完成后，会运行如下截图信息的容器
-![](./assets/service-complete.jpg)
-
-### 访问界面
-
-当部署成功后，您可以在`gemcloud-gateway-system`命名空间下找到一个名叫 `deftault-gateway` 的网关，它由 KubeGems 自动创建。
-
-```bash
-kubectl get pod -n gemcloud-gateway-system
-NAME                                                         READY   STATUS    RESTARTS   AGE
-default-gateway-5bcb8bc59c-2fcq4                             1/1     Running   0          7d7h
-nginx-ingress-operator-controller-manager-56bcddd997-kbjqw   2/2     Running   0          7d7h
-
-kubectl get svc -n gemcloud-gateway-system
-NAME                                                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
-default-gateway                                             NodePort    10.102.206.7    <none>        80:32717/TCP,443:30557/TCP   7d7h
-nginx-ingress-operator-controller-manager-metrics-service   ClusterIP   10.96.47.121    <none>        8443/TCP                     7d8h
-nginx-ingress-operator-metrics                              ClusterIP   10.111.159.25   <none>        9113/TCP                     7d8h
-```
-您可以在创建一条ingress 规则将 kubegems dashboard 服务暴露出来，参考如下
-
-```yaml
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  annotations:
-    nginx.org/proxy-buffering: "false"
-    nginx.org/websocket-services: gems-dashboard
-  name: gems-dashboard
-  namespace: gemcloud-system
-spec:
-  ingressClassName: default-gateway
-  rules:
-  - host: console.kubegems.io
-    http:
-      paths:
-      - backend:
-          serviceName: gems-dashboard
-          servicePort: 8000
-        path: /
-        pathType: ImplementationSpecific
-```
-
-此时，您需要将域名`console.kubegems.io`解析到 Kubernetes 集群内任意节点后，即可通过 `http://console.kubegems.io:<NodePort>` 访问页面。
 
 ![](./assets/gems-first-dashbaord.jpg)
 
 您可以通过如下用户名与密码登录控制台：
 
 ```
-user: admin 
+user: admin
 password: demo!@#admin
 ```
 
-### 添加管理集群
+### 添加集群
 
 使用 admin 身份登录 KubeGems 平台后，点击右下角 “工具” 图标，进入【平台管理】，点击 “添加集群”。
 
 :::info
-初次安装完成后，KubeGems 内无集群数据，需要用户自信将当前集群添加到 KubeGems 当中。
+初次安装完成后，KubeGems 内无集群数据，需要用户自行将当前集群添加到 KubeGems 当中。
 :::
 
 - 将您的 kubeconfig 内容粘贴至文本框，点击“下一步”
@@ -225,16 +190,16 @@ password: demo!@#admin
 - 当 kubeconfig 校验成功，您可以看到如下界面后，点击“下一步”
 
 <img
-  src={require('./assets/cluster-check-success.jpg').default}
+  src={require("./assets/cluster-check-success.jpg").default}
   alt="Example banner"
   width="80%"
   align="center"
 />
 
-- 勾选 “控制集群”，并端着控制集群中的一些基本信息，如“镜像仓库”、“存储类型”等。
+- 设置一些基本信息，如 “集群名称” “镜像仓库”、“存储类型”等。
 
 <img
-  src={require('./assets/gems-first-centrol-info.jpg').default}
+  src={require("./assets/gems-first-centrol-info.png").default}
   alt="Example banner"
   width="80%"
   align="center"
@@ -244,33 +209,28 @@ password: demo!@#admin
 如无法确定如何选择上述信息，保持默认即可。
 :::
 
-- 提交保存成功，您在“集群资源”页面即可看到新加的控制集群。
+- 提交保存成功，您在“集群资源”页面即可看到新加的集群。
 
 ![](./assets/gems-first-centrol.jpg)
 
-- 点击控制集群的“详情”，即可看到集群的详细信息。
+- 点击集群的“详情”，即可看到集群的详细信息。
 
 ![](./assets/gems-first-centrol-dash.jpg)
-
 
 :::tip
 想更进一步了解 KubeGems 使用 ?
 请跳转至 [快速开始](/docs/quick-starts/quick-start) 开始学习。
 :::
 
-### 附录 
+### 附录
 
 #### 系统命名空间
 
-| 命名空间 | 用途 |
-| --- | --- |
-| cert-manager | 证书管理所在空间,KubeGems 安装过程中会向 cert-manager 申请 tls 证书 |
-| kubegems-installer | KubeGems installer  operator 所在空间 |
-| gemcloud-system| KubeGems 系统核心服务所在空间|
-| gemcloud-monitoring-system| KubeGems 监控告警服务所在空间 |
-| gemcloud-logging-system| KubeGems 日志服务所在空间 |
-| gemcloud-gateway-system| KubeGems 租户Ingress网关和 Istio 网关所在空间 |
-| gemcloud-workflow-system | KubeGems 持续部署引擎 ArgoCD 所在空间 |
-| observability | KubeGems Jaeger 应用链路跟踪服务所在空间 |
-| istio-system |  Kubegems istio 服务治理套件所在空间 |
-| local-path-storage |  local-path-provisioner所在空间，用于创建本地文件系统的 pvc |
+| 命名空间            | 用途                                            |
+| ------------------- | ----------------------------------------------- |
+| kubegems-installer  | KubeGems installer operator 所在空间            |
+| kubegems            | KubeGems 系统核心服务所在空间                   |
+| kubegems-local      | Kubegems 集群代理服务所在空间                   |
+| kubegems-monitoring | KubeGems 监控告警服务所在空间                   |
+| kubegems-logging    | KubeGems 日志服务所在空间                       |
+| kubegems-gateway    | KubeGems 租户 Ingress 网关和 Istio 网关所在空间 |

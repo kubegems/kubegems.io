@@ -41,7 +41,7 @@ const config = {
           lastVersion: 'current',
           versions: {
             current: {
-              label: 'v1.20.0-beta.2',
+              label: 'v1.21.0',
             },
           },
           // Please change this to your repo.
