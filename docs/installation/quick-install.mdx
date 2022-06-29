@@ -64,15 +64,6 @@ kubegems-installer-6fb7495c4d-8rqwn   0/1     Running   0          12s
   kubectl apply -f https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/addon-local-path-provisioner.yaml
   ```
 
-- 使用 ingress 访问 kubegems ui 界面，您也可以无需安装 ingress 转而使用 NodePort 或者 PortForward 方式访问。
-
-  如果没有 ingress controller，可以安装 nginx-ingress-controller。
-
-  ```sh
-  kubectl create namespace ingress-nginx
-  kubectl apply -f https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/addon-nginx-ingress.yaml
-  ```
-
 ### 部署 kubegems 核心组件
 
 默认使用 dockerhub 镜像，但如果您的网络在获取 docker.io quay.io gcr.io 上的镜像时较为缓慢，可以使用我们在阿里云上的镜像。
@@ -141,29 +132,77 @@ kubegems-worker-7d67974f4c-cj65l                   1/1     Running     5 (21h ag
 
 ### 访问 kubegems 仪表板
 
-此时您可以临时的通过端口转发的方式访问 kubegems 界面：
+1. 通过端口转发：
 
 ```sh
-# 使用端口转发
 kubectl -n kubegems port-forward svc/kubegems-dashboard 8080:80
 ```
 
-如果作为正式使用您可能需要使用 ingress 或其他方式访问。
+2. 通过NodePort:
 
-kubegems 默认创建了 hostname 为 `dashboard.kubegems.io` 的 ingress。
-如果您想更改为其他域名，可以编辑 `kubegems` 空间下名称为 `kubegems` 的 plugin CR。
+你需要编辑kubegems插件，为dashbnoard组件开启nodeport
+```sh
+kubectl -n kubegems edit plugins.plugins.kubegems.io kubegems
+```
+示例:
+```yaml
+apiVersion: plugins.kubegems.io/v1beta1
+kind: Plugin
+metadata:
+spec:
+  kind: helm
+  url: https://charts.kubegems.io/kubegems
+  values:
+    dashboard:
+      service:
+        type: NodePort
+    global:
+      kubegemsVersion: v1.21.0
+      storageClass: local-path
+    ingress:
+      hostname: dashboard.kubegems.io
+```
+
+3. 如果作为正式使用您可能需要使用 ingress 或其他方式访问。
+
+kubegems 默认创建了 hostname 为 `dashboard.kubegems.io` 的 ingress, 同时默认绑定了 `default-gateway`的`ingressClass`。
+如果您想更改为其他域名，或者绑定到其他网关可以编辑kubegems插件。
+
+:::tip
+`default-gateway`是平台默认网关，要使用它，你需要启用`网关-gateway`插件
+:::
 
 ```sh
 kubectl -n kubegems edit plugins.plugins.kubegems.io kubegems
 ```
+
+示例:
+```yaml
+apiVersion: plugins.kubegems.io/v1beta1
+kind: Plugin
+metadata:
+spec:
+  kind: helm
+  url: https://charts.kubegems.io/kubegems
+  values:
+    global:
+      kubegemsVersion: v1.21.0
+      storageClass: local-path
+    ingress:
+      hostname: dashboard.kubegems.io
+      ingressClassName: default-gateway
+```
+
+:::info
+更多相关配置文档: https://github.com/kubegems/kubegems/blob/main/deploy/plugins/kubegems/README.md#dashboard-exposure-parameters
+:::
 
 您需要将该域名解析到 Kubernetes 集群内任意节点或者 Ingress LoadBanlancer IP 后，才可通过该域名访问页面。
 
 获取 ingress 访问地址：
 
 ```bash
-# 使用 nginx ingress nodeport
-PORT=$(kubectl -n ingress-nginx get svc nginx-ingress-controller -ojsonpath='{.spec.ports[0].nodePort}')
+PORT=$(kubectl -n kubegems-gateway get svc default-gateway -ojsonpath='{.spec.ports[0].nodePort}')
 ADDRESS=$(kubectl -n kubegems get ingress kubegems -ojsonpath='{.spec.rules[*].host}')
 echo http://$ADDRESS:$PORT
 ```
