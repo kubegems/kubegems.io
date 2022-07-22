@@ -94,6 +94,10 @@ const config = {
           content: 'kubegems.io/configer git https://github.com/kubegems/configer'
         },
         {
+          name: 'go-import', 
+          content: 'kubegems.io/ingress-nginx-operator git https://github.com/kubegems/ingress-nginx-operator'
+        },
+        {
           name: 'go-source', 
           content: 'kubegems.io/kubegems https://github.com/kubegems/kubegems https://github.com/kubegems/kubegems/tree/master{/dir} https://github.com/kubegems/kubegems/blob/master{/dir}/{file}#L{line}'
         },
@@ -104,6 +108,10 @@ const config = {
         {
           name: 'go-source', 
           content: 'kubegems.io/configer https://github.com/kubegems/configer https://github.com/kubegems/configer/tree/master{/dir} https://github.com/kubegems/configer/blob/master{/dir}/{file}#L{line}'
+        },
+        {
+          name: 'go-source', 
+          content: 'kubegems.io/ingress-nginx-operator https://github.com/kubegems/ingress-nginx-operator https://github.com/kubegems/ingress-nginx-operator/tree/master{/dir} https://github.com/kubegems/ingress-nginx-operator/blob/master{/dir}/{file}#L{line}'
         },
       ],
       hideableSidebar: true,
