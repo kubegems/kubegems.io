@@ -78,7 +78,7 @@ kubegems-installer-6fb7495c4d-8rqwn   0/1     Running   0          12s
 kubectl create namespace kubegems
 
 export STORAGE_CLASS=local-path  # 改为您使用的 storageClass
-export KUBEGEMS_VERSION=v1.21.0  # change to specify kubegems version
+export KUBEGEMS_VERSION=v1.21.1  # change to specify kubegems version
 curl -sL https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/kubegems.yaml \
 | sed -e "s/local-path/${STORAGE_CLASS}/g" -e "s/latest/${KUBEGEMS_VERSION}/g" \
 > kubegems.yaml
@@ -93,7 +93,7 @@ kubectl apply -f kubegems.yaml
 kubectl create namespace kubegems
 
 export STORAGE_CLASS=local-path  # 改为您使用的 storageClass
-export KUBEGEMS_VERSION=v1.21.0  # change to specify kubegems version
+export KUBEGEMS_VERSION=v1.21.1  # change to specify kubegems version
 curl -sL https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/kubegems-mirror.yaml \
 | sed -e "s/local-path/${STORAGE_CLASS}/g" -e "s/latest/${KUBEGEMS_VERSION}/g" \
 > kubegems.yaml
@@ -157,7 +157,7 @@ spec:
       service:
         type: NodePort
     global:
-      kubegemsVersion: v1.21.0
+      kubegemsVersion: v1.21.1
       storageClass: local-path
     ingress:
       hostname: dashboard.kubegems.io
@@ -186,7 +186,7 @@ spec:
   url: https://charts.kubegems.io/kubegems
   values:
     global:
-      kubegemsVersion: v1.21.0
+      kubegemsVersion: v1.21.1
       storageClass: local-path
     ingress:
       hostname: dashboard.kubegems.io
