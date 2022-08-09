@@ -8,7 +8,7 @@ sidebar_position: 3
 
 ---
 
-KubeGems 采用前后端分离的架构设计，后端通过 `gem-sservice`服务对外部提供 [**Rest API**](https://www.apifox.cn/apidoc/project-729575/api-13879389) 接口，同时内部实现对个模块的集成与封装。通过 `gems-controller` 服务对 kubernetes 的资源进行管理，已实现实现操作不同基础设施的集群。依托Kubernetes架构，KubeGems 无底层基础设施依赖，它可以在任何遵循带有 `Kubernetes一致性认证` 的平台上运行，其中包括但不限于，原生Kubernetes、私有云平台、公有云、裸金属或虚拟机。
+KubeGems 采用前后端分离的架构设计，后端通过 `gems-service`服务对外部提供 [**Rest API**](https://www.apifox.cn/apidoc/project-729575/api-13879389) 接口，同时内部实现对个模块的集成与封装。通过 `gems-controller` 服务对 kubernetes 的资源进行管理，已实现实现操作不同基础设施的集群。依托Kubernetes架构，KubeGems 无底层基础设施依赖，它可以在任何遵循带有 `Kubernetes一致性认证` 的平台上运行，其中包括但不限于，原生Kubernetes、私有云平台、公有云、裸金属或虚拟机。
 
 :::tip 推荐 Kubernetes 版本
 为保持最佳的使用体验，KubeGems 推荐运行在 **Kubernetes v1.18.0 - 1.20.15** 之间的版本当中。
