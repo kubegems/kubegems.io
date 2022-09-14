@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[5476],{77794:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"nacos","count":1,"permalink":"/blog/tags/nacos"}')}}]);
