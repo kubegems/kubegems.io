@@ -1,5 +1,5 @@
 ---
-slug: kubegems-kind
+slug: kubegems-nacos
 title: KubeGems 启用 Nacos 配置中心
 authors: [LinkMaq]
 tags: [kubernetes,nacos,kubegems]
