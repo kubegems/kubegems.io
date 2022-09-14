@@ -17,6 +17,16 @@ const Contribution = () => {
       avatar: 'https://github.com/liutao-east.png',
       name: 'liutao-east',
     },
+    {
+      id: '3',
+      avatar: 'https://github.com/VioZhang.png',
+      name: 'VioZhang',
+    },
+    {
+      id: '4',
+      avatar: 'https://github.com/itxx00.png',
+      name: 'itxx00',
+    },
   ]
 
   return (

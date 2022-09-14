@@ -1,0 +1,68 @@
+---
+title: 部署 demo 环境
+hide_title: true
+sidebar_position: 1
+description: 本文用于指导用户使用 kind 部署一个 kubegems 的demo 环境
+keywords: [kubegems, KubeGems, kubernetes]
+---
+
+##  安装 Kind 
+
+<Tabs >
+  <TabItem value="Linux" label="Linux" default>
+
+```shell
+curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+```
+
+  </TabItem>
+  <TabItem value="MacOS" label="MacOS">
+
+```shell
+# for Intel Macs
+[ $(uname -m) = x86_64 ]&& curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-darwin-amd64
+# for M1 / ARM Macs
+[ $(uname -m) = arm64 ] && curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-darwin-arm64
+chmod +x ./kind
+mv ./kind /some-dir-in-your-PATH/kind
+```
+
+  </TabItem>
+  <TabItem value="Windows" label="Windows">
+
+```shell
+curl.exe -Lo kind-windows-amd64.exe ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-windows-amd64
+Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
+```
+  </TabItem>
+</Tabs> 
+
+## 创建服务
+
+和创建 Kubernetes 集群一样，使用命令`kind create cluster`就能快速拉起一个 Kubernetes 服务并部署 KubeGems
+![image-20220805141017484.png](https://img-blog.csdnimg.cn/img_convert/3657c5205677e4e218c3af9ca78d49a8.png)
+
+由于不需要定制`kindest/node`镜像，所以 KubeGems安装全程需要连接公网下载所需的镜像。在启动完成之前会有许多 Pod 的状态为 `CrashLoopBackOff`，这是由于其依赖的服务（mysql、redis、gitea、argocd 等）还在启动中，这是正常的，请耐心等待。
+
+kubegems 所有服务部署并启动完成后会有如下 pod
+
+![image-20220805141327441.png](https://img-blog.csdnimg.cn/img_convert/fb5260ef6c4a10fa34e4b3ee832c9011.png)
+
+当容器状态全部`Running`后，使用 port-forward 将 KubeGems Dashboard 服务映射到本地
+
+```shell
+kubectl port-forward svc/kubegems-dashboard :80 -n kubegems                           
+
+Forwarding from 127.0.0.1:52302 -> 8000
+Forwarding from [::1]:52302 -> 8000
+``` 
+
+此时，打开浏览器访问 `http://localhost:52302`即可访问 KubeGems，默认用户`admin` 默认密码`demo!@#admin`
+
+:::info
+ 使用 Kind 生成的 KubeConfig文件导入集群是，注意修改集群 Server 地址为内部地址`http://kubernetes.default:443`
+:::
+
+![image-20220805144837887.png](https://img-blog.csdnimg.cn/img_convert/750cf1eb84463f564fd6c1cf00b2bac5.png)
