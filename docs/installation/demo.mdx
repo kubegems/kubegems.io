@@ -6,21 +6,25 @@ description: 本文用于指导用户使用 kind 部署一个 kubegems 的demo �
 keywords: [kubegems, KubeGems, kubernetes]
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 ##  安装 Kind 
 
-<Tabs >
+选择安装适合您操作系统的发行版
+
+<Tabs>
   <TabItem value="Linux" label="Linux" default>
 
-```shell
+```bash
 curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-linux-amd64
 chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 ```
-
   </TabItem>
   <TabItem value="MacOS" label="MacOS">
 
-```shell
+```bash
 # for Intel Macs
 [ $(uname -m) = x86_64 ]&& curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-darwin-amd64
 # for M1 / ARM Macs
@@ -28,11 +32,10 @@ sudo mv ./kind /usr/local/bin/kind
 chmod +x ./kind
 mv ./kind /some-dir-in-your-PATH/kind
 ```
-
   </TabItem>
   <TabItem value="Windows" label="Windows">
 
-```shell
+```bash
 curl.exe -Lo kind-windows-amd64.exe ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-windows-amd64
 Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
 ```
