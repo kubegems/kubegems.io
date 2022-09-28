@@ -49,6 +49,10 @@ const config = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
         },
+        blog: {
+          blogSidebarTitle: '最新博客',
+          blogSidebarCount: 'ALL',
+        },
         theme: {
           customCss: require.resolve('./src/styles/custom.scss'),
         },
