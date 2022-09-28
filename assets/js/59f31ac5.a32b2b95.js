@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[4621],{34555:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"oci","count":1,"permalink":"/blog/tags/oci"}')}}]);

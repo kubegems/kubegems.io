@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[9387],{36462:function(e){e.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"kubernetes","count":4,"permalink":"/blog/tags/kubernetes"}')}}]);
