@@ -1,23 +1,28 @@
 zhanghe:
   name: zhanghe
-  title: support@kubegems.io
+  title: developer@kubegems.io
   url: https://github.com/zhanghe9702
   image_url: https://github.com/zhanghe9702.png
 pepesi:
   name: yud
-  title: support@kubegems.io
+  title: developer@kubegems.io
   url: https://github.com/pepesi
   image_url: https://github.com/pepesi.png
 jojotong:
   name: jojotong
-  title: support@kubegems.io
+  title: developer@kubegems.io
   url: https://github.com/jojotong
   image_url: https://github.com/jojotong.png
 LinkMaq:
   name: LinkMaq
-  title: support@kubegems.io
+  title: developer@kubegems.io
   url: https://github.com/LinkMaq
   image_url: https://github.com/LinkMaq.png
+cnfatal:
+  name: cnfatal
+  title: developer@kubegems.io
+  url: https://github.com/cnfatal
+  image_url: https://github.com/cnfatal.png
 liutao:
   name: liutao
   title: contributor@kubegems.io
