@@ -123,6 +123,7 @@ const config = {
         content:
           '⭐️ If you like KubeGems, <a target="_blank" href="https://github.com/kubegems/kubegems">give it a star on GitHub</a> ! ',
         backgroundColor: 'rgba(0, 0, 0, 0.03)',
+        isCloseable: false,
       },
       hideableSidebar: true,
       autoCollapseSidebarCategories: true,
