@@ -118,6 +118,12 @@ const config = {
           content: 'kubegems.io/ingress-nginx-operator https://github.com/kubegems/ingress-nginx-operator https://github.com/kubegems/ingress-nginx-operator/tree/master{/dir} https://github.com/kubegems/ingress-nginx-operator/blob/master{/dir}/{file}#L{line}'
         },
       ],
+      announcementBar: {
+        id: 'support_us',
+        content:
+          '⭐️ If you like KubeGems, <a target="_blank" href="https://github.com/kubegems/kubegems">give it a star on GitHub</a> ! ',
+        backgroundColor: 'rgba(0, 0, 0, 0.03)',
+      },
       hideableSidebar: true,
       autoCollapseSidebarCategories: true,
       zoom: {
