@@ -26,11 +26,11 @@ export default function Home(): JSX.Element {
           {/* <Resources /> */}
         </div>
 
-        <div className={styles.kubegems__bg}>
+        {/* <div className={styles.kubegems__bg}>
           <div className={styles['kubegems__bg-arc1']}></div>
           <div className={styles['kubegems__bg-arc2']}></div>
           <div className={styles['kubegems__bg-arc3']}></div>
-        </div>
+        </div> */}
       </main>
       {/* <PageNav /> */}
     </Layout>
