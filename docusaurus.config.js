@@ -164,6 +164,12 @@ const config = {
             activeBaseRegex: `/community/`,
             key: 'community'
           },
+           {
+            to: 'https://wj.qq.com/s2/10923500/96e0/',
+            label: 'Contact',
+            position: 'left',
+            key: 'contact'
+          },
           {
             type: 'docsVersionDropdown',
             position: 'right',
