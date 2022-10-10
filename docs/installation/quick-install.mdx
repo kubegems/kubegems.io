@@ -33,6 +33,12 @@ kubegems 包含以下主要部分：
 
 ## 部署 KubeGems
 
+确定部署版本,您可以前往 [Kubegems Release](https://github.com/kubegems/kubegems/tags) 查询到最新的版本号.
+
+```bash
+export KUBEGEMS_VERSION=<kubegems version> #  安装 kubegems 的版本
+```
+
 ### 部署 installer
 
 installer 是用于安装 kubegems 主要组件和插件的控制器。
@@ -40,9 +46,9 @@ installer 是用于安装 kubegems 主要组件和插件的控制器。
 
 详情参考:[bundle-controller](https://github.com/kubegems/bundle-controller)。
 
-```sh
+```bash
 kubectl create namespace kubegems-installer
-kubectl apply -f https://github.com/kubegems/kubegems/raw/main/deploy/installer.yaml
+kubectl apply -f https://github.com/kubegems/kubegems/raw/${KUBEGEMS_VERSION}/deploy/installer.yaml
 ```
 
 等待安装程序准备就绪。
@@ -59,17 +65,16 @@ kubegems-installer-6fb7495c4d-8rqwn   0/1     Running   0          12s
 
   如果没有 CSI 插件，可以安装 local-path-provisioner
 
-  ```sh
+  ```bash
   kubectl create namespace local-path-storage
-  kubectl apply -f https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/addon-local-path-provisioner.yaml
+  kubectl apply -f https://github.com/kubegems/kubegems/raw/${KUBEGEMS_VERSION}/deploy/addon-local-path-provisioner.yaml
   ```
 
 ### 部署 kubegems 核心组件
 
 默认使用 dockerhub 镜像，但如果您的网络在获取 docker.io quay.io gcr.io 上的镜像时较为缓慢，可以使用我们在阿里云上的镜像。
 
-注意：kubegems 默认使用名称为 local-path 的 storageClass 以及 tag 为 latest 的版本。
-如果您想自定义 kubegems 版本或使用不同的 storageClass，您需要在 apply 前下载并编辑 `kubegems.yaml` 文件。
+注意：kubegems 默认使用名称为 local-path 的 storageClass,如果您使用不同的 storageClass，您需要在 apply 前下载并编辑 `kubegems.yaml` 文件。
 
 <Tabs>
   <TabItem value="dockerhub" label="DockerHub 源" default>
@@ -78,9 +83,8 @@ kubegems-installer-6fb7495c4d-8rqwn   0/1     Running   0          12s
 kubectl create namespace kubegems
 
 export STORAGE_CLASS=local-path  # 改为您使用的 storageClass
-export KUBEGEMS_VERSION=v1.21.4  # change to specify kubegems version
-curl -sL https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/kubegems.yaml \
-| sed -e "s/local-path/${STORAGE_CLASS}/g" -e "s/latest/${KUBEGEMS_VERSION}/g" \
+curl -sL https://github.com/kubegems/kubegems/raw/${KUBEGEMS_VERSION}/deploy/kubegems.yaml \
+| sed -e "s/local-path/${STORAGE_CLASS}/g" \
 > kubegems.yaml
 
 kubectl apply -f kubegems.yaml
@@ -93,9 +97,9 @@ kubectl apply -f kubegems.yaml
 kubectl create namespace kubegems
 
 export STORAGE_CLASS=local-path  # 改为您使用的 storageClass
-export KUBEGEMS_VERSION=v1.21.4  # change to specify kubegems version
-curl -sL https://raw.githubusercontent.com/kubegems/kubegems/main/deploy/kubegems-mirror.yaml \
-| sed -e "s/local-path/${STORAGE_CLASS}/g" -e "s/latest/${KUBEGEMS_VERSION}/g" \
+export IMAGE_REGISTY=registry.cn-beijing.aliyuncs.com
+curl -sL https://github.com/kubegems/kubegems/raw/${KUBEGEMS_VERSION}/deploy/kubegems.yaml \
+| sed -e "s/local-path/${STORAGE_CLASS}/g" -e "s/docker.io/${IMAGE_REGISTY}/g" \
 > kubegems.yaml
 
 kubectl apply -f kubegems.yaml
@@ -138,13 +142,16 @@ kubegems-worker-7d67974f4c-cj65l                   1/1     Running     5 (21h ag
 kubectl -n kubegems port-forward svc/kubegems-dashboard 8080:80
 ```
 
-2. 通过NodePort:
+2. 通过 NodePort:
 
-你需要编辑kubegems插件，为dashbnoard组件开启nodeport
+你需要编辑 kubegems 插件，为 dashbnoard 组件开启 nodeport
+
 ```sh
 kubectl -n kubegems edit plugins.plugins.kubegems.io kubegems
 ```
+
 示例:
+
 ```yaml
 apiVersion: plugins.kubegems.io/v1beta1
 kind: Plugin
@@ -166,7 +173,7 @@ spec:
 3. 如果作为正式使用您可能需要使用 ingress 或其他方式访问。
 
 kubegems 默认创建了 hostname 为 `dashboard.kubegems.io` 的 ingress, 同时默认绑定了 `default-gateway`的`ingressClass`。
-如果您想更改为其他域名，或者绑定到其他网关可以编辑kubegems插件。
+如果您想更改为其他域名，或者绑定到其他网关可以编辑 kubegems 插件。
 
 :::tip
 `default-gateway`是平台默认网关，要使用它，你需要启用`网关-gateway`插件
@@ -177,6 +184,7 @@ kubectl -n kubegems edit plugins.plugins.kubegems.io kubegems
 ```
 
 示例:
+
 ```yaml
 apiVersion: plugins.kubegems.io/v1beta1
 kind: Plugin
