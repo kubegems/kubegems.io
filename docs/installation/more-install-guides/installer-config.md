@@ -1,5 +1,5 @@
 ---
-title: 配置插件
+title: 配置 KubeGems 插件
 hide_title: true
 sidebar_position: 2
 ---
