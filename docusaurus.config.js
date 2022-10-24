@@ -41,7 +41,7 @@ const config = {
           lastVersion: 'current',
           versions: {
             current: {
-              label: 'v1.21.4',
+              label: 'v1.22',
             },
           },
           // Please change this to your repo.
@@ -121,7 +121,7 @@ const config = {
       announcementBar: {
         id: 'support_us',
         content:
-          '⭐️ If you like KubeGems, <a target="_blank" href="https://github.com/kubegems/kubegems">give it a star on GitHub</a> ! ',
+          '⭐️ <b>If you like KubeGems, <a target="_blank" href="https://github.com/kubegems/kubegems">give it a star on GitHub</b></a> ! ',
         backgroundColor: 'rgba(0, 0, 0, 0.03)',
         isCloseable: false,
       },

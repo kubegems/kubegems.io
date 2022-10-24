@@ -1,12 +1,12 @@
 ---
-title: 安全
+title: 安全审计
 hide_title: true
 sidebar_position: 4
 # description: 本文用于指导用户在KubeGems快速使用，并对Kubernetes相关的资源进行操作
 # keywords: [kubegems,KubeGems,kubernetes]
 ---
 
-## 安全管理
+## 安全审计
 
 ---
 

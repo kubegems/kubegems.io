@@ -20,12 +20,12 @@ KubeGems 默认对每个用户环境开启了资源限制，如果您使用的�
 
 ### 设置环境成员
 
-- 在【环境详情页】 中点击 “环境成员” 按钮，进入成员管理页面。[参考文档：租户空间成员](/docs/quick-starts/example/common-operation#环境空间成员) 
+- 在【环境详情页】 中点击 “环境成员” 按钮，进入成员管理页面。[参考文档：租户空间成员](/docs/quick-starts/common-operation#环境空间成员) 
 
 
 ### 设置环境资源
 
-- 在【环境详情页】 中点击 “调整资源限制” 按钮，进入资源管理页面。[参考文档：调整环境资源配额](/docs/quick-starts/example/common-operation#调整环境资源配额)
+- 在【环境详情页】 中点击 “调整资源限制” 按钮，进入资源管理页面。[参考文档：调整环境资源配额](/docs/quick-starts/common-operation#调整环境资源配额)
 
 ## 附录
 ### Kubernetes 中的 ResourceQuota
