@@ -19,7 +19,7 @@ sidebar_position: 1
 
 ### 安装 kubegems 集群
 
-一般情况下，你仅需要一个 kubernetes 集群，并且按照 [部署](../deploy/README-zh.md) 流程安装好 kubegems。
+一般情况下，你仅需要一个 kubernetes 集群，并且按照部署流程安装好 kubegems。
 
 确保您的 kubectl 可以直接访问到 kubegems 所在的 kubernetes 集群。
 
@@ -66,7 +66,6 @@ cd kubegems
 ```
 
 kubegems-api 曾经叫 service）入口为 `kubegems service`,这是 kubegems 最核心的服务，你可以通过 help 查看其需要的配置。
-代码在 [cmd/apps/service.go](../cmd/apps/service.go)
 
 为了在本地启动调试需要先构建好依赖环境，这里主要是是准备 gitea argocd mysql redis 等配置,在容器中这些配置都通过环境变量和启动参数的方式配置完成。
 
