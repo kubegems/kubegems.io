@@ -29,7 +29,7 @@ import TabItem from '@theme/TabItem';
 
 - 禁用交换分区。为了保证 kubelet 正常工作，你**必须**禁用交换分区。
 
-:::info 信息
+:::info 
 **操作系统推荐使用**Ubuntu Server 1804**以上版本**
 :::
 
@@ -69,7 +69,7 @@ sudo sysctl --system
 
 如果同时检测到 Docker 和 containerd，则优先选择 Docker。 如果检测到其他两个或多个运行时，kubeadm 输出错误信息并退出。
 
-:::tip 提示
+:::tip 
 kubelet 通过内置的 dockershim CRI 实现与 Docker 集成。
 :::
 参阅容器运行时 以了解更多信息。
@@ -142,7 +142,7 @@ sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 sudo systemctl enable --now kubelet
 ```
 
-:::caution 注意
+:::caution
 - 通过运行命令 setenforce 0 和 sed ... 将 SELinux 设置为 permissive 模式 可以有效地将其禁用。 这是允许容器访问主机文件系统所必需的，而这些操作时为了例如 Pod 网络工作正常。您必须这么做，直到 kubelet 做出对 SELinux 的支持进行升级为止。
 
 - 如果你知道如何配置 SELinux 则可以将其保持启用状态，但可能需要设定 kubeadm 不支持的部分配置
@@ -159,7 +159,7 @@ sudo mkdir -p /opt/cni/bin
 curl -L "https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz" | sudo tar -C /opt/cni/bin -xz
 ```
 定义要下载命令文件的目录。
-:::tip 说明
+:::info
 DOWNLOAD_DIR 变量必须被设置为一个可写入的目录。 如果你在运行 Flatcar Container Linux，可将 DOWNLOAD_DIR 设置为 /opt/bin。
 :::
 
@@ -199,7 +199,7 @@ systemctl enable --now kubelet
   </TabItem>
 </Tabs>
 
-### 配置 container d和 cri 工具
+### 配置 containerd和 cri 工具
 
 ```bash
 cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
@@ -534,7 +534,7 @@ kubeadm join 10.36.0.68:6443 \
 --ignore-preflight-errors all
 ```
 
-:::caution 注意
+:::info
 `token`为kubeadm初始化后提供.<br />
 `discovery-token-ca-cert-hash`为kubeadm初始化后提供。
 :::
@@ -561,13 +561,13 @@ cat /etc/kubernetes/manifests/kube-controller-manager.yaml
 cat /etc/kubernetes/manifests/kube-scheduler.yaml
 ```
 
-:::caution 注意
+:::info
 `kube-apiserver.yaml` 文件拷贝到master2和master3上时，需要将文件中的master1节点ip信息换成对应机器上的ip。
 :::
 
 ---
 
-### 部署Kubelet节点
+### 部署 Kubelet节点
 
 1. 容器数据盘 （可选）
 
@@ -580,7 +580,7 @@ mount /dev/sdb /data
 echo "/dev/sdb    none            xfs   defaults      0       0" >> /etc/fstab
 ```
 
-:::info 信息
+:::info
 **sdb设备要灵活选择，要保证数据的安全性，如果服务器有多块硬盘的话，至少要做RAID1以上的模式**
 :::
 
@@ -675,7 +675,7 @@ kubeadm join 127.0.0.1:6443 \
 --ignore-preflight-errors all
 ```
 
-:::tip 提示
+:::info
 `token`为kubeadm初始化后提供，如果您没有这个数据，可以通过下述命令获取
 
 ```bash
@@ -698,7 +698,7 @@ openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outfor
 
 ---
 
-### 配置Containerd for GPU
+### 配置 Containerd for GPU
 
 1. 安装contaienrd nvidia runtime
 

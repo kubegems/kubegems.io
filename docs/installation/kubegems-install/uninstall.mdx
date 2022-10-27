@@ -1,5 +1,42 @@
 ---
-title: KubeGems 卸载说明
+title: 卸载 KubeGems
 hide_title: true
 sidebar_position: 8
 ---
+
+## 卸载 kubeGems
+
+### 前置条件
+
+1. 具备 kuebgems 管理员账号
+
+2. 具备 kubernetes 集群管理员权限
+
+
+### 卸载插件
+
+在 KubeGems 的后台集群管理的插件页面中，点击卸载即可删除所有 KubeGems 生态相关插件
+
+:::caution 风险提示
+ KubeGems 部分插件采用了 Operator 部署，在卸载插件前，请确定您是否通过 Operator 提交过其他资源。避免删除 operator 后导致您的资源丢失或无法管理
+:::
+
+### 卸载 KubeGems
+
+```
+$ kubectl delete plugin kubegems -n kuebgems
+```
+
+:::tip 提示
+默认情况下，我们保留了 MySQL 等数据库的持久化数据卷，如果您要彻底删除数据，可执行以下命令
+```bash
+$ kubectl  delete pvc --all -n kubegems
+```
+:::
+
+### 卸载 KubeGems installer
+
+```
+$ kubectl delete -f https://github.com/kubegems/kubegems/raw/${KUBEGEMS_VERSION}/deploy/installer.yaml
+$ kubectl delete ns kubegems-installer
+```

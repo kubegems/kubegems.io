@@ -3,3 +3,286 @@ title: 基于 SealOS 安装
 hide_title: true
 sidebar_position: 3
 ---
+
+## 基于 SealOS 安装
+
+--- 
+
+### 前置条件
+
+sealos 是一个简单的 go 二进制文件，可以安装在大多数 Linux 操作系统中。
+
+以下是一些基本的安装要求：
+
+- 每个集群节点应该有不同的主机名。 主机名不要带下划线
+- 所有节点的时间同步
+- 在 Kubernetes 集群的第一个节点上运行sealos run命令，目前集群外的节点不支持集群安装
+- 建议使用干净的操作系统来创建集群。不要自己装 Docker
+- 支持大多数 Linux 发行版，例如：Ubuntu CentOS Rocky linux
+- 支持 DockerHub 中支持的 Kubernetes 版本
+- 支持使用 containerd 作为容器运行时
+- 在公有云上请使用私有 IP
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## sealos 安装
+
+### 二进制下载
+
+<Tabs groupId="arch">
+  <TabItem value="amd64" label="amd64" default>
+
+```bash
+$ wget https://github.com/labring/sealos/releases/download/v4.0.0/sealos_4.0.0_linux_amd64.tar.gz \
+   && tar zxvf sealos_4.0.0_linux_amd64.tar.gz sealos && chmod +x sealos && mv sealos /usr/bin
+```
+
+  </TabItem>
+  <TabItem value="arm64" label="arm64">
+
+```bash
+$ wget https://github.com/labring/sealos/releases/download/v4.0.0/sealos_4.0.0_linux_arm64.tar.gz \
+   && tar zxvf sealos_4.0.0_linux_arm64.tar.gz sealos && chmod +x sealos && mv sealos /usr/bin
+```
+
+  </TabItem>
+</Tabs>
+
+### 包管理工具安装
+
+#### DEB 源
+
+```bash
+echo "deb [trusted=yes] https://apt.fury.io/labring/ /" | sudo tee /etc/apt/sources.list.d/labring.list
+sudo apt update
+sudo apt install sealos
+```
+
+#### RPM 源
+
+```bash
+sudo cat > /etc/yum.repos.d/labring.repo << EOF
+[fury]
+name=labring Yum Repo
+baseurl=https://yum.fury.io/labring/
+enabled=1
+gpgcheck=0
+EOF
+sudo yum update
+sudo yum install sealos
+```
+
+### 源码安装
+
+#### 前置依赖
+1. `git`  
+2. `golang` 1.19+  
+3. `libgpgme-dev libbtrfs-dev libdevmapper-dev`
+
+如果在 `arm64` 环境下需要添加 `:arm64` 后缀。
+
+#### 构建
+
+```bash
+# git clone the repo
+git clone https://github.com/labring/sealos.git
+# just make it
+make build
+```
+
+## 自定义安装配置
+
+1. 运行 `sealos gen` 生成一个 Clusterfile，例如：
+
+```shell
+$ sealos gen labring/kubernetes:v1.25.0 labring/helm:v3.8.2 labring/calico:v3.24.1 \
+   --masters 192.168.0.2,192.168.0.3,192.168.0.4 \
+   --nodes 192.168.0.5,192.168.0.6,192.168.0.7 --passwd xxx > Clusterfile
+```
+
+生成的 Clusterfile 如下：
+
+<details>
+<summary>Clusterfile</summary>
+
+```yaml
+apiVersion: apps.sealos.io/v1beta1
+kind: Cluster
+metadata:
+  creationTimestamp: null
+  name: default
+spec:
+  hosts:
+  - ips:
+    - 192.168.0.2:22
+    - 192.168.0.3:22
+    - 192.168.0.4:22
+    roles:
+    - master
+    - amd64
+  - ips:
+    - 192.168.0.5:22
+    - 192.168.0.6:22
+    - 192.168.0.7:22
+    roles:
+    - node
+    - amd64
+  image:
+  - labring/kubernetes:v1.24.0
+  - labring/calico:v3.24.1
+  ssh:
+    passwd: xxx
+    pk: /root/.ssh/id_rsa
+    port: 22
+    user: root
+status: {}
+```
+
+</details>
+
+2. 将 [calico Clusterfile](https://github.com/labring/sealos/blob/main/applications/calico/Clusterfile) 追加到生成的 Clusterfile 后，然后更新集群配置。例如，要修改 pods 的 CIDR 范围，就可以修改 `networking.podSubnet` 和 `spec.data.spec.calicoNetwork.ipPools.cidr` 字段。最终的 Clusterfile 会像是这样:
+
+<details>
+<summary>Clusterfile</summary>
+
+```yaml
+apiVersion: apps.sealos.io/v1beta1
+kind: Cluster
+metadata:
+  creationTimestamp: null
+  name: default
+spec:
+  hosts:
+    - ips:
+        - 192.168.0.2:22
+        - 192.168.0.3:22
+        - 192.168.0.4:22
+      roles:
+        - master
+        - amd64
+    - ips:
+        - 192.168.0.5:22
+        - 192.168.0.6:22
+        - 192.168.0.7:22
+      roles:
+        - node
+        - amd64
+  image:
+    - labring/kubernetes:v1.25.0
+    - labring/helm:v3.8.2
+    - labring/calico:v3.24.1
+  ssh:
+    passwd: xxx
+    pk: /root/.ssh/id_rsa
+    port: 22
+    user: root
+status: {}
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+networking:
+  podSubnet: 10.160.0.0/12
+---
+apiVersion: apps.sealos.io/v1beta1
+kind: Config
+metadata:
+  name: calico
+spec:
+  path: manifests/calico.yaml
+  data: |
+    apiVersion: operator.tigera.io/v1
+    kind: Installation
+    metadata:
+      name: default
+    spec:
+      # Configures Calico networking.
+      calicoNetwork:
+        # Note: The ipPools section cannot be modified post-install.
+        ipPools:
+        - blockSize: 26
+          # Note: Must be the same as podCIDR
+          cidr: 10.160.0.0/12
+          encapsulation: IPIP
+          natOutgoing: Enabled
+          nodeSelector: all()
+        nodeAddressAutodetectionV4:
+          interface: "eth.*|en.*"
+```
+
+</details>
+
+3. 运行 `sealos apply -f Clusterfile` 启动集群。集群运行成功后会把 Clusterfile 保存到 `.sealos/default/Clusterfile` 文件中，可以修改其中字段来重新 apply 对集群进行变更。
+
+:::tip
+可以参考[官方文档](https://kubernetes.io/docs/reference/config-api/kubeadm-config.v1beta2/)或运行 `kubeadm config print init-defaults` 命令来打印 kubeadm 配置。
+:::
+
+## 创建 Kubernetes 集群
+
+### 单机安装 Kuberentes
+
+```shell
+# sealos version must >= v4.1.0
+$ sealos run labring/kubernetes:v1.25.0 labring/helm:v3.8.2 labring/calico:v3.24.1 --single
+```
+
+### 集群安装 Kuberentes
+
+```shell
+$ sealos run labring/kubernetes:v1.25.0 labring/helm:v3.8.2 labring/calico:v3.24.1 \
+     --masters 192.168.64.2,192.168.64.22,192.168.64.20 \
+     --nodes 192.168.64.21,192.168.64.19 -p [your-ssh-passwd]
+```
+
+参数说明：
+
+| 参数名 | 参数值示例 | 参数说明 |
+| --- | --- | --- |
+| --masters |  192.168.0.2 | kubernetes master 节点地址列表 |
+| --nodes | 192.168.0.3 | kubernetes node 节点地址列表 |
+| --ssh-passwd | [your-ssh-passwd] | ssh 登录密码 |
+|image | labring/kubernetes:v1.25.0 | kubernetes 镜像 |
+
+在干净的服务器上直接执行上面命令，不要做任何多余操作即可启动一个高可用的 kubernetes 集群。
+
+### 安装各种分布式应用
+
+```shell
+sealos run labring/helm:v3.8.2 # install helm
+sealos run labring/openebs:v1.9.0 # install openebs
+sealos run labring/minio-operator:v4.4.16 labring/ingress-nginx:4.1.0 \
+   labring/mysql-operator:8.0.23-14.1 labring/redis-operator:3.1.4 # oneliner
+```
+
+这样高可用的 mysql redis 等都有了，不用关心所有的依赖问题。
+
+### 增加节点
+
+增加 node 节点:
+```shell
+$ sealos add --nodes 192.168.64.21,192.168.64.19 
+```
+
+增加 master 节点:
+```shell
+$ sealos add --masters 192.168.64.21,192.168.64.19 
+```
+
+### 删除节点
+
+删除 node 节点:
+```shell
+$ sealos delete --nodes 192.168.64.21,192.168.64.19 
+```
+
+删除 master 节点:
+```shell
+$ sealos delete --masters 192.168.64.21,192.168.64.19  
+```
+
+### 清理集群
+
+```shell
+$ sealos reset
+```
