@@ -6,121 +6,119 @@ description: 本文用于指导用户在KubeGems快速使用，并对Kubernetes�
 keywords: [kubegems, KubeGems, kubernetes]
 ---
 
-## 集群管理
+## Kubernetes 集群管理
 
 ---
 
-### 导入集群
+### 前置条件
 
-- 使用 `admin` 账号登录 KubeGems 管理后台，点击右下角 【工具箱】 图标，进入 【系统管理】
-  ![](./assets/admin-first-login.jpg)
+1. KubeGems 成功安装
 
-- 点击 【创建集群】，将集群的 `kubeconfig` 文件粘贴至文本框。
+### 导入 Kubernetes 集群
 
-![](./assets/admin-first-cluster.jpg)
+- 使用 admin 账号登录 KubeGems 管理后台，点击右下角 【工具箱】 图标，进入 【系统管理】
 
-输入`集群名称`等其他选项。
+  <img
+  src={require('./assets/cluster-import-1.jpg').default}
+  align="center"
+  width="50%"
+/>
 
-![](./assets/admin-first-import-cluster.jpg)
+- 点击 【添加集群】，将集群的 kubeconfig 文件粘贴至文本框。
 
-- 集群导入成功，并且状态正常后，点击 【详情】进入集群信息管理页面
+  ![](./assets/cluster-import-2.jpg)
 
-![](./assets/admin-first-cluster-list.jpg)
-![](./assets/admin-first-cluster-info.jpg)
+输入集群名称 等其他选项。
 
-集群详情页包含了集群的`基本状态`、`证书信息`、`监控指标`、`物理资源`、`资源类型`以及`使用统计`等信息。
+  <img
+  src={require('./assets/cluster-import-3.jpg').default}
+  align="center"
+  width="50%"
+/>
 
-### 租户管理
+- 检测集群连接状态，等待状态正常后，点击 【下一步】进入集群配置界面
 
-- 使用 `admin` 账号登录 KubeGems 管理后台，点击左上角【集群资源】卡片，进入【平台管理】
+  ![](./assets/cluster-import-4.jpg)
 
-![](./assets/admin-first-tenant-list.jpg)
+- 集群配置中，包含了集群的名称、关联镜像仓库 和 KubeGems 插件部署所需要的存储类型
 
-- 点击租户列表右上角的 `创建租户` 按钮，创建一个名为 **demo** 的租户
+  ![](./assets/cluster-import-5.jpg)
 
-![](./assets/admin-first-tenant-create.jpg)
+KubeGems 会将 kubegems-installer 相关的 CRD 一同推送到目标kuebrnetes，最终当运行成功后。管理员可使用 kubectl 在目标 kubernetes 执行下述命令进行查看
 
-- 点击 **demo**，进入租户详情页，里面可以`管理租户成员`以及`集群的资源配额管理`
+```bash
+$ kubectl get pod -n kubegems-installer
 
-![](./assets/admin-first-tenant-info.jpg)
+$ kubectl get pod -n kubegems-local
 
-- 点击 **添加集群资源**，选择`cluster-demo`集群，为 **demo** 租户分配 8Core 16G 内存和 100G 硬盘
+$ kubectl get plugin -n kubegems-local
 
-![](./assets/admin-first-tenant-quota.jpg)
+argo-rollouts              template   Disabled                                                                               27d
+cert-manager               template   Disabled   cert-manager          1.0.0            1.8.0            9d                 27d
+dcgm-exporter              template   Disabled                                                                               27d
+eventer                    template   Disabled   kubegems-eventer      1.0.0            1.4.12           9d                 27d
+gateway                    template   Disabled   kubegems-gateway      1.0.0            0.3.2            9d                 27d
+grafana                    template   Disabled                                                                               27d
+istio                      template   Disabled   istio-system          1.0.0            1.11.7           9d                 27d
+kubegems-local             helm       Installed  kubegems-local        0.0.0            0.0.0            9d                 27d
+kubegems-models            helm       Disabled   kubegems              v1.22.0-beta.2   v1.22.0-beta.2   9d                 27d
+kubevela                   template   Disabled                                                                               27d
+local-path                 template   Disabled                                                                               27d
+logging                    template   Disabled   kubegems-logging      1.0.0            3.17.6           9d                 27d
+metallb                    template   Disabled                                                                               27d
+metrics-server             template   Disabled                                                                               27d
+monitoring                 template   Disabled   kubegems-monitoring   1.0.0            35.2.0           9d                 27d
+nacos                      template   Disabled   nacos                 1.0.0            2.1.1            9d                 27d
+node-local-dns             template   Disabled                                                                               27d
+node-problem-detector      template   Disabled                                                                               27d
+nvidia-device-plugin       template   Disabled                                                                               27d
+openkruise                 template   Disabled                                                                               27d
+opentelemetry              template   Disabled   observability         1.0.0            0.28.0           9d                 27d
+prometheus-node-exporter   template   Disabled   kubegems-monitoring   1.0.0            3.3.0            9d                 27d
+tke-gpu-manager            template   Disabled                                                                               27d
+tracing                    template   Disabled   observability         1.0.0            1.36.0           9d                 27d
+volume-snapshoter          template   Installed  kube-system           1.0.0            5.0.1            9d                 27d
+```
 
-### 租户空间
+同时在界面上添加集群时写入的集群信息也将配置到 configmap 当中
 
-- 点击 KubeGems 顶部栏中的【工作台】进入租户空间，并点击【用户头像】可以自由切换租户空间
+```yaml
+apiVersion: v1
+data:
+  global.clusterName: demo
+  global.imageRegistry: registry.cn-beijing.aliyuncs.com
+  global.imageRepository: kubegems
+  global.kubegemsVersion: v1.22.0-beta.2
+  global.runtime: containerd
+  global.storageClass: local-path
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2022-09-29T06:31:40Z"
+  name: kubegems-global-values
+  namespace: kubegems-local
+```
 
-![](./assets/admin-first-demo-dash.jpg)
+- 当集群添加成功后，KubeGems 会自动为目标集群添加安装器，等待服务安装成功后，即可在集群列表中查看
 
-- 点击 【创建项目】 为租户创建一个名为 **demo** 项目空间，并选择可以按照角色添加成员至该项目空间
+  ![](./assets/cluster-import-6.jpg)
 
-![](./assets/admin-first-demo-project.jpg)
+集群详情页包含了集群的 基本状态、证书信息、监控指标、物理资源、资源类型以及使用统计等信息。
 
-- 进入 **demo** 项目空间，点击右上角的【创建环境】创建一个名为 **demo-env** 的环境空间
+  ![](./assets/cluster-import-7.jpg)
 
-![](./assets/admin-first-demo-env.jpg)
-
-:::caution 注意
-注意：环境空间的删除策略为 `仅删除关联` 和 `删除整个命名空间`，它们之间的主要区别控制删除环境时，控制器的行为。
+:::info
+KubeGems 默认采用了精简安装，仅包含了最基本的功能。如需开启其他功能，可在插件中心启用
 :::
 
-为 **demo-env** 环境创建资源配合，此处为 Kubernetes 原生的 `ResourceQuota` 资源
+### 设置集群资源超分
 
-![](./assets/admin-first-demo-env-quota.jpg)
+默认情况下 Kubernetes 集群资源是由 Kubelet 上报给 Api Server，在实际应用中，用户的计算资源往往会根据应用运行资源进行分配 CPU 、内存等。此时如果将集群真实资源进行分配，会导致可用资源的严重不足。所以 KubeGems 在集群管理中添加了 **“超分”** 的概念，平台管理员可根据资源规划来计算出合理的超分比例。
 
-- 点击 demo-env 进入到环境空间详情页，Kubernetes 相关的资源控制均在环境空间内完成
+![](./assets/oversale.jpg)
 
-![](./assets/admin-first-demo-env-info.jpg)
-
-### 创建工作负载
-
-#### 创建 Deployment
-
-- 进入环境空间，点击左部侧边栏，选择【运行时】 - 【工作负载】，进入工作负载管理页面
-
-![](./assets/admin-first-demo-env-workload.jpg)
-
-- 点击右上角 【创建工作负载】，根据页面引导创建 deployment 资源
-
-![](./assets/admin-first-demo-env-deploy-1.jpg)
-![](./assets/admin-first-demo-env-deploy-2.jpg)
-![](./assets/admin-first-demo-env-deploy-3.jpg)
-![](./assets/admin-first-demo-env-deploy-4.jpg)
-![](./assets/admin-first-demo-env-deploy-5.jpg)
-
-当 `deployment` 资源创建成功后可以【工作负载】和【容器组】页面内查看创建的容器资源信息。您也可以点击相关资源进入详情页浏览资源细节。
-
-![](./assets/admin-first-demo-env-deploy-success.jpg)
-
-详情页提供的资源包含不限于：
-
-- 工作负载基本信息
-- 元数据
-- 容器状态
-- 事件
-- 监控
-
-更多配置请参考【运行时管理】
-
-#### 创建 Service
-
-- 进入环境空间，点击左部侧边栏，选择【运行时】 - 【服务】，进入服务管理页面，根据页面引导创建 Serivce
-
-![](./assets/admin-first-demo-env-service-1.jpg)
-![](./assets/admin-first-demo-env-service-2.jpg)
-
-更多配置请参考【运行时管理】
-
-#### 创建 Ingress
-
-- 进入环境空间，点击左部侧边栏，选择【运行时】 - 【路由】，进入服务路由管理界面，根据页面引导创建 `Ingress`
-
-![](./assets/admin-first-demo-env-ingress-1.jpg)
-
-- 创建完成后点击 **demo-http** ,进入 ingress 详情页，在路由【路由规则】处，点击【访问】可以直接访问服务 Web 页面
-
-![](./assets/admin-first-demo-env-ingress-info.jpg)
-
-更多设置请参考 [服务路由](/docs/tasks/appservice/gateways/ingress)
+设置成功后，在集群详情卡片上即可展现出来
+  <img
+  src={require('./assets/oversaleinfo.jpg').default}
+  align="center"
+  width="50%"
+/>

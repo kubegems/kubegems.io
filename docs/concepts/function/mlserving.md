@@ -13,7 +13,7 @@ description: 一站式 MLOps 模型自动化交付
 
 KubeGems 在 v1.22 版本开始引入 [Seldon Core](https://docs.seldon.io/)，它是一个用于在 Kubernetes 上大规模部署您的机器学习模型。通过 KubeGems 的模型管理控制器，我们旨在标准化用户在平台内提供通用场景下的 MLOps 模型交付流程。
 
-![](https://raw.githubusercontent.com/SeldonIO/seldon-core/master/doc/source/images/seldon-core-high-level.jpg)
+![](./assets/seldon.jpg)
 
 
 高级功能：
