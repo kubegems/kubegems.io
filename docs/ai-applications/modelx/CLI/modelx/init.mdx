@@ -1,0 +1,41 @@
+---
+title: Init Model
+hide_title: true
+sidebar_position: 6
+description:  init model
+keywords: [kubegems,modelx]
+---
+
+## Init Model
+
+---
+
+```
+# 初始化模型目录
+$ modelx init class
+
+Modelx model initialized in class
+
+# 模型目录结构
+$ tree class
+class
+├── modelx.yaml    # 模型描述信息
+└── README.md      # 模型 ReadMe 信息
+```
+
+## modelx.yaml
+
+```
+config:
+  inputs: {}
+  outputs: {}
+description: This is a modelx model
+framework: <some framework>
+maintainers:
+  - maintainer
+modelFiles: []
+tags:
+  - modelx
+  - <other>
+task: ""
+```

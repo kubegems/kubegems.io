@@ -1,5 +1,86 @@
 ---
-title: 升级到 beta.2
+title: beta.1 to beta.2
 hide_title: true
 sidebar_position: 1
+description: upgrade v1.22.0-beta.1 to v1.22.0-beta.2
 ---
+
+## From v1.22.0-beta.1 to v1.22.0-beta.2
+
+---
+
+### 1. Upgrade kubegems-installer  on all kuberentes cluster
+
+```
+$ kubectl set image deployment/kubegems-installer installer=registry.cn-beijing.aliyuncs.com/kubegems/kubegems:v1.22.0-beta.2 -n kubegems-installer
+$ kubectl patch deployments.apps -n kubegems-installer kubegems-installer -p '{"spec": {"template": {"spec":{"containers":[{"name":"installer","imagePullPolicy":"Always"}]}}}}'
+```
+
+### 2. Upgrade kubegems agent on all kubernetes cluster
+```
+$ Kubectl patch cm/kubegems-global-values  -n kubegems-local --type merge -p '{"data": {"global.kubegemsVersion": "v1.22.0-beta.2"}}'
+```
+
+:::caution
+Changing global values will cause all plugins to be reapplied, and manual changes will be restored.
+:::
+
+### 3. Upgrade kubegems controller node
+
+```
+$ kubectl patch plugin/kubegems -n kubegems --type merge -p '{"spec":{"values":{"global":{"kubegemsVersion": "v1.22.0-beta.2"}}}}'
+```
+
+### 4. Execution script to merge altering revicer
+
+```golang
+func mergeLogMonitorReceiver(cli client.Client) {
+    ctx := context.TODO()
+    amConfigs := v1alpha1.AlertmanagerConfigList{}
+    if err := cli.List(ctx, &amConfigs, client.InNamespace(v1.NamespaceAll), client.MatchingLabels(map[string]string{
+        gems.LabelAlertmanagerConfigName: "kubegems-default-logging-alert-rule",
+    })); err != nil {
+        panic(err)
+    }
+
+    for _, v := range amConfigs.Items {
+        monitorAMCfg, err := getOrCreateAlertmanagerConfig(cli, ctx, v.Namespace, prometheus.DefaultAlertCRDName)
+        if err != nil {
+            panic(err)
+        }
+        monRecMap := map[string]v1alpha1.Receiver{}
+        for _, v := range monitorAMCfg.Spec.Receivers {
+            monRecMap[v.Name] = v
+        }
+        for _, logRec := range v.Spec.Receivers {
+            if _, ok := monRecMap[logRec.Name]; !ok {
+                monitorAMCfg.Spec.Receivers = append(monitorAMCfg.Spec.Receivers, logRec)
+            }
+        }
+        monitorAMCfg.Spec.Route.Routes = append(monitorAMCfg.Spec.Route.Routes, v.Spec.Route.Routes...)
+        if err := cli.Update(ctx, monitorAMCfg); err != nil {
+            panic(err)
+        }
+        log.Printf("namespace %s merge finished", v.Namespace)
+        if err := cli.Delete(ctx, v); err != nil {
+            panic(err)
+        }
+    }
+    bts, _ := yaml.Marshal(amConfigs)
+    os.WriteFile(logAmcfgPath, bts, os.ModeAppend)
+}
+
+func getOrCreateAlertmanagerConfig(cli client.Client, ctx context.Context, namespace, name string) (*v1alpha1.AlertmanagerConfig, error) {
+    aconfig := &v1alpha1.AlertmanagerConfig{}
+    err := cli.Get(ctx, types.NamespacedName{Namespace: namespace, Name: name}, aconfig)
+    if kerrors.IsNotFound(err) {
+        // 初始化
+        aconfig = prometheus.GetBaseAlertmanagerConfig(namespace, name)
+        if err := cli.Create(ctx, aconfig); err != nil {
+            return nil, err
+        }
+        return aconfig, nil
+    }
+    return aconfig, err
+}
+```

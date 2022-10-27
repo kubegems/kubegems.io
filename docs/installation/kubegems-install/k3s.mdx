@@ -2,4 +2,153 @@
 title: 基于自建 k3s 安装
 hide_title: true
 sidebar_position: 2
+description: 指导用户在本地部署k3s集群和 KubeGems 服务
 ---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+## 基于自建 k3s 安装
+
+---
+
+### 前置条件
+
+- 一台兼容的 Linux 主机。Kubernetes 项目**为基于Debian和Ubuntu**的Linux发行版以及一些不提供包管理器的发行版提供通用的指令
+
+- 每台机器 8 GB 或更多的 RAM （如果少于这个数字将会影响你应用的运行内存)
+
+- 2 CPU 核或更多
+
+- 集群中的所有机器的网络彼此均能相互连接(公网和内网都可以)
+
+- 节点之中不可以有重复的主机名、MAC 地址或 product_uuid。请参见这里了解更多详细信息。
+
+- 禁用交换分区。为了保证 kubelet 正常工作，你**必须**禁用交换分区。
+
+- 所有节点的时间同步
+
+
+### 安装 k3s 集群
+
+K3s 提供了一个安装脚本，可以方便的在 systemd 或 openrc 的系统上将其作为服务安装。这个脚本可以在 https://get.k3s.io 获得。要使用这种方法安装 K3s，只需运行以下命令
+
+```bash
+$ curl -sfL https://get.k3s.io | sh -
+```
+
+:::tip
+中国大陆地区用户，可以使用以下方法加速安装：
+```bash
+$ curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -
+```
+:::
+
+运行此安装后：
+
+- K3s 服务将被配置为在节点重启后或进程崩溃或被杀死时自动重启。
+- 将安装其他实用程序，包括kubectl、crictl、ctr、k3s-killall.sh 和 k3s-uninstall.sh。
+- 将kubeconfig文件写入到/etc/rancher/k3s/k3s.yaml，由 K3s 安装的 kubectl 将自动使用该文件
+
+### 加入 k3s 集群
+
+在工作节点上安装并将它们添加到集群，请使用K3S_URL和K3S_TOKEN环境变量运行安装脚本
+
+```bash
+$ curl -sfL https://get.k3s.io | K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken sh -
+```
+
+:::tip
+中国大陆地区用户，可以使用以下方法加速安装：
+```bash
+$ curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken sh -
+```
+:::
+
+设置K3S_URL参数会使 K3s 以 worker 模式运行。K3s agent 将在所提供的 URL 上向监听的 K3s 服务器注册。K3S_TOKEN使用的值存储在你的服务器节点上的 `/var/lib/rancher/k3s/server/node-token` 路径下。
+
+### 安装 KubeGems
+
+1. 部署 installer
+
+```bash
+$ k3s kubectl create namespace kubegems-installer
+$ k3s kubectl apply -f https://github.com/kubegems/kubegems/raw/${KUBEGEMS_VERSION}/deploy/installer.yaml
+```
+
+2. 等待安装程序准备就绪。
+
+```sh
+$ k3s kubectl -n kubegems-installer get po
+
+NAME                                  READY   STATUS    RESTARTS   AGE
+kubegems-installer-6fb7495c4d-8rqwn   0/1     Running   0          12s
+```
+
+3. 部署 kubegems 核心组件
+
+:::caution
+kubegems 默认使用名称为 local-path 的 storageClass，如果您使用不同的 storageClass，您需要在 apply 前下载并编辑 `kubegems.yaml` 文件。
+:::
+
+<Tabs>
+  <TabItem value="dockerhub" label="DockerHub 源" default>
+
+```bash
+$ k3s kubectl create namespace kubegems
+
+$ export STORAGE_CLASS=local-path  # 改为您使用的 storageClass
+$ curl -sL https://github.com/kubegems/kubegems/raw/${KUBEGEMS_VERSION}/deploy/kubegems.yaml \
+| sed -e "s/local-path/${STORAGE_CLASS}/g" \
+> kubegems.yaml
+
+$ k3s kubectl apply -f kubegems.yaml
+```
+
+  </TabItem>
+  <TabItem value="aliyun" label="阿里云镜像源（中国大陆地区推荐）" default>
+
+```bash
+$ k3s kubectl create namespace kubegems
+
+$ export STORAGE_CLASS=local-path  # 改为您使用的 storageClass
+$ export IMAGE_REGISTY=registry.cn-beijing.aliyuncs.com
+curl -sL https://github.com/kubegems/kubegems/raw/${KUBEGEMS_VERSION}/deploy/kubegems.yaml \
+| sed -e "s/local-path/${STORAGE_CLASS}/g" -e "s/docker.io/${IMAGE_REGISTY}/g" \
+> kubegems.yaml
+
+$ k3s kubectl apply -f kubegems.yaml
+```
+
+  </TabItem>
+</Tabs>
+
+** kubegems CR 下发后，大约需要 5 分钟才会一切正常，这取决于您的具体配置。**
+
+:::info
+在启动完成之前会有许多 Pod 的状态为 `CrashLoopBackOff`，这是由于其依赖的服务（mysql、redis、gitea、argocd 等）还在启动中，这是正常的，请耐心等待。
+:::
+
+kubegems 所有服务部署并启动完成后会有如下 pod：
+
+```bash
+$ k3s kubectl -n kubegems get pod
+
+NAME                                               READY   STATUS      RESTARTS      AGE
+kubegems-api-7bf85fff57-lfk7j                      1/1     Running     0             10m
+kubegems-argo-cd-app-controller-c6c479d68-2j4c4    1/1     Running     0             10m
+kubegems-argo-cd-repo-server-7dddd8f57d-ldj5k      1/1     Running     0             10m
+kubegems-argo-cd-server-76745cc657-v8dx9           1/1     Running     0             10m
+kubegems-chartmuseum-6c546b4d-qxfjj                1/1     Running     0             10m
+kubegems-charts-init-main-lmtwt                    0/1     Completed   0             10m
+kubegems-dashboard-6bcd7f65f-89gsk                 1/1     Running     0             10m
+kubegems-gitea-0                                   1/1     Running     0             10m
+kubegems-init-main-vjxnq                           0/1     Completed   0             10m
+kubegems-msgbus-7c58548497-pqwht                   1/1     Running     1 (1m ago)    10m
+kubegems-mysql-0                                   1/1     Running     0             10m
+kubegems-redis-master-0                            1/1     Running     0             10m
+kubegems-worker-7d67974f4c-cj65l                   1/1     Running     0             10m
+```
+
+### 下一步
+
+请移步 [快速入门](../../category/快速入门) 进行平台设置
