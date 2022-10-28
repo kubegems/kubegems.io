@@ -6,13 +6,128 @@ sidebar_position: 3
 
 ## 应用商店开发指南
 
-KubeGems应用商店采用标准的 Helm3 对应用进行打包，仓库位于https://github.com/kubegems/appstore-charts ，这里面大部分都来源于 Bitnami、helm offical以及部分自写的 charts 包。由于 KubeGems 还不支持在界面上传自定义Charts，所以需要将本仓库构建出镜像，并提交charts-updater任务触发应用商店更新。
+KubeGems 应用商店采用标准的 Helm3 对应用进行打包，应用商店内的 Charts 全部位于仓库 [appstore-charts](https://github.com/kubegems/appstore-charts) 。这里面大部分都来源于 Bitnami、helm offical以及部分自写的 charts 包。由于 KubeGems 还不支持在界面上传自定义Charts，所以需要将本仓库构建出镜像，并提交 `charts-updater` 任务触发应用商店更新。
 
-## ChartMuseum
+### 什么是ChartMuseum
 
 ChartMuseum是一个用Go（Golang）编写的开源Helm Chart Repository服务器，支持云存储后端，包括Google云存储，Amazon S3，Microsoft Azure Blob存储，阿里云OSS存储，Openstack对象存储和Oracle云基础架构对象存储.
 
 [chartmusem官方文档]( https://chartmuseum.com/docs/)
+
+## 开发约束
+
+### 资源名称
+
+在 charts 的 schema 文件中资必须声明 `nameOverride`和`fullnameOverride`为必填项。
+
+:::info
+为了保证通过 helm 部署应用的资源名称与应用商店填写的最终一致。KubeGems 前端在提交 values 资源时，会将应用名称同时写入到`nameOverride`和`fullnameOverride`这个两个变量
+:::
+
+例如： consul/values.schema.json
+
+```json
+    "properties": {
+      "nameOverride": {
+        "type": "string",
+        "title": "Consul容器名",
+        "form": true
+      },
+      "fullnameOverride": {
+        "type": "string",
+        "title": "Consul服务名",
+        "form": true
+      },
+```
+
+### 监控数据采集
+
+在开发 charts 或集成第三方 charts 时，如果 charts 内部已经带了监控采集的模板（大部分由 prometheus-operator实现），默认将它关闭
+
+:::info
+KubeGems 的接入中心提供了第三方组件的 exporter charts 模板，如果用户集成的第三方 charts 中包含了 serviceMonitor，虽然能被 kubeGems 的 prometheus 采集，当无法通过界面查询数据
+:::
+
+例如： consul/values.schema.json
+
+``` json
+      "metrics": {
+        "type": "object",
+        "form": true,
+        "title": "监控服务",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "启用监控采集端",
+            "default": false,    \\默认关闭
+            "form": true
+          }
+        }
+      }
+```
+
+### Charts 多国语言设置
+
+Helm Charts 默认并没有设计多国语言的配置，KubeGems 在应用商店中加载应用部署时的表单处自行设计了规范，可参考如下
+
+多国语言 json.schema 文件保存在 charts 根下的 i18n目录内，按照语言缩写命名文件
+
+```bash
+charts
+├── i18n
+│   └── values.en.json      // en_US
+│   └── values.jp.json      // ja_JP
+├── Chart.yaml
+├── README.md
+├── charts
+│   └── common
+├── ci
+├── templates
+├── values.schema.json    //default zh_CN
+└── values.yaml
+```
+
+多语言内容格式与默认保持一致即可，例如  values.en.json
+
+```json
+{
+  "properties": {
+    "nameOverride": {
+      "title": "Zookeeper Name"
+    },
+    "fullnameOverride": {
+      "title": "Zookeeper Fullname"
+    },
+    "replicaCount": {
+      "title": "ReplicaCount"
+    },
+    "maxClientCnxns": {
+      "title": "Max Client Connections"
+    },
+    "persistence": {
+      "properties": {
+        "enabled": {
+          "title": "Enable PVC"
+        },
+        "size": {
+          "title": "Capacity"
+        },
+        "storageClass": {
+          "title": "StorageClass"
+        }
+      }
+    },
+    "metrics": {
+      "title": "Service Monitor",
+      "properties": {
+        "enabled": {
+          "title": "Enable"
+        }
+      }
+    }
+  }
+}
+```
 
 ## 操作说明
 
@@ -32,35 +147,102 @@ $ make build
 ```
 $ make apply
 ```
+
+:::info
+修改 Makefile 的`CHARTS_UPLOADER`变量将 build 成功的镜像推送在您的私有镜像仓库
+:::
+
+### 通过调用 Chartsmuseum API 更新
+
+设置 Nodeport 将 kubegems-chartmuseum 的服务暴露出来，通过以下命令上传 charts 包。由于
+
+```bash
+$ curl --data-binary "@<charts包路径>" -w "%{stdout}\n" <chartmuseum地址>/api/kubegems/charts
+```
+
+### 为 Exporter 类应用设置告警
+
+KubeGems 的应用商店中包含诸多 exporter 类型的 charts，它们的主要作用是为 KubeGems 接入中心提供中间件的监控数据接入能力。
+
+如果您自己开发 appstore-charts 仓库中的中间件 exporter 需遵循如下两条规则
+
+- values 和 schema 文件中设计 `alert.eneabled`字段用于判断在部署中是否创建告警规则
+
+```yaml
+alerts:
+  ## If true, a PrometheusRule CRD is created for a prometheus operator
+  ## https://github.com/coreos/prometheus-operator
+  ##
+  ## The rules will be processed as Helm template, allowing to set variables in them.
+  enabled: true
+```
+
+- 在 charts 的根目录下创建`alerts.yaml`文件,内容为中间件的告警规则, 
+
+以下是示例演示
+
+```yaml
+- name: MongodbDown
+  namespace: __namespace__
+  expr: mongodb_up{service="__fullname__",namespace="__namespace__"}
+  message: MongoDB [namespace {{ $labels.namespace }}] [service {{ $labels.service }}] [instance {{ $labels.instance }}] down
+  for: 0m
+  alertLevels:
+    - compareOp: "=="
+      compareValue: "0"
+      severity: critical
+  receivers:
+    - name: gemcloud-default-webhook
+      interval: 10m
+```
+
+:::info
+在告警规则的查询语句中必须包含 `server="__fullname__"` 和 `namespace="__namespace__"` 这两个标签，它们的作用是用于定位 exporter 的信息。
+:::
+
+:::info
+gemcloud-default-webhook 是 KubeGems 内置 webhook 用户将告警事件推送到前端气泡当中
+:::
+
+- 自动构建告警规则
+
+```
+$ make generate
+```
+
+:::info
+make命令会扫描仓库内  exporter 应用，并在其 charts.template 下自动创建 `prometheusrules.yaml` 和 `alertmanagerconfig.yaml`
+:::
+
 ### 常用命令
 
 ### helm
 
 - 查看所有charts
 
-```
-$helm search repo xxx
+```bash
+$ helm search repo xxx
 ```
 
 - 下载依赖到charts目录
   
-```
+```bash
 $ helm dependency update
 ```
 
 - helm 本地渲染模板
   
-```
+```bash
 $ helm template .
 ```
 
 - 生成charts索引文件index.yaml
 
-```
- helm repo index [DIR] [flags]
+```bash
+$ helm repo index [DIR] [flags]
 ```
 
-## 自动渲染表单 JsonSchema
+## JsonSchema 说明
 
 关于 chart 模式文 件values.schema.json, 请参考: https://helm.sh/zh/docs/topics/charts/
 
@@ -215,9 +397,62 @@ KubeGems 应用商店部署页面的中间件表单, 采用 schema文件进行�
 
 ### 表单关联
 
-通过hidden字段实现, 比如要实现打开zookeeper开关, 其子表单才显示出来的效果, 通过value中的值enabled与hidden父级字段同级的enabled字段关联实现联动, 比如以上Json案例中的persistence对象中的enabed字段为打开, 则size和storageClass中的hidden.value由于依赖该enabled字段, 所以默认打开, 反之亦然, condition字段暂时没有使用
+schema 中可以同通过简单的判断逻辑来影响其他其他资源的行为。
 
-注意事项: 暂时不支持跨父节点关联
+:::caution
+不支持跨父节点关联
+:::
+
+例如，mysql/values.schema.json
+
+通过`persistence.enabled`布尔值来判断后续表单是否隐藏
+
+```json
+    "master": {
+      "type": "object",
+      "title": "MYSQL主库设置",
+      "form": true,
+      "properties": {
+        "persistence": {
+          "type": "object",
+          "title": "数据持久化设置",
+          "form": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "title": "启用存储卷",
+              "form": true
+            },
+            "size": {
+              "type": "string",
+              "title": "存储卷容量",
+              "form": true,
+              "render": "slider",
+              "sliderMin": 1,
+              "sliderMax": 100,
+              "sliderUnit": "Gi",
+              "default": "10Gi",
+              "hidden": {
+                "path": "master/persistence/enabled",
+                "value": false
+              }
+            },
+            "storageClass": {
+              "type": "string",
+              "title": "存储类型",
+              "form": true,
+              "hidden": {
+                "path": "master/persistence/enabled",
+                "value": false
+              }
+            }
+          }
+        }
+      }
+    },
+```
+
+
 
 ### 整数integer
 

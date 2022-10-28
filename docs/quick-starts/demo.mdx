@@ -57,7 +57,11 @@ Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
 和创建 Kubernetes 集群一样，使用命令`kind create cluster`就能快速拉起一个 Kubernetes 服务并部署 KubeGems
 ![image-20220805141017484.png](https://img-blog.csdnimg.cn/img_convert/3657c5205677e4e218c3af9ca78d49a8.png)
 
-由于不需要定制`kindest/node`镜像，所以 KubeGems安装全程需要连接公网下载所需的镜像。在启动完成之前会有许多 Pod 的状态为 `CrashLoopBackOff`，这是由于其依赖的服务（mysql、redis、gitea、argocd 等）还在启动中，这是正常的，请耐心等待。
+:::info
+由于不需要定制`kindest/node`镜像，所以 KubeGems安装全程需要连接公网下载所需的镜像。
+:::
+
+在启动完成之前会有许多 Pod 的状态为 `CrashLoopBackOff`，这是由于其依赖的服务（mysql、redis、gitea、argocd 等）还在启动中，是正常的，请耐心等待。
 
 kubegems 所有服务部署并启动完成后会有如下 pod
 
@@ -75,7 +79,15 @@ Forwarding from [::1]:52302 -> 8000
 此时，打开浏览器访问 `http://<目标服务器地址>:52302`即可访问 KubeGems，默认用户`admin` 默认密码`demo!@#admin`
 
 :::info
- 使用 Kind 生成的 KubeConfig文件导入集群是，注意修改集群 Server 地址为内部地址`https://kubernetes.default:443`
+ 使用 Kind 生成的 KubeConfig 文件导入集群时，注意修改集群 Server 地址为内部地址`https://kubernetes.default:443`
 :::
+
+<img
+  src={require('./assets/demo-kubeconfig.jpg').default}
+  width="60%"
+  align="center"
+/>
+
+集群导入成功后即可进入集群详情页
 
 ![image-20220805144837887.png](https://img-blog.csdnimg.cn/img_convert/750cf1eb84463f564fd6c1cf00b2bac5.png)
