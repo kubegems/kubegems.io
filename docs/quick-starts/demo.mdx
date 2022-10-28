@@ -9,7 +9,17 @@ keywords: [kubegems, KubeGems, kubernetes]
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-##  安装 Kind 
+## 单机体验版(Kind)安装
+
+---
+
+### 前置条件
+
+- 安装的目标机器运行了 docker 服务 
+- 目标机器具备 kubectl 工具
+
+###  安装 Kind 
+
 
 选择安装适合您操作系统的发行版
 
@@ -42,7 +52,7 @@ Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
   </TabItem>
 </Tabs> 
 
-## 创建服务
+### 创建服务
 
 和创建 Kubernetes 集群一样，使用命令`kind create cluster`就能快速拉起一个 Kubernetes 服务并部署 KubeGems
 ![image-20220805141017484.png](https://img-blog.csdnimg.cn/img_convert/3657c5205677e4e218c3af9ca78d49a8.png)
@@ -56,16 +66,16 @@ kubegems 所有服务部署并启动完成后会有如下 pod
 当容器状态全部`Running`后，使用 port-forward 将 KubeGems Dashboard 服务映射到本地
 
 ```shell
-kubectl port-forward svc/kubegems-dashboard :80 -n kubegems                           
+kubectl port-forward svc/kubegems-dashboard :80 -n kubegems --address 0.0.0.0
 
-Forwarding from 127.0.0.1:52302 -> 8000
+Forwarding from 0.0.0.0:52302 -> 8000
 Forwarding from [::1]:52302 -> 8000
 ``` 
 
-此时，打开浏览器访问 `http://localhost:52302`即可访问 KubeGems，默认用户`admin` 默认密码`demo!@#admin`
+此时，打开浏览器访问 `http://<目标服务器地址>:52302`即可访问 KubeGems，默认用户`admin` 默认密码`demo!@#admin`
 
 :::info
- 使用 Kind 生成的 KubeConfig文件导入集群是，注意修改集群 Server 地址为内部地址`http://kubernetes.default:443`
+ 使用 Kind 生成的 KubeConfig文件导入集群是，注意修改集群 Server 地址为内部地址`https://kubernetes.default:443`
 :::
 
 ![image-20220805144837887.png](https://img-blog.csdnimg.cn/img_convert/750cf1eb84463f564fd6c1cf00b2bac5.png)
