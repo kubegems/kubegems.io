@@ -2,4 +2,41 @@
 title: 已知问题
 hide_title: true
 sidebar_position: 5
+description: KubeGems 及生态中存在的已知问题
 ---
+
+## 已知问题
+
+---
+
+### 1. 日志规则过多导致秘钥 logger-fluentd-app 超长无法更新配置
+
+此问题记录在 [kubegems/issues/295](https://github.com/kubegems/kubegems/issues/295), 由于 Kubernetes Secret 资源 annotation 最大支持 262144 个字符串，当集群内存在大量配置时，导致 `banzaicloud.com/last-applied` 记录超长 operator 无法提交最新配置。
+
+**解决方法：** 删除 logger-fluentd-app这个秘钥，由 operator 重新提交即可恢复
+ 
+```
+$ kubectl delete secret logging-operator-logging-fluentd-app -n kubegems-logging
+```
+
+此外，由于 kubernetes secret 的 data 部分最大空间为 3MB，如果集群内规则过多也会导致规则无法更新。
+
+目前此问题无解，上游正在探讨效仿`prometheus-operator`将配置压缩成 tar.gz 格式写入 secret，然后在`config-reloader`容器中解压重载配置。这个进度在这里查看 [logging-operator/pull/1108](https://github.com/banzaicloud/logging-operator/pull/1108)
+
+### 2. 插件 eventer 服务运行一段时间后无事件输出
+
+此问题进度在此处跟进[kubegems/issues/247](https://github.com/kubegems/kubegems/issues/247)，此问题在于`client go`的限流策略， 在 config 中调大 eveter 的 qos即可。上游跟进 [kubernetes-event-exporter/issues/16](https://github.com/resmoio/kubernetes-event-exporter/issues/16)
+
+:::info
+由于用户的集群规模不通，复现这个问题的条件也不一样，遇见此问题，再根据实际情况修改配置
+:::
+
+### 其它问题
+
+如果您仍有其他问题无法解决，可以通过以下渠道联系我们：
+
+- GitHub 上查询或提交是否有相关的 [Issue](https://github.com/kubegems/kubegems/issues)
+
+- 加入 [微信群](../../community/support#wechat) 寻求帮助
+
+- 获取 [官方支持](https://wj.qq.com/s2/10923500/96e0/), 我们会尽快联系你

@@ -110,7 +110,7 @@ This release brings new plugin management and observability features live. Now y
 * ✨ feat(observability): add dashboard and labelname api by @jojotong in #69
 * ✨ feat(monitor): support unit in promql query and dashboard by @jojotong in #75
 * ✨ feat(plugin): add logging and eventer plugins by @jojotong in #77
-* feat(plugin): add 6 plugins in kuebgems-stack by @LinkMaq in #81
+* feat(plugin): add 6 plugins in kubegems-stack by @LinkMaq in #81
 * feat(plugins): split all in one plugins by @cnfatal in #91
 * feat(nacos): add nacos plugins for application configure management on kubegems by @pepesi in #90
 * Feature nacos client by @pepesi in #113

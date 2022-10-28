@@ -2,4 +2,194 @@
 title: 在 KubeGems 使用 Nacos 配置中心
 hide_title: true
 sidebar_position: 5
+description: 指导用户在 KubeGems 启用 Nacos 插件
 ---
+
+## Nacos 介绍
+
+Nacos 是阿里云开源一款在微服务场景下用于处理应用配置发布管理和服务注册管理的服务平台。其主要提供了如下几个特性：
+
+- **服务发现和服务健康监测**
+
+基于 DNS 和 RPC 的服务发现。服务提供者使用 [原生SDK](https://nacos.io/zh-cn/docs/sdk.html)、[OpenAPI](https://nacos.io/zh-cn/docs/open-api.html)、或一个[独立的Agent TODO](https://nacos.io/zh-cn/docs/other-language.html)注册 Service 后，服务消费者可以使用[DNS TODO](https://nacos.io/zh-cn/docs/xx) 或[HTTP&API](https://nacos.io/zh-cn/docs/open-api.html)查找和发现服务。
+
+- **动态配置服务**
+
+动态配置服务可以让您以中心化、外部化和动态化的方式管理所有环境的应用配置和服务配置。
+
+- **动态 DNS 服务**
+
+动态 DNS 服务支持权重路由，让您更容易地实现中间层负载均衡、更灵活的路由策略、流量控制以及数据中心内网的简单DNS解析服务。
+
+- **服务及其元数据管理**
+
+Nacos 从微服务平台建设的视角管理数据中心的所有服务及元数据，包括管理服务的描述、生命周期、服务的静态依赖分析、服务的健康状态、服务的流量管理、路由及安全策略、服务的 SLA 以及最首要的 metrics 统计数据。
+
+#### KubeGems 中的 Nacos
+
+KubeGems 自v1.21版本之后开启了对 Nacos 配置中心的支持，并利用了内置 Plugins CRD 实现了对 Nacos 的快速启动。
+
+![](https://img-blog.csdnimg.cn/img_convert/6a57af0e23c16e58a78472ae29f4bbf7.png)
+
+KubeGems 中的 Nacos 安装源来至官方社区提供https://github.com/nacos-group/nacos-k8s，并在 plugin crd 中来管理部署的版本。用过 Nacos 的同学可能知道，其内部的数据模型主要围绕`dataid`、`group`和`namespace`这 3 个进行操作。由于 KubeGems 的设计是一个支持多租户的平台，所以在应用 nacos 数据模型时，按照了 `tenant + project`来区分内部的命名空间。
+
+![](https://img-blog.csdnimg.cn/img_convert/bb863509816423e613ed977995dd4e2b.png)
+![](https://img-blog.csdnimg.cn/img_convert/c9f4f887d094f244dd24262e3f073b01.png)
+
+##  启用和配置插件
+
+KubeGems 启用 Nacos 需要具备系统管理员的权限进行操作。管理员进入管理后台的“插件管理”，点击“启用“按钮“即可开启Nacos。
+
+![](https://img-blog.csdnimg.cn/img_convert/47c194e765849b11c82c0dd020d0a54a.png)
+
+直到出现如下状态，代表插件运行正常
+
+![](https://img-blog.csdnimg.cn/img_convert/41020365de048594c7a8c977756d6ce4.png)
+
+此时，我们就可以在租户的环境中开始使用 Nacos 服务
+
+![](https://img-blog.csdnimg.cn/img_convert/7cd5bcbdd802a5e73f952461a28eff6b.png)
+
+#### 个性化配置
+
+Nacos插件的配置以 CRD 的形式存放在 `nacos`命名空间中，我们可以通过命令`kubectl edit plugin nacos -n nacos`对插件进行个性化配置。
+
+```yaml
+apiVersion: plugins.kubegems.io/v1beta1
+kind: Plugin
+metadata:
+  finalizers:
+  - plugins.kubegems.io/finalizer
+  generation: 1
+  name: nacos
+  namespace: nacos
+spec:
+  kind: helm
+  path: helm
+  url: https://github.com/nacos-group/nacos-k8s.git
+  values:
+    namespace: nacos
+    global:
+      mode: cluster
+    nacos:
+      replicaCount: 1
+      image:
+        repository: registry.cn-beijing.aliyuncs.com/kubegems/nacos-server
+        tag: v2.1.1
+      plugin:
+        image:
+          repository: registry.cn-beijing.aliyuncs.com/kubegems/nacos-peer-finder-plugin
+    persistence:
+      data:
+        storageClassName: local-path
+      enabled: true
+    service:
+      type: ClusterIP
+  version: master
+```
+
+> 提示：KubeGems的插件 CRD 由 https://github.com/kubegems/bundle-controller提供支持，我们也可以直接使用 bundle-controller 在非 kubegems 集群中管理插件。
+
+#### 集群部署
+
+Nacos集群由社区提供支持部署，kubegems 默认将 nacos 的全局运行模式设置为“cluster”，如果您需要扩展成多集群，只需修改`replicaCount`的副本数为 3 即可。
+
+![](https://img-blog.csdnimg.cn/img_convert/a092ff1c77944d29af215bf903a6982c.png)
+
+#### 开放集群外访问
+
+Nacos 插件默认运行在 Kubernetes 内部，如果需要在集群外访问 Nacos 需借助网关实现。管理员可以在后台创建一条基于默认网关的 ingress 来代理 nacos api。过程如下：
+
+第一步： 进入路由功能页面，选择 nacos 命名空间
+
+![](https://img-blog.csdnimg.cn/img_convert/fa34c978d12936cc2a469cb566e2321b.png)
+
+第二步：创建并提交一条路由规则，用于 nacos 的代理
+
+![](https://img-blog.csdnimg.cn/img_convert/c7522700c7fe0f5b1f280248053a40df.png)
+
+第三步：获取访问地址
+
+![](https://img-blog.csdnimg.cn/img_convert/17b723e385f2876158498785b1c72809.png)
+
+> 提示：Nacos2.0版本相比1.X新增了gRPC的通信方式，因此需要增加2个端口。新增端口是在配置的主端口(server.port)基础上，进行一定偏移量自动生成
+
+## 使用配置中心
+
+进入应用环境下的“应用配置”，可以点击右上角的“获取访问信息”查看当前环境下的 nacos sdk 所需的配置信息
+
+![](https://img-blog.csdnimg.cn/img_convert/97b1cffe1e6100e3d93977b1d35fbf34.png)
+
+#### 配置管理
+
+点击“创建配置项”就可以创建配置
+
+![](https://img-blog.csdnimg.cn/img_convert/4341eb874c2c223fef96e4ec9565b0a6.png)
+
+#### 配置历史与回滚
+
+![](https://img-blog.csdnimg.cn/img_convert/0a8b985cf5f1e096abba2065a6219d20.png)
+
+#### 监听列表
+
+![](https://img-blog.csdnimg.cn/img_convert/a9c008358d95739108e1ade1cf86322a.png)
+
+## 运行测试
+
+我们用 `nacos-sdk-go/v1`来做一个简单的认证
+
+```golang
+package main
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/nacos-group/nacos-sdk-go/clients"
+	"github.com/nacos-group/nacos-sdk-go/common/constant"
+	"github.com/nacos-group/nacos-sdk-go/vo"
+)
+
+func main() {
+	sc := []constant.ServerConfig{
+		{
+			IpAddr: "nacos.kubegems.io",
+			Port:   31956,
+		},
+	}
+
+	cc := constant.ClientConfig{
+		NamespaceId:         "69f7325702bc396a8773f9a0a94eea310b21ec39", //namespace id
+		TimeoutMs:           5000,
+		NotLoadCacheAtStart: true,
+		LogDir:              "/tmp/nacos/log",
+		CacheDir:            "/tmp/nacos/cache",
+		LogLevel:            "debug",
+	}
+	client, err := clients.NewConfigClient(
+		vo.NacosClientParam{
+			ClientConfig:  &cc,
+			ServerConfigs: sc,
+		},
+	)
+
+	if err != nil {
+		panic(err)
+	}
+
+	content, err := client.GetConfig(vo.ConfigParam{
+		DataId: "test",
+		Group:  "e3",
+	})
+	fmt.Println("GetConfig,config :" + content)
+
+	err = client.ListenConfig(vo.ConfigParam{
+		DataId: "test",
+		Group:  "e3",
+		OnChange: func(namespace, group, dataId, data string) {
+			fmt.Println("config changed group:" + group + ", dataId:" + dataId + ", content:" + data)
+		},
+	})
+	time.Sleep(300 * time.Second)
+}
+```
