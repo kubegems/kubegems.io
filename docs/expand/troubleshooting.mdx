@@ -3,3 +3,81 @@ title: KubeGems 问题排查
 hide_title: true
 sidebar_position: 4
 ---
+
+## KubeGems 问题排查
+
+---
+
+### 1. kubegems-api 与 kubegems-local 时间不同步造成请求返回 403
+
+KubeGems 内部各模块接口调用之间均开启了 http签名，可有效防御**请求被篡改**、**重放攻击**等手段。
+
+:::tip什么是 [HTTP 签名](https://oauth.net/http-signatures/) ?
+:::
+
+在 KubeGems 中，httpsign 的始终差默认为 15分钟，如服务间时间差大于 15 分钟时会报如下错误  *kubectl-api.log*
+
+```
+2022-10-13 08:04:17.924	error	middleware/httpsig.go:32	signer	{"error": "httpsigs time out, origin: 1665649153, now: 2022-10-13 08:04:17.924265317 +0000 UTC m=+1221.099241986"}
+2022-10-13 08:04:17.925	warn	gin@v1.8.0/context.go:173	Forbidden	{"method": "GET", "path": "/v1/api-resources", "code": 403, "latency": 0.001017259}
+2022-10-13 08:04:24.35	error	middleware/httpsig.go:32	signer	{"error": "httpsigs time out, origin: 1665649160, now: 2022-10-13 08:04:24.350349102 +0000 UTC m=+1227.525325614"}
+2022-10-13 08:04:24.35	warn	gin@v1.8.0/context.go:173	Forbidden	{"method": "GET", "path": "/internal/plugins.kubegems.io/v1beta1/namespaces/kubegems-local/Plugin", "code": 403, "latency": 0.000517216}
+2022-10-13 08:04:24.445	error	middleware/httpsig.go:32	signer	{"error": "httpsigs time out, origin: 1665649160, now: 2022-10-13 08:04:24.445145498 +0000 UTC m=+1227.620122137"}
+2022-10-13 08:04:24.446	warn	gin@v1.8.0/context.go:173	Forbidden	{"method": "GET", "path": "/internal/plugins.kubegems.io/v1beta1/namespaces/kubegems-local/Plugin", "code": 403, "latency": 0.001365423}
+```
+
+同步集群内主机的时间可解决上述问题
+
+:::info
+推荐在操作系统中启用 NTP 或 Chorny 始终同步服务
+:::oauth
+
+### 2. 为 kubegems 前端添加代理后，应用中心状态页面加载很慢
+
+由于应用中心部分接口后端采用了 SSE（Server-Setnt Events） 单向连接来像页面推送消息，由于 Nginx 或其他网关默认在代理开启了 buffer 池来缓冲数据，等到 buffer 满了批量返回给客户端，这就导致 KubeGems 前端数据加载变慢。
+此问题关闭 proxy buffer 即可解决。
+
+:::tip 什么是 [Server-Setnt Events](https://en.wikipedia.org/wiki/Server-sent_events) ?
+:::
+
+**Nginx配置**
+
+```nginx
+location / {    
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+    proxy_buffering off;
+    proxy_cache off;
+    proxy_pass http://kubegems-dashboard:8000;
+}
+```
+
+**Nginx Ingress 配置**
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.org/proxy-buffering: "false"
+    nginx.org/websocket-services: kubegems-dashboard
+```
+
+**APISIX 配置**
+
+修改 apisix 配置文件，注入以下内容
+
+``` yaml
+http_configuration_snippet: |-
+  proxy_buffering                 off;
+```
+
+### 其它问题
+
+如果您仍有其他问题无法解决，可以通过以下渠道联系我们：
+
+- GitHub 上查询或提交是否有相关的 [Issue](https://github.com/kubegems/kubegems/issues)
+
+- 加入 [微信群](../../community/support#wechat) 寻求帮助
+
+- 获取 [官方支持](https://wj.qq.com/s2/10923500/96e0/), 我们会尽快联系你
