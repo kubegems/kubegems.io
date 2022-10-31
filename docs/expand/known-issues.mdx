@@ -37,6 +37,21 @@ KubeGems v1.22 版本引入的 mongodb-exporter 是由 prometheus-community 社�
 
 但存在部分 metrics 变化导致 KubeGems 监控模板不再使用。我们计划在 KubeGems v1.23 版本中跟进社区替换此 exporter。
 
+### 4. Nacos 插件在集群 (embedded) 模式下，重启所有 nacos 容器后集群无法正常恢复
+
+Nacos 集群所有容器都重启的场景下（可能是计算节点宕机、或例行维护），新的 nacos-0 启动时无法解析其它 pod 或连接其它 pod 失败（因为其它nacos pod 还没启动） 导致集群无法正常恢复。
+
+由于 Kubernetes Statefulset 默认的容器创建规则是有序的（OrderReady），这会影响 nacos 集群启动时之间的通信。
+
+:::tip StatefulSet 的容器管理策略 [pod-management-policies](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies)
+:::
+
+修复此问题，只需需将 nacos 的 statefulset 中的容器管理规则修改为 `Parallel` 即可
+
+:::info 
+StatefulSet 不允许直接修改`.spec.podManagementPolicy`，需将 StatefulSet 资源导出来修改后重新提交
+:::
+
 ### 其它问题
 
 如果您仍有其他问题无法解决，可以通过以下渠道联系我们：
