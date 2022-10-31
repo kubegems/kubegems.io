@@ -5,3 +5,51 @@ sidebar_position: 5
 description: 安装过程中的问题记录与修复
 keywords: [kubegems, KubeGems, kubernetes]
 ---
+
+## 安装问题排查指南
+
+--- 
+
+### 1. KubeGems 重装导致访问 MYSQL 数据库报错 `Access denied`
+
+此问题的原因在于 KubeGems 在初次安装过程中通过 helm 生成了 MYSQL 等一系列中间件的**随机密码**。第一次安装过程中，MYSQL 会将数据库密码持久化数据卷当中。
+
+当您在重复安装 kubegems 时，如果没有删除 MYSQL 的 PVC 数据，就会报这类连接错误。
+
+```bash
+Error: Error 1045: Access denied for user 'root'@'100.74.135.15' (using password: YES)
+Error 1045: Access denied for user 'root'@'100.74.135.15' (using password: YES)
+```
+
+解决方案： 删除 kubegems 命名空间下的所有 pvc 后重新安装 kubegems 即可解决
+
+```bash
+$ kubectl delete pvc --all -n kubegems
+```
+
+### 2. 阿里云镜像下载失败
+
+KubeGems 在中国地区使用阿里云的免费企业镜像服务，由于免费版收到请求 QOS 限制，所以在使用时存在镜像拉取的各种报错
+
+```
+报错类型一：
+
+pull access denied, repository does not exist or may require authorization: server message: insufficientscope: authorization failed
+
+报错类型二：
+ 
+request canceled whille waiting for connection (Client.Timeout exceeded while awaiting headers)
+```
+
+:::tip 如果您的网络环境比较畅通，建议采用 dockerhub 作为全局镜像仓库
+:::
+
+### 其它问题
+
+如果您仍有其他问题无法解决，可以通过以下渠道联系我们：
+
+- GitHub 上查询或提交是否有相关的 [Issue](https://github.com/kubegems/kubegems/issues)
+
+- 加入 [微信群](../../community/support#wechat) 寻求帮助
+
+- 获取 [官方支持](https://wj.qq.com/s2/10923500/96e0/), 我们会尽快联系你

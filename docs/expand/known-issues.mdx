@@ -31,6 +31,12 @@ $ kubectl delete secret logging-operator-logging-fluentd-app -n kubegems-logging
 由于用户的集群规模不通，复现这个问题的条件也不一样，遇见此问题，再根据实际情况修改配置
 :::
 
+### 3. MongoDB Exporter 无法连接部分 MongoDB 数据库，报错 "Unable to decode message length"
+
+KubeGems v1.22 版本引入的 mongodb-exporter 是由 prometheus-community 社区基于`ssheehy/mongodb-exporter`构建的。当前这个项目以停止维护，且对 MongoDB 4.2 版本以上服务支持有限。prometheus-community 社区已经将新的 [mongodb-exporter](https://github.com/percona/mongodb_exporter) 切换成由 percona 提供。
+
+但存在部分 metrics 变化导致 KubeGems 监控模板不再使用。我们计划在 KubeGems v1.23 版本中跟进社区替换此 exporter。
+
 ### 其它问题
 
 如果您仍有其他问题无法解决，可以通过以下渠道联系我们：
