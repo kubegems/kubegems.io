@@ -36,7 +36,7 @@ yarn install
 **本地预览**
 
 ```bash
-yarn run start
+yarn start
 
 yarn run v1.22.11
 $ docusaurus start
@@ -45,3 +45,46 @@ $ docusaurus start
 ```
 
 您可以打开本地浏览器，通过访问`http://localhost:3000`来浏览本站内容。
+
+
+### 提交文档
+
+1. 在 Github 页面上将本仓库 fork 到自己名下
+
+2. clone 仓库到本地
+
+```
+$ git clone https://github.com/<你的账号>/kubegems.io.git
+```
+
+3. 设置 remote repo
+
+```
+$ git remote add upstream https://github.com/kubegems/kubegems.io.git
+```
+
+4. 创建分支并开始更新文档
+
+```
+$ git branch <你的分支名称>
+```
+
+5. 提交更新的文档
+
+```
+$ git add <你的文档>
+
+$ git commit -m '更新内容'
+```
+
+6. 提交 pr
+
+```
+$ git fetch upstream/main
+
+$ git rebase -i upstream/main  --reapply-cherry-picks
+
+$ git push origin <你的分支>
+```
+
+7. 登录 GitHub 提交 PR
