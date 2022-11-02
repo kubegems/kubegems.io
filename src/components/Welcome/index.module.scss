@@ -55,6 +55,13 @@
     bottom: 0;
     animation: next-skip 0.5s ease 0s infinite alternate-reverse;
   }
+
+  &__video {
+    width: 90%;
+    height: 90%;
+    margin-left: 100px;
+    margin-top: 20px;
+  }
 }
 
 @keyframes next-skip {

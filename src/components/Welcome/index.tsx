@@ -37,7 +37,9 @@ const Welcome = (): JSX.Element => {
               </Link>
             </TweenOne>
           </div>
-          <div className='col col--6'></div>
+          <div className='col col--6'>
+            <iframe className={styles.welcome__video} src="//player.bilibili.com/player.html?aid=344990374&bvid=BV1Kd4y1G7P8&cid=815586037&page=1&high_quality=1&danmaku=0&t=2" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+          </div>
         </div>
         {/* <i className={clsx('kubegems-icon icon-scroll', styles.welcome__scroll)} /> */}
       </div>
