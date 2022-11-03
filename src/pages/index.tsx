@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Welcome from '../components/Welcome'
+import Play from '../components/Play'
 import WhyKubeGems1 from '../components/WhyKubeGems1';
 import WhyKubeGems2 from '../components/WhyKubeGems2';
 import Documents from '../components/Documents';
@@ -11,6 +12,8 @@ import styles from './index.module.scss';
 
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext()
+  const playRef = useRef();
+
   return (
     <Layout
       title={siteConfig.title}
@@ -19,7 +22,7 @@ export default function Home(): JSX.Element {
 
       <main className={styles.kubegems__main}>
         <div className={styles.kubegems__pages}>
-          <Welcome />
+          <Welcome handleShowPlay={() => { playRef.current.handleShow() }} />
           {/* <WhyKubeGems1 /> */}
           {/* <WhyKubeGems2 /> */}
           {/* <Documents /> */}
@@ -33,6 +36,7 @@ export default function Home(): JSX.Element {
         </div> */}
       </main>
       {/* <PageNav /> */}
-    </Layout>
+      <Play ref={playRef} />
+    </Layout >
   );
 }

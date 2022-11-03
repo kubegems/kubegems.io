@@ -15,10 +15,11 @@
 
   &__content {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     height: 100%;
     padding: 2rem 0;
     position: relative;
+    padding-top: 10%;
   }
 
   &__title {
@@ -57,10 +58,17 @@
   }
 
   &__video {
-    width: 90%;
+    margin-left: 80px;
+    margin-top: 10px;
+    background-image: url("/img/pages/video_cover.jpg");
     height: 90%;
-    margin-left: 100px;
-    margin-top: 20px;
+    background-repeat: round;
+    position: relative;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2),
+      0 4px 5px 0 rgba(0, 0, 0, .14),
+      0 1px 10px 0 rgba(0, 0, 0, .12);
+    border-radius: 5px;
+    cursor: pointer;
   }
 }
 
