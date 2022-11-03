@@ -1,3 +1,11 @@
+/*
+ * @Author: leon.chen imchensl@163.com
+ * @Date: 2022-11-03 12:47:10
+ * @LastEditors: leon.chen imchensl@163.com
+ * @LastEditTime: 2022-11-03 18:07:23
+ * @FilePath: /kubegems.io/src/components/Welcome/index.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import React from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
@@ -7,7 +15,7 @@ import TweenOne from 'rc-tween-one';
 import styles from './index.module.scss';
 import style from 'tween-one/es/plugins/StylePlugin';
 
-const Welcome = (): JSX.Element => {
+const Welcome = (props) => {
   return (
     <section id='welcome' className={styles.welcome}>
       <div className={clsx(styles.welcome__content, 'container')}>
@@ -38,7 +46,8 @@ const Welcome = (): JSX.Element => {
             </TweenOne>
           </div>
           <div className='col col--6'>
-            <iframe className={styles.welcome__video} src="//player.bilibili.com/player.html?aid=344990374&bvid=BV1Kd4y1G7P8&cid=815586037&page=1&high_quality=1&danmaku=0&t=2" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+            <div className={styles.welcome__video} onClick={() => { props.handleShowPlay() }}>
+            </div>
           </div>
         </div>
         {/* <i className={clsx('kubegems-icon icon-scroll', styles.welcome__scroll)} /> */}
