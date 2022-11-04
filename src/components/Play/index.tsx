@@ -32,7 +32,7 @@ class Play extends React.Component {
             </div>
             <div className={styles.play__video}>
               <img className={styles.play__video__close} src="/img/pages/close.png" onClick={() => { this.setState({ show: 0 }) }} />
-              { <video className={styles.play__video__media}  poster="/img/pages/videofm.jpg" crossOrigin="anonymous" controls src="http://s3.harix.iamidata.com/video/KubeGems.mp4">
+              { <video className={styles.play__video__media}  poster="/img/pages/videofm.jpg" crossOrigin="anonymous" controls src="https://s3.harix.iamidata.com/video/KubeGems.mp4">
               </video> }
             </div>
           </div>
