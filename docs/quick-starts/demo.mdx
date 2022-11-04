@@ -27,7 +27,7 @@ import TabItem from "@theme/TabItem";
   <TabItem value="Linux" label="Linux" default>
 
 ```bash
-curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-linux-amd64
+curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-kubegems-1.22/kind-linux-amd64
 chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 ```
@@ -36,9 +36,9 @@ sudo mv ./kind /usr/local/bin/kind
 
 ```bash
 # for Intel Macs
-[ $(uname -m) = x86_64 ]&& curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-darwin-amd64
+[ $(uname -m) = x86_64 ]&& curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-kubegems-1.22/kind-darwin-amd64
 # for M1 / ARM Macs
-[ $(uname -m) = arm64 ] && curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-darwin-arm64
+[ $(uname -m) = arm64 ] && curl -Lo ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-kubegems.1.22/kind-darwin-arm64
 chmod +x ./kind
 mv ./kind /some-dir-in-your-PATH/kind
 ```
@@ -46,7 +46,7 @@ mv ./kind /some-dir-in-your-PATH/kind
   <TabItem value="Windows" label="Windows">
 
 ```bash
-curl.exe -Lo kind-windows-amd64.exe ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-alpha-kubegems/kind-windows-amd64
+curl.exe -Lo kind-windows-amd64.exe ./kind https://github.com/kubegems/kind/releases/download/v0.15.0-kubegems.1.22/kind-windows-amd64
 Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
 ```
   </TabItem>
