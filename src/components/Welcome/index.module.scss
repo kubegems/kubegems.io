@@ -43,6 +43,10 @@
     font-size: 1rem;
     margin-bottom: 3rem;
     opacity: 0.85;
+
+    @media (max-width: 996px) {
+      margin-bottom: 1rem;
+    }
   }
 
   &__getstart {
@@ -74,7 +78,7 @@
     @media (max-width: 996px) {
       height: 200px;
       margin-left: 0px;
-      margin-top: 30px;
+      margin-top: 1rem;
     }
   }
 }
