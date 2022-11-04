@@ -13,8 +13,8 @@
   &__video {
     z-index: 1000;
     position: absolute;
-    width: 869px;
-    height: 489px;
+    width: 1280px;
+    height: 720px;
     top: 50%;
     transform: translate(-50%, -50%);
     left: 50%;
@@ -28,7 +28,7 @@
       position: absolute;
       width: 30px;
       right: -12px;
-      top: -12px;
+      top: -10px;
       cursor: pointer;
       z-index: 1001;
     }
