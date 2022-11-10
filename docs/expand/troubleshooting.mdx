@@ -72,6 +72,37 @@ http_configuration_snippet: |-
   proxy_buffering                 off;
 ```
 
+### 3. KubeGems 升级后应用部署报错 invalid session: account password has changed since token issued
+
+KubeGems 中心服务升级后再应用部署时，页面报错`account password has changed since token issued`，KubeGems API 日志如下:
+
+```
+2022-11-09 02:09:05.716 error gin@v1.8.0/context.go:173 Error #1: rpc error: code = Unauthenticated desc = invalid session: account password has changed since token issued
+```
+
+此问题出现在 KubeGems v1.22 的版本升级，复现于 ArgoCD 在更新过程中的丢失了账号认证信息（ KubeGems API -> ArgoCD ）。修复此问题需重启 kubegems-api 容器加载 argocd 的最新配置即可。
+
+### 4. 启用模型商店后,容器 kubegems-models-store 状态一直 Error
+
+容器 models-store 启动日志报错如下：
+
+```
+2022-11-10 02:02:26.654	warn	config/config.go:104	no config file found or config file format error: Config File "config" Not Found in "[/app /app/config]"
+2022-11-10 02:02:26.654	info	config/config.go:121	config from env: MONGO_ADDR=kubegems-models-mongodb:27017
+2022-11-10 02:02:26.654	info	config/config.go:121	config from env: MONGO_PASSWORD=**********
+2022-11-10 02:02:26.654	info	config/config.go:121	config from env: MONGO_USERNAME=root
+2022-11-10 02:02:26.654	info	config/config.go:121	config from env: MYSQL_ADDR=kubegems-mysql-headless:3306
+2022-11-10 02:02:26.654	info	config/config.go:121	config from env: MYSQL_PASSWORD=**********
+2022-11-10 02:02:26.654	info	config/config.go:121	config from flag: listen=:8080
+2022-11-10 02:02:26.654	info	config/config.go:121	config from flag: sync-addr=http://kubegems-models-sync:8080
+Error: setup mongo: server selection error: server selection timeout, current topology: { Type: Unknown, Servers: [{ Addr: kubegems-models-mongodb:27017, Type: Unknown, Last error: connection() error occurred during connection handshake: dial tcp 10.96.165.211:27017: connect: connection refused }, ] }
+setup mongo: server selection error: server selection timeout, current topology: { Type: Unknown, Servers: [{ Addr: kubegems-models-mongodb:27017, Type: Unknown, Last error: connection() error occurred during connection handshake: dial tcp 10.96.165.211:27017: connect: connection refused }, ] }
+Error: setup mongo: server selection error: server selection timeout, current topology: { Type: Unknown, Servers: [{ Addr: kubegems-models-mongodb:27017, Type: Unknown, Last error: connection() error occurred during connection handshake: dial tcp 10.96.165.211:27017: connect: connection refused }, ] }
+setup mongo: server selection error: server selection timeout, current topology: { Type: Unknown, Servers: [{ Addr: kubegems-models-mongodb:27017, Type: Unknown, Last error: connection() error occurred during connection handshake: dial tcp 10.96.165.211:27017: connect: connection refused }, ] }
+```
+
+由于模型商店需要向 HuggingFace 和 OpenMMLab 同步元数据，出现此错误在于 MongoDB 内无数据，在 KubeGems 管理员后台的模型商店中同步模型即可。
+
 ### 其它问题
 
 如果您仍有其他问题无法解决，可以通过以下渠道联系我们：
