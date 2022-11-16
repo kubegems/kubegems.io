@@ -44,7 +44,7 @@ SMTP协议有多种用户认证方式，如：`CRAM-MD5`, `LOGIN`和`PLAIN`，�
 
 ![](assets/test-email.jpg)
 
-### 飞书机器人告警
+#### 飞书机器人告警
 首先你得在目标飞书群聊中，添加一个**自定义机器人**
 :::tip 如何添加、使用飞书自定义机器人？
 https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN?lang=zh-CN
@@ -63,7 +63,7 @@ https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN?lang=zh-CN
 
 ![](assets/test-feishu.jpg)
 
-### Webhook告警
+#### Webhook告警
 webhook告警渠道在触发告警时，会以`prometheus alertmanager`的告警格式，通过`HTTP POST`请求发送告警
 
 | 字段名       | 释义                                                 |
@@ -76,3 +76,10 @@ webhook告警渠道在触发告警时，会以`prometheus alertmanager`的告警
 
 ![](assets/test-webhook.jpg)
 
+### 修改、删除告警渠道
+:::caution 注意
+若一个告警渠道正在被某些告警规则使用，修改此告警渠道 **不会同步更新** 这些告警规则的接收器，此时会造成 **数据不一致**（但不影响该告警规则正常运行）。
+此时建议在界面上根据提示，在数据不一致的地方重新提交修改该告警规则。
+
+同理，删除该告警渠道也不会影响使用它的告警规则，但会造成数据不一致，最好重新提交告警规则。
+:::
