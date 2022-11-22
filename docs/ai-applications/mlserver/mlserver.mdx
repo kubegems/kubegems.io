@@ -9,3 +9,26 @@ keywords: [kubegems,mlserver]
 ## 快速了解 MLServer
 
 ---
+Kubegems 模型商店的推理服务主要是基于[MLServer](https://github.com/SeldonIO/MLServer)开发, MLServer 是 [SeldonIO](https://github.com/SeldonIO) 用于机器学习模型的开源推理服务器。 `MLServer` 主要由 `编码器(codecs)` 和 `推理运行时(Inference runtime)` 两部分组成
+
+### 编码器
+
+在介绍编码器之前，需要先简单说明一下[V2 推理协议](https://docs.seldon.io/projects/seldon-core/en/latest/reference/apis/v2-protocol.html),
+V2 推理协议旨在提供一种标准化协议来与不同的推理服务器（例如 MLServer、Triton 等）和编排框架（例如 Seldon Core、KServe 等）进行通信。 `V2 推理协议`的规范定义了 REST 和 gRPC 接口的端点 和 数据传输格式。
+需要说明的是，V2 推理协议的数据传输格式当前仅仅定义底层的数据类型，然而许多的模型需要的是特定的类型的数据，例如 底层传输的是一个uint64的数组，模型需要的入参数是个Pillow的图片;
+这时候就需要由编码器将底层数据编码成为一个Pillow对象;
+
+编码器主要是负责处理各种模型的输入输出数据的编解码；目前MLServer内置一些常用的codec: `Base64Codec`, `StringCodec`, `PandasCodec`, `NumpyCodec`, `DatetimeCodec`
+有关介绍可以在[其文档](https://mlserver.readthedocs.io/en/latest/user-guide/content-type.html?#available-content-types)查看
+
+此外，如果需要特定的类型数据，也很容易开发自己的自定义编解码器，只需要实现其接口 `mlserver.codecs.InputCodec` 或 `mlserver.codecs.RequestCodec` 即可
+
+### 推理运行时
+
+`推理运行时` 允许用户定义一个模型如何在 MLServer 中的如何被外部使用。
+可以将它们当成 MLServer 和你选择的机器学习框架之间的后端粘合剂。可以在[它的文档页面](https://mlserver.readthedocs.io/en/latest/runtimes/index.html)阅读有关推理运行时的更多信息。
+MLServer带有一组预打包的运行时，它可以让用户与一些通用框架开发的模型直接交互, 这意味着可以直接使用一些现成的基于这些通用开发框架开发出来的模型,例如sklearn, huggingface等。
+
+`推理运行时`会根据输入数据的 `content_type` 或者数据内容，自动选择已经注册的编码器来进行解码成对应格式的数据类型，然后作为模型入参数，传递给模型，将获取的输出，选择合适的编码器，编码后返回
+
+此外，你依然可以开发自己的自定义推理服务运行时，需要实现接口 `mlserver.model.MLModel` 即可
