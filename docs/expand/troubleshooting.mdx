@@ -10,12 +10,12 @@ sidebar_position: 4
 
 ### 1. kubegems-api 与 kubegems-local 时间不同步造成请求返回 403
 
-KubeGems 内部各模块接口调用之间均开启了 http签名，可有效防御**请求被篡改**、**重放攻击**等手段。
+KubeGems 内部各模块接口调用之间均开启了 http 签名，可有效防御**请求被篡改**、**重放攻击**等手段。
 
-:::tip什么是 [HTTP 签名](https://oauth.net/http-signatures/) ?
+:::tip 什么是 [HTTP 签名](https://oauth.net/http-signatures/) ?
 :::
 
-在 KubeGems 中，httpsign 的始终差默认为 15分钟，如服务间时间差大于 15 分钟时会报如下错误  *kubectl-api.log*
+在 KubeGems 中，httpsign 的始终差默认为 15 分钟，如服务间时间差大于 15 分钟时会报如下错误 _kubectl-api.log_
 
 ```
 2022-10-13 08:04:17.924	error	middleware/httpsig.go:32	signer	{"error": "httpsigs time out, origin: 1665649153, now: 2022-10-13 08:04:17.924265317 +0000 UTC m=+1221.099241986"}
@@ -40,10 +40,10 @@ KubeGems 内部各模块接口调用之间均开启了 http签名，可有效防
 :::tip 什么是 [Server-Setnt Events](https://en.wikipedia.org/wiki/Server-sent_events) ?
 :::
 
-**Nginx配置**
+**Nginx 配置**
 
 ```nginx
-location / {    
+location / {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection $connection_upgrade;
     proxy_buffering off;
@@ -67,7 +67,7 @@ metadata:
 
 修改 apisix 配置文件，注入以下内容
 
-``` yaml
+```yaml
 http_configuration_snippet: |-
   proxy_buffering                 off;
 ```
@@ -102,6 +102,19 @@ setup mongo: server selection error: server selection timeout, current topology:
 ```
 
 由于模型商店需要向 HuggingFace 和 OpenMMLab 同步元数据，出现此错误在于 MongoDB 内无数据，在 KubeGems 管理员后台的模型商店中同步模型即可。
+
+### 5. 更改集群 kubeconfig apiserver 地址后，无法创建应用
+
+创建应用时提示:
+
+```log
+rpc error: code = InvalidArgument desc = application destination spec for {xxxx} is invalid: unable to find destination server: there are 2 clusters with the same name: [https://xxx-apiserver1:6443 https://xxx-apiserver2:6443]"
+```
+
+由于 argo application 所在 project 中关联的 cluster 以 apiserver 作为唯一标识存储，
+修改 apiserver 地址后,对原 cluster 进行修改 server 地址后会新建一个同名 cluster(而不是修改已有 cluster)，而导致存在两个同名 cluster。
+
+临时解决方案： 可以将旧 cluster 删除，并手动更新所有 project 中的 server 地址至新地址（如果有）。
 
 ### 其它问题
 
