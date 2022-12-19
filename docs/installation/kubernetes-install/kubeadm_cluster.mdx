@@ -228,7 +228,7 @@ EOF
 
 sudo mkdir -p /etc/containerd
 sudo containerd config default | sudo tee /etc/containerd/config.toml
-sed -i 's#root = "/var/lib/containerd"#root = "/data/containerd"#' /etc/containerd/config.tom
+sed -i 's#root = "/var/lib/containerd"#root = "/data/containerd"#' /etc/containerd/config.toml
 systemctl restart containerd
 ```   
 

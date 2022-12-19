@@ -3,3 +3,76 @@ title: 使用 java-agent 接入 KubeGems 可观测性
 hide_title: true
 sidebar_position: 6
 ---
+
+## Java应用接入KubeGems OpenTelemetry
+
+### 步骤一、 进入 KubeGems 可观测性功能下的接入中心，选择 Java 应用，查看接入说明
+
+![](./assets/java-otel-1.PNG)
+
+### 步骤二、 封装 java 类型基础镜像
+
+1.Dockerfile
+
+将 java agent 拷贝到路径 /opt/otel/lib/opentelemetry-javaagent.jar 下
+
+```bash
+RUN mkdir -p /opt/otel/lib && \
+    curl -o /opt/otel/lib/  https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar
+```
+
+2. entrypoint.sh (业务启动脚本)
+
+:::info提供伪代码来说明脚本启动逻辑
+:::
+
+```bash
+if exist and true << (ENV OTEL_ENABLED)
+    java -javaagent:/opt/otel/lib/opentelemetry-javaagent.jar -jar myapp.jar
+else
+    java -jar myapp.jar
+fi
+```
+
+### 步骤三、 在 KubeGems 中需要接入的应用，在编排中添加环境变量，并同步成功
+
+```yaml
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: OTEL_ENABLED
+              value: "true"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://opentelemetry-collector.observability:4317
+            - name: OTEL_SERVICE_NAME
+              value: <你的应用名称>
+            - name: OTEL_K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: OTEL_K8S_POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: OTEL_K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: >-
+                service.name=$(OTEL_SERVICE_NAME),namespace=$(OTEL_K8S_NAMESPACE),node=$(OTEL_K8S_NODE_NAME),pod=$(OTEL_K8S_POD_NAME)
+```
+
+### 步骤四、在 KubeGems 应用性能中查看接口和内部方法的监控视图
+
+![](./assets/java-otel-2.jpg)
+
+
+在 KuebGems 链路查询器中查看链路视图
+
+![](./assets/java-otel-3.jpeg)

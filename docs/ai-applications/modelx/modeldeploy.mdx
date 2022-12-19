@@ -1,0 +1,105 @@
+---
+title: ModelDeployment
+hide_title: true
+sidebar_position: 5
+description:  模型部署的CRD 释义
+keywords: [kubegems,modelx,modeldeployment]
+---
+
+## ModelDeployment CRD
+
+以下CR 是 ModelDeployment 资源的完整释义，通过 KubeGems 模型商店部署的算法推理服务可在应用中心对已部署的算法进行持续修改。
+
+``` yaml
+kind: ModelDeployment
+apiVersion: models.kubegems.io/v1beta1
+metadata:
+  name: gpt2
+  namespace: default
+spec:
+  replicas: 1
+  model:
+    source: huggingface     # 模型来源
+    name: library/gpt2      # 模型名称
+    version: v3.1.0         # 模型版本
+    url: "https://modelx.kubegems.io"  # 算法服务注册到网关的默认域名
+    token: "<token>"        # 模型 Token，从 modelxd 服务中签发
+    task: text-generation
+  server:
+    # seldon server protocol,ref: https://docs.seldon.io/projects/seldon-core/en/latest/graph/protocols.html#graph-protocols--page-root
+    protocol: v2 
+    # replace default seldon server image
+    image: "some/custom-image:latest" 
+    # seldon implementation, ref: https://docs.seldon.io/projects/seldon-core/en/latest/servers/overview.html#servers-overview--page-root
+    kind: HUGGINGFACE_SERVER 
+    # init container, ref: https://docs.seldon.io/projects/seldon-core/en/latest/servers/overview.html#init-containers
+    storageInitializerImage: "docker.io/kubegems/modelx-dl:latest"
+    mounts:
+      # 模型挂载路径
+      - kind: Model
+        mountPath: /app/model-files 
+      # 挂载 HostPath （可选）
+      - kind: HostPath
+        mountPath: /host-path
+        source: /host-path
+      # 挂载 ConfigMap（可选）
+      - kind: ConfigMap
+        mountPath: /config
+        source: configmap-name
+      # 挂载 PersistentVolume（可选）
+      - kind: PVC
+        mountPath: /data
+        source: some-pvc-name
+      # 挂载 EmptyDir（可选）
+      - kind: EmptyDir
+        mountPath: /tmp
+      # 挂载 Secret（可选）
+      - kind: Secret
+        mountPath: /certs
+        source: some-secret-name
+    parameters:
+      - name: task
+        value: text-generation
+      - name: pretrained_model
+        value: gpt2
+    # 运行特权模式
+    privileged: true 
+    # 自定义启动命令
+    command:
+      - run.py
+    # 自定义启动参数
+    args:
+      - --arg-foo=value
+    # 自定义环境变量
+    env:
+      - name: ENV_NAME
+        value: env_value
+      - name: ENV_FOO
+        valueFrom: # container's valueFrom
+          configMapKeyRef:
+            key: some-config
+            name: "key_foo"
+    # 自定义服务端口
+    ports:
+      - name: http # seldon 默认仅暴露名称为 http 和 grpc 的端口到 service
+        containerPort: 8080
+      - name: grpc
+        containerPort: 50051
+      - name: other-port # 其他名称的端口无法在seldon service上暴露出来
+        containerPort: 1234
+    # 自定义资源限制
+    resources:
+      limits:
+        cpu: "2"
+        memory: 4Gi
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    upgradeStrategy: RollingUpdate # deployment strategy
+  # ingress 配置
+  ingress:
+    host: api.models.kubegems.io # ingress host
+    className: "ingress-nginx" # nginx ingress class name
+    gatewayName: default-gateway # kubegems gateway name
+
+```

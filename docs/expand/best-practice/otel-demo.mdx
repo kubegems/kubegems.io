@@ -3,3 +3,45 @@ title: OpenTelemetry Demo 快速接入 KubeGems
 hide_title: true
 sidebar_position: 7
 ---
+
+OpenTelemetry-Demo 这是一个基于微服务的分布式系统，旨在说明OpenTelemetry在一个接近真实世界的环境中的实现。
+
+它目标有三个：
+
+- 提供一个现实的分布式系统的例子，可以用来展示OpenTelemetry的仪器和观测能力
+- 为供应商、工具作者和其他人建立一个基础，以扩展和展示他们的OpenTelemetry集成
+- 为OpenTelemetry贡献者创建例子，用于测试新版本的API、SDK和其他组件或增强功能
+
+OpenTelemetry-Demo 由用不同编程语言编写的微服务组成，这些微服务通过 gRPC 和 HTTP 相互通信；以及使用 Locust 伪造用户流量的负载生成器。
+
+![](https://opentelemetry.io/blog/2022/frontend-overhaul/diagram.png)
+
+### 运行 OpenTelemetry Demo
+
+在 KubeGems 中部署 opentelemetry Demo 需要您具备 Kubernetes 的 admin 权限，因为它仅仅只是用来测试您当前集群的 OpenTelemetry 服务是否运行正常。
+
+- 安装 opentelmetry Demo
+
+```
+helm install otel-demo -n <命名空间> https://raw.githubusercontent.com/kubegems/appstore-charts/main/opentelemetry-demo-0.1.4.tgz
+
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /Users/maqing/.kube/config
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: /Users/maqing/.kube/config
+NAME: otel-demo
+LAST DEPLOYED: Mon Dec 19 13:44:54 2022
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+=======================================================================================
+  _____  _______ _______             ______  _______ _______  _____ 
+ |     |    |    |______ |           |     \ |______ |  |  | |     |
+ |_____|    |    |______ |_____      |_____/ |______ |  |  | |_____|
+                                                                    
+ _     _ _     _ ______  _______  ______ _______ _______ _______
+ |____/  |     | |_____] |______ |  ____ |______ |  |  | |______
+ |    \_ |_____| |_____] |______ |_____| |______ |  |  | ______|
+
+=======================================================================================
+```
