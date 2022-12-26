@@ -46,7 +46,7 @@ $ wget https://github.com/labring/sealos/releases/download/v4.0.0/sealos_4.0.0_l
 ### 安装 KubeGems
 ```
 sealos run \
-  --masters xxx --nodes xxx,xxx,xxx -p pwd \
+  --masters xxx,xxx --nodes xxx,xxx,xxx -p pwd \
   labring/kubernetes:v1.23.10 \
   labring/helm:v3.8.2 \
   labring/calico:v3.22.1 \
