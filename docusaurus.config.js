@@ -121,7 +121,7 @@ const config = {
       announcementBar: {
         id: 'support_us',
         content:
-          '⭐️ <b>If you like KubeGems, <a target="_blank" href="https://github.com/kubegems/kubegems">give it a star on GitHub</b></a> ! ',
+          '⭐️ <b>If you like KubeGems, give it a star on <a target="_blank" href="https://github.com/kubegems/kubegems">GitHub</a> and follow us on <a target="_blank" href="https://twitter.com/KubeGems">Twitter</a>  <a title="Twitter, Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Twitter-logo.svg"><img width="17" height="13" alt="Twitter-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Twitter-logo.svg/32px-Twitter-logo.svg.png"></a></b> ',
         backgroundColor: 'rgba(0, 0, 0, 0.03)',
         isCloseable: false,
       },
