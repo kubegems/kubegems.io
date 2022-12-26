@@ -4,12 +4,232 @@ hide_title: true
 sidebar_position: 7
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 ## 离线安装 (实验性质) 
 
 ---
 
-:::tip
-KubeGems 离线部署方案由 SealOS 提供支持，我们正在进行适配。
+:::info 提示
+KubeGems 离线部署方案由 SealOS 社区提供技术支持，非常感谢 [cuisongliu@sealos](https://github.com/cuisongliu) 同学的支持！
 :::
 
-敬请期待
+### 前置条件
+
+- 每个集群节点应该有不同的主机名。 主机名不要带下划线
+- 所有节点的时间同步
+- 在 Kubernetes 集群的第一个节点上运行sealos run命令，目前集群外的节点不支持集群安装
+- 建议使用干净的操作系统来创建集群。不要自己装 Docker
+- 支持大多数 Linux 发行版，例如：Ubuntu CentOS Rocky linux
+- 支持 DockerHub 中支持的 Kubernetes 版本
+- 支持使用 containerd 作为容器运行时
+- 在公有云上请使用私有 IP
+
+### 下载离线安装包
+
+准备一台能够访问公网的机器，用于下载安装 KubeGems 的离线资源包
+
+<Tabs groupId="kubegems_offline">
+  <TabItem value="SealOS" label="SealOS" default>
+
+1. 下载并安装 sealos 客户端
+
+```bash
+$ wget https://github.com/labring/sealos/releases/download/v4.0.0/sealos_4.0.0_linux_amd64.tar.gz \
+   && tar zxvf sealos_4.0.0_linux_amd64.tar.gz sealos && chmod +x sealos && mv sealos /usr/bin
+```
+
+2. 下载镜像包
+
+```bash
+$ sealos pull labring/kubegems:<需要安装的版本>
+$ sealos pull labring/kubernetes:v1.23.15
+$ sealos pull labring/coredns:v0.0.1
+$ sealos pull labring/helm:v3.8.2
+$ sealos pull labring/calico:v3.22.1
+$ sealos pull labring/openebs:v1.9.0
+```
+
+:::info 提示（非必须下载）
+如需启用 KubeGems 算法模型商店，需下载额外的 AI 扩展镜像包
+
+```bash
+$ sealos pull labring/kubegems:<需要安装的版本>-ai1    (~5.5GB)
+$ sealos pull labring/kubegems:<需要安装的版本>-ai2    (~5GB)
+$ sealos pull labring/kubegems:<需要安装的版本>-ai3    (~5GB)
+```
+:::
+
+3. 导出镜像包
+
+```bash
+$ sealos save -o kubegems.tar labring/kubegems:<需要安装的版本>
+$ sealos save -o kubernetes-v1.23.15.tar labring/kubernetes:v1.23.15
+$ sealos save -o coredns-v0.0.1.tar labring/coredns:v0.0.1
+$ sealos save -o helm-v3.8.2.tar labring/helm:v3.8.2
+$ sealos save -o calico-v3.22.1.tar labring/calico:v3.22.1
+$ sealos save -o openebs-v1.9.0.tar labring/openebs:v1.9.0
+```
+
+  </TabItem>
+  <TabItem value="百度网盘" label="百度网盘">
+
+下载百度网盘 APP，[访问链接](https://pan.baidu.com/s/10y5Fq2pMq-aELSGF6wzdNA )下载离线镜像包
+
+:::tip 
+百度网盘资源提取码： gems 
+:::
+
+离线镜像包包含:
+- kubegems-<需要安装的版本>.tar
+- kubernetes-v1.23.15.tar
+- coredns-v0.0.1.tar
+- helm-v3.8.2.tar 
+- calico-v3.22.1.tar
+- openebs-v1.9.0.tar 
+
+:::info 提示（非必须下载）
+如需启用 KubeGems 算法模型商店，需下载额外的 AI 扩展镜像包
+- kubegems-<需要安装的版本>-ai1.tar
+- kubegems-<需要安装的版本>-ai2.tar
+- kubegems-<需要安装的版本>-ai3.tar
+:::
+  </TabItem>
+</Tabs>
+
+
+### 导入镜像包
+
+1. 将下载的离线镜像包上传至 Master 服务器
+
+2. 安装 SealOS 二进制客户端
+
+<Tabs groupId="arch">
+  <TabItem value="amd64" label="amd64" default>
+
+```bash
+$ wget https://github.com/labring/sealos/releases/download/v4.0.0/sealos_4.0.0_linux_amd64.tar.gz \
+   && tar zxvf sealos_4.0.0_linux_amd64.tar.gz sealos && chmod +x sealos && mv sealos /usr/bin
+```
+
+  </TabItem>
+  <TabItem value="arm64" label="arm64">
+
+```bash
+$ wget https://github.com/labring/sealos/releases/download/v4.0.0/sealos_4.0.0_linux_arm64.tar.gz \
+   && tar zxvf sealos_4.0.0_linux_arm64.tar.gz sealos && chmod +x sealos && mv sealos /usr/bin
+```
+
+  </TabItem>
+</Tabs>
+
+3. 导入镜像包
+
+```bash
+$ sealos load -i kubegems-<需要安装的版本>.tar
+$ sealos load -i kubernetes-v1.23.15.tar
+$ sealos load -i coredns-v0.0.1.tar
+$ sealos load -i helm-v3.8.2.tar
+$ sealod load -i calico-v3.22.1.tar
+$ sealod load -i openebs-v1.9.0.tar 
+```
+
+:::info 提示（非必须导入）
+如需启用 KubeGems 算法模型商店，需导入额外的 AI 扩展镜像包
+
+```bash
+$ sealos load -i kubegems-<需要安装的版本>-ai1.tar
+$ sealos load -i kubegems-<需要安装的版本>-ai2.tar
+$ sealos load -i kubegems-<需要安装的版本>-ai3.tar
+:::
+
+4. 使用命令 `sealos images` 可查看 sealos 导入的镜像包信息
+
+### 安装 KubeGems
+
+```
+$ sealos run \
+  --masters xxx,xxx,xxx --nodes xxx,xxx,xxx -p pwd \
+  labring/kubernetes:v1.23.15 \
+  labring/helm:v3.8.2 \
+  labring/calico:v3.22.1 \
+  labring/coredns:v0.0.1 \
+  labring/openebs:v1.9.0 \
+  labring/kubegems:<需要安装的版本>
+```
+
+:::info 提示（非必须安装）
+如需启用 KubeGems 算法模型商店，需添加 AI 扩展镜像包
+
+```bash
+$ sealos run \
+  --masters xxx,xxx,xxx --nodes xxx,xxx,xxx -p pwd \
+  labring/kubernetes:v1.23.15 \
+  labring/helm:v3.8.2 \
+  labring/calico:v3.22.1 \
+  labring/coredns:v0.0.1 \
+  labring/openebs:v1.9.0 \
+  labring/kubegems:<需要安装的版本> \
+  labring/kubegems:<需要安装的版本>-ai1 \
+  labring/kubegems:<需要安装的版本>-ai2 \
+  labring/kubegems:<需要安装的版本>-ai3 
+:::
+
+安装成功后，您将看到如下打印的信息
+
+```
+2022-10-07T01:00:05 info guest cmd is bash kubegems.sh
+Release "kubegems-installer" does not exist. Installing it now.
+NAME: kubegems-installer
+LAST DEPLOYED: Fri Oct  7 01:00:05 2022
+NAMESPACE: kubegems-installer
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+CHART NAME: kubegems-installer
+CHART VERSION: 1.21.0
+APP VERSION: 1.21.0
+
+** Please be patient while the chart is being deployed **
+
+%%Instructions to access the application depending on the serviceType and other considerations%%
+Release "kubegems" does not exist. Installing it now.
+NAME: kubegems
+LAST DEPLOYED: Fri Oct  7 01:00:08 2022
+NAMESPACE: kubegems
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+CHART NAME: kubegems
+CHART VERSION: 1.21.0
+APP VERSION: 1.21.0
+
+** Please be patient while the chart is being deployed **
+
+%%Instructions to access the application depending on the serviceType and other considerations%%
+visit http://172.31.136.79:32529, user: admin password: demo!@#admin
+2022-10-07T01:00:11 info succeeded in creating a new cluster, enjoy it!
+2022-10-07T01:00:11 info
+      ___           ___           ___           ___       ___           ___
+     /\  \         /\  \         /\  \         /\__\     /\  \         /\  \
+    /::\  \       /::\  \       /::\  \       /:/  /    /::\  \       /::\  \
+   /:/\ \  \     /:/\:\  \     /:/\:\  \     /:/  /    /:/\:\  \     /:/\ \  \
+  _\:\~\ \  \   /::\~\:\  \   /::\~\:\  \   /:/  /    /:/  \:\  \   _\:\~\ \  \
+ /\ \:\ \ \__\ /:/\:\ \:\__\ /:/\:\ \:\__\ /:/__/    /:/__/ \:\__\ /\ \:\ \ \__\
+ \:\ \:\ \/__/ \:\~\:\ \/__/ \/__\:\/:/  / \:\  \    \:\  \ /:/  / \:\ \:\ \/__/
+  \:\ \:\__\    \:\ \:\__\        \::/  /   \:\  \    \:\  /:/  /   \:\ \:\__\
+   \:\/:/  /     \:\ \/__/        /:/  /     \:\  \    \:\/:/  /     \:\/:/  /
+    \::/  /       \:\__\         /:/  /       \:\__\    \::/  /       \::/  /
+     \/__/         \/__/         \/__/         \/__/     \/__/         \/__/
+
+                  Website :https://www.sealos.io/
+                  Address :github.com/labring/sealos
+
+```
+
+### 下一步
+
+请移步 [快速入门](../../category/快速入门) 进行平台设置
