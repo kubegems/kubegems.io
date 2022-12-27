@@ -1,7 +1,7 @@
 ---
 title: 微服务治理
 hide_title: true
-sidebar_position: 5
+sidebar_position: 7
 description: Istio 服务治理
 ---
 
