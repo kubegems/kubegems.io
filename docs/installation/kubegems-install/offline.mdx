@@ -31,6 +31,31 @@ KubeGems 离线部署方案由 SealOS 社区提供技术支持，非常感谢 [c
 准备一台能够访问公网的机器，用于下载安装 KubeGems 的离线资源包
 
 <Tabs groupId="kubegems_offline">
+
+  <TabItem value="百度网盘" label="百度网盘(推荐)">
+
+下载百度网盘 APP，[访问链接](https://pan.baidu.com/s/10y5Fq2pMq-aELSGF6wzdNA )下载离线镜像包
+
+:::tip 
+百度网盘资源提取码： gems 
+:::
+
+离线镜像包包含:
+- kubegems-<需要安装的版本>.tar
+- kubernetes-v1.23.15.tar
+- coredns-v0.0.1.tar
+- helm-v3.8.2.tar 
+- calico-v3.22.1.tar
+- openebs-v1.9.0.tar 
+
+:::info 提示（非必须下载）
+如需启用 KubeGems 算法模型商店，需下载额外的 AI 扩展镜像包
+- kubegems-<需要安装的版本>-ai1.tar
+- kubegems-<需要安装的版本>-ai2.tar
+- kubegems-<需要安装的版本>-ai3.tar
+:::
+  </TabItem>
+
   <TabItem value="SealOS" label="SealOS" default>
 
 1. 下载并安装 sealos 客户端
@@ -57,8 +82,10 @@ $ sealos pull labring/openebs:v1.9.0
 ```bash
 $ sealos pull labring/kubegems:<需要安装的版本>-ai1    (~5.5GB)
 $ sealos pull labring/kubegems:<需要安装的版本>-ai2    (~5GB)
-$ sealos pull labring/kubegems:<需要安装的版本>-ai3    (~5GB)
+$ sealos pull labring/kubegems:<需要安装的版本>-ai3    (~11GB)
 ```
+
+*说明： SealOS Build 在线镜像存在容量限制，AI 扩展镜像包推荐在百度网盘上下载*
 :::
 
 3. 导出镜像包
@@ -72,29 +99,6 @@ $ sealos save -o calico-v3.22.1.tar labring/calico:v3.22.1
 $ sealos save -o openebs-v1.9.0.tar labring/openebs:v1.9.0
 ```
 
-  </TabItem>
-  <TabItem value="百度网盘" label="百度网盘">
-
-下载百度网盘 APP，[访问链接](https://pan.baidu.com/s/10y5Fq2pMq-aELSGF6wzdNA )下载离线镜像包
-
-:::tip 
-百度网盘资源提取码： gems 
-:::
-
-离线镜像包包含:
-- kubegems-<需要安装的版本>.tar
-- kubernetes-v1.23.15.tar
-- coredns-v0.0.1.tar
-- helm-v3.8.2.tar 
-- calico-v3.22.1.tar
-- openebs-v1.9.0.tar 
-
-:::info 提示（非必须下载）
-如需启用 KubeGems 算法模型商店，需下载额外的 AI 扩展镜像包
-- kubegems-<需要安装的版本>-ai1.tar
-- kubegems-<需要安装的版本>-ai2.tar
-- kubegems-<需要安装的版本>-ai3.tar
-:::
   </TabItem>
 </Tabs>
 
@@ -174,6 +178,11 @@ $ sealos run \
   labring/kubegems:<需要安装的版本>-ai1 \
   labring/kubegems:<需要安装的版本>-ai2 \
   labring/kubegems:<需要安装的版本>-ai3 
+:::
+
+:::caution 重要提示
+KubeGems 安装完成后在导入集群时，选择镜像仓库一定要选择 `docker.io/kubegems` 。否则安装内置组件的镜像下载不会经过 SealOS 离线镜像包
+![](./assets/sealos-offline.jpg)
 :::
 
 安装成功后，您将看到如下打印的信息
