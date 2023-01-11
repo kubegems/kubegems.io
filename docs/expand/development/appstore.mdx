@@ -1,11 +1,11 @@
 ---
-title: 应用商店开发指南
+title: 应用商店开发手册
 hide_title: true
 sidebar_position: 3
 description: KubeGems 应用商店开发手册
 ---
 
-## 应用商店开发指南
+## 应用商店开发手册
 
 KubeGems 应用商店采用标准的 Helm3 对应用进行打包，应用商店内的 Charts 全部位于仓库 [appstore-charts](https://github.com/kubegems/appstore-charts) 。这里面大部分都来源于 Bitnami、helm offical以及部分自写的 charts 包。由于 KubeGems 还不支持在界面上传自定义Charts，所以需要将本仓库构建出镜像，并提交 `charts-updater` 任务触发应用商店更新。
 

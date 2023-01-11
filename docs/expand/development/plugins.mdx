@@ -1,10 +1,399 @@
 ---
-title: 三方插件开发指南
+title: 插件开发手册
 hide_title: true
 sidebar_position: 2
 description: KubeGems 与云原生生态插件开发指导
 ---
 
-## 三方插件开发指南
+## 插件开发手册
 
 ---
+
+一个插件本质上是一个 helm chart，KubeGems 在其上做了功能的扩展和一些约定。
+插件主要功能是对配置的重新规划和统一。
+
+主要包含了：
+
+- 支持统一配置镜像仓库，存储 以及集群名称等
+- 使能插件之间配置联动(引用)
+
+## 概念
+
+| 名词         | 解释                                                                                                               |
+| ------------ | ------------------------------------------------------------------------------------------------------------------ |
+| plugin(资源) | plugin 一般指类型为 plugin 的资源(CR),由 kubegems-installer 提供。                                                 |
+| 插件         | 仓库中 helm chart 格式存放的 chart.                                                                                |
+| 插件管理     | KubeGems WebUI  中的插件控制部分功能，插件的启用/禁用本质上是创建/删除 `kubegems-installer` 空间下的 plugin 资源。 |
+
+## 了解 Plugin 资源
+
+先来了解一下 `plugin` 资源，插件控制的主要资源就是`plugin`资源，
+plugin crd 由 [kubegems-installer](github.com/kubegems/kubegems/deploy/installer.yaml) 提供和处理的，
+要使用 plugin 需要先安装 installer。
+
+plugin 资源可以用来将一个 helm chart 部署到集群中。
+
+例如，使用 plugin 来将 ingress controller 以 helm 方式 部署到集群中:
+
+```sh
+$ kubectl create namespace ingress-nginx
+namespace/ingress-nginx created
+
+$ cat <<EOF | kubectl apply -f -
+# https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller/#installing-the-chart
+apiVersion: plugins.kubegems.io/v1beta1
+kind: Plugin
+metadata:
+  name: nginx-ingress-controller
+  namespace: ingress-nginx
+spec:
+  kind: helm
+  url: https://charts.bitnami.com/bitnami
+  chart: nginx-ingress-controller
+  version: 9.3.25
+  values:
+    extraArgs:
+      # https://kubernetes.github.io/ingress-nginx/user-guide/tls/#ssl-passthrough
+      enable-ssl-passthrough: true
+EOF
+plugin.plugins.kubegems.io/nginx-ingress-controller created
+
+$ kubectl -n ingress-nginx get plugins.plugins.kubegems.io #查看plugin状态
+NAME                       KIND   STATUS      NAMESPACE       VERSION   APPVERSION   UPGRADETIMESTAMP   AGE
+nginx-ingress-controller   helm   Installed   ingress-nginx   9.3.25    1.6.0        2s                 68s
+```
+
+plugin 还支持从 configmap/secret 填充 helm values 的功能，以 集群中的 `kubegems` 插件为例：
+
+```yaml
+apiVersion: plugins.kubegems.io/v1beta1
+kind: Plugin
+metadata:
+...
+  name: kubegems
+  namespace: kubegems-installer
+spec:
+  installNamespace: kubegems
+  kind: helm
+  url: https://charts.kubegems.io/kubegems
+  values: {}
+  valuesFrom:
+    - kind: ConfigMap
+      name: kubegems-global-values
+      prefix: global.
+  version: 1.23.0
+```
+
+其中的 `.spec.valuesFrom` 字段表示将名称为 `kubegems-global-values` 的 configmap 的 data 填充至 values 下的 并添加 `global.`前缀
+
+查看合并和后的 values:
+
+```sh
+$ kubectl -n kubegems-installer get plugins.plugins.kubegems.io kubegems -ojsonpath='{.status.values}'  | yq -p json
+global:
+  clusterName: manager-cluster
+  enabled: true
+  imageRegistry: registry.k8s.fatalc.cn
+  imageRepository: kubegems
+  kubegemsVersion: release-1.23
+  runtime: containerd
+  storageClass: standard
+```
+
+可以看到 configmap 中的 key 都合并到了 kubegems 的 values 中。
+
+:::info 注意
+ **修改 configmap 中的 data 值，也会触发引用该 configmap 的 plugin 进行更新**
+:::
+
+### 特别的 global 插件
+
+插件系统中有一个默认使用的 [global plugin](https://github.com/kubegems/plugins/blob/main/plugins/global)，
+用于维护全局配置。
+
+该 plugin 会生成上述的名称为 `kubegems-global-values` 的 configmap，
+通过 WEB UI 插件管理启用的插件会默认增加对这个 configmap 的引用。
+
+```yaml
+apiVersion: plugins.kubegems.io/v1beta1
+kind: Plugin
+metadata:
+  name: global
+  namespace: kubegems-installer
+spec:
+  chart: global
+  kind: template
+  url: https://charts.kubegems.io/kubegems
+  values:
+    clusterName: manager-cluster
+    imageRegistry: registry.cn-beijing.aliyuncs.com
+    imageRepository: kubegems
+    kubegemsVersion: v1.23.0
+    storageClass: standard
+  version: 1.0.0
+```
+
+## 编写插件
+
+:::info 注意
+**所有顶级 plugin 都是安装在 `kubegems-installer` 空间下的，也只有该空间下的 plugin 资源会展示在 web 界面的 “插件管理” 中。**
+:::
+
+以 [nginx-ingress-controller](https://github.com/kubegems/plugins/tree/main/plugins/gateway) 编写一个 **KubeGems 风格** 的插件为例:
+
+### 镜像本地化
+
+如果需要支持统一配置镜像仓库，需要完成镜像的本地化配置。global 中有两个参数，`global.imageRegistry` 以及 `global.imageRepository`
+
+例如，如果配置了 `global.imageRepository`为`registry.cn-beijing.aliyuncs.com`, `global.imageRepository`为`kubegems`。
+
+例如如果使用到的镜像是 `docker.io/library/nginx:latest`应当被渲染为为`registry.cn-beijing.aliyuncs.com/kubegems/nginx:latest`.
+
+```sh
+$ helm template  --repo https://charts.bitnami.com/bitnami nginx-ingress-controller | grep 'image: '
+          image: docker.io/bitnami/nginx-ingress-controller:1.6.0-debian-11-r11
+          image: docker.io/bitnami/nginx:1.22.1-debian-11-r26
+
+$ #参考 https://artifacthub.io/packages/helm/bitnami/nginx-ingress-controller 进行values更改以满足需求
+
+$ helm template  --repo https://charts.bitnami.com/bitnami nginx-ingress-controller \
+    --set 'defaultBackend.image.registry=registry.cn-beijing.aliyuncs.com' \
+    --set 'defaultBackend.image.repository=kubegems' \
+    --set 'image.repository=kubegems/nginx-ingress-controller' \
+    --set 'global.imageRegistry=registry.cn-beijing.aliyuncs.com' |  grep 'image: '
+          image: registry.cn-beijing.aliyuncs.com/kubegems/nginx-ingress-controller:1.6.0-debian-11-r11
+          image: registry.cn-beijing.aliyuncs.com/kubegems:1.22.1-debian-11-r26
+```
+
+由于镜像本地化需要将镜像 copy 到 kubgems 镜像仓库中，可以执行：
+
+```sh
+skopeo copy -a docker://docker.io/bitnami/nginx-ingress-controller:1.6.0-debian-11-r11 docker://registry.cn-beijing.aliyuncs.com/kubegems/nginx-ingress-controller:1.6.0-debian-11-r11
+skopeo copy -a docker://docker.io/bitnami/nginx:1.22.1-debian-11-r26 docker://registry.cn-beijing.aliyuncs.com/kubegems/nginx:1.22.1-debian-11-r26
+```
+
+在 plugin 资源中，如果要达到上述功能需要更改 `nginx-ingress-controller` plugin values 为：
+
+```yaml
+apiVersion: plugins.kubegems.io/v1beta1
+kind: Plugin
+metadata:
+  name: nginx-ingress-controller
+  namespace: ingress-nginx
+spec:
+  kind: helm
+  url: https://charts.bitnami.com/bitnami
+  chart: nginx-ingress-controller
+  version: 9.3.25
+  values:
+    defaultBackend:
+      image:
+        registry: registry.cn-beijing.aliyuncs.com
+        repository: kubegems
+    global:
+      imageRegistry: registry.cn-beijing.aliyuncs.com
+    image:
+      repository: kubegems/nginx-ingress-controller
+```
+
+### 定义新插件
+
+要能够部署上述的 plugin，就需要一个插件来生成上述的 plugin。那么上述的 plugin 就被作为被 template 的资源。
+
+> 插件没有模板，新增插件时可以参考 [plugins/cert-manager](plugins/cert-manager) 来编写。
+
+插件用到的 annotations 可以从 [这里](README.md) 查看。
+
+```yaml
+# plugins/nginx-ingress-controller/Chart.yaml
+apiVersion: v2
+name: nginx-ingress-controller
+version: 9.3.25 # 建议保持与上游一致
+appVersion: 1.6.0
+description: NGINX Ingress Controller 是一个 Ingress 控制器，它使用 NGINX 管理 Kubernetes 集群中对 HTTP 服务的外部访问。
+dependencies:
+  - name: common
+    repository: file://../common
+    version: 1.x.x
+annotations:
+  plugins.kubegems.io/is-plugin: "true" # 表示这是一个 kubegems 插件，必要。
+  plugins.kubegems.io/install-namespace: ingress-nginx # 插件需要被安装的namespace，即templates中的资源应当被安装的位置。如果为空则为 `kubegems-installer`
+  plugins.kubegems.io/category: kubernetes/网络 # 插件分类，用于web ui 分类展示
+```
+
+```template
+# plugins/nginx-ingress-controller/templates/nginx-ingress-controller.yaml
+apiVersion: plugins.kubegems.io/v1beta1
+kind: Plugin
+metadata:
+  name: nginx-ingress-controller
+  namespace: {{ .Release.Namespace }}
+spec:
+  kind: helm
+  url: https://charts.bitnami.com/bitnami
+  chart: nginx-ingress-controller
+  version: {{ .Chart.AppVersion }}
+  values:
+    defaultBackend:
+      image:
+        registry: {{ .Values.global.imageRegistry }}
+        repository: {{ .Values.global.imageRepository }}
+    global:
+      imageRegistry: {{ .Values.global.imageRegistry }}
+    image:
+      # repository: bitnami/nginx-ingress-controller
+      {{ include "common.images.repository" ( dict "repository" "bitnami/nginx-ingress-controller" "context" .) }}
+```
+
+:::tip 提示
+common.images.repository 在 [plugins/common](plugins/common/templates/_helpers.tpl) 下,更多使用示例可以参照已有使用。
+:::
+增加 values 文件，将常用选项提出到 values 中，以便于 web ui 渲染。
+为了 web ui 能够正常渲染还需要使用 [kubegems/tools/helm-schema](https://github.com/kubegems/kubegems/blob/main/tools/helm-schema)来生成 schema，
+需要在 values 中增加一些注释。
+
+```yaml
+# plugins/nginx-ingress-controller/values.yaml
+# global 字段下的值会从 global 插件注入
+global:
+  imageRegistry: ""
+  imageRepository: ""
+# @title 额外参数
+# @title.en Extra Args
+# @title.jp 额外変数
+# @schema additionalProperties=true
+extraArgs: {}
+# @title 指标采集
+# @title.en Metrics
+# @title.jp 指標
+metrics:
+  # @title 启用
+  # @title.en Enable
+  enabled: false
+```
+
+:::tip 提示：
+更多可用注释，需要查看 helm-schema 使用说明
+:::
+
+完成后执行 schema 自动生成:
+
+```sh
+$ helm-schema plugins/nginx-ingress-controller
+Reading plugins/nginx-ingress-controller/values.yaml
+Writing plugins/nginx-ingress-controller/i18n/values.schema.en.json
+Writing plugins/nginx-ingress-controller/i18n/values.schema.jp.json
+Writing plugins/nginx-ingress-controller/values.schema.json
+```
+
+## 测试插件
+
+### 本地测试
+
+插件编写完成后，可以先进行本地 helm template 来检查生成的资源是否符合预期：
+
+```yaml
+$ helm dependency update plugins/nginx-ingress-controller
+$ helm template plugins/nginx-ingress-controller --namespace=ingress-nginx  --set global.imageRegistry=registry.cn-beijing.aliyuncs.com --set global.imageRepository=kubegems
+---
+# Source: nginx-ingress-controller/templates/nginx-ingress-controller.yaml
+apiVersion: plugins.kubegems.io/v1beta1
+kind: Plugin
+metadata:
+  name: nginx-ingress-controller
+  namespace: ingress-nginx
+spec:
+  kind: helm
+  url: https://charts.bitnami.com/bitnami
+  chart: nginx-ingress-controller
+  version: 1.6.0
+  values:
+    defaultBackend:
+      image:
+        registry: registry.cn-beijing.aliyuncs.com
+        repository: kubegems
+    global:
+      imageRegistry: registry.cn-beijing.aliyuncs.com
+    image:
+      # repository: bitnami/nginx-ingress-controller
+      repository: kubegems/nginx-ingress-controller
+```
+
+可以看到能够正常渲染出我们需要的 位于 ingress-nginx 空间下的 plugin 。
+
+### 集成测试
+
+为保证插件能够正常的从 kubegems 插件系统上展示和安装部署，需要在本地搭建插件源，并将源添加至 kubegems installer，然后才能进行测试。
+
+搭建本地源：
+
+```sh
+$ mkdir tmp && cd tmp
+$ helm package -u ../plugins/nginx-ingress-controller
+$ helm repo index .
+$ python -m 'http.server'
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ..
+```
+
+添加本地源到 kubegems 插件系统：
+
+> 目前插件源使用 secret 存储，后续可能会变更
+
+```sh
+kubectl -n kubegems-installer create secret generic --from-literal=address=http://<YOUR IP>:8000 plugin-repository-local
+kubectl -n kubegems-installer label secrets plugin-repository-local plugins.kubegems.io/is-plugin-repo="true"
+```
+
+然后到 WEB UI 上 "插件管理" -> "检查插件版本" 以刷新源信息。
+
+![plugin-refresh](https://raw.githubusercontent.com/kubegems/plugins/main/docs/assets/plugin-refresh.png)
+
+刷新后，即可在对应的分类下看到插件了
+
+![plugin-ingress-nginx](https://raw.githubusercontent.com/kubegems/plugins/main/docs/assets/plugin-ingress-nginx.png)
+
+选择 “启用” 即可看到使用 schema 渲染出的 form,确认启用后会创建如下 plugin:
+
+```sh
+$ kubectl -n kubegems-installer get plugins.plugins.kubegems.io nginx-ingress-controller -oyaml
+apiVersion: plugins.kubegems.io/v1beta1
+kind: Plugin
+metadata:
+  annotations:
+    plugins.kubegems.io/category: kubernetes/网络
+    plugins.kubegems.io/description: NGINX Ingress Controller 是一个 Ingress 控制器，它使用
+      NGINX 管理 Kubernetes 集群中对 HTTP 服务的外部访问。
+    plugins.kubegems.io/health-check: ""
+    plugins.kubegems.io/required: "false"
+  finalizers:
+  - plugins.kubegems.io/finalizer
+  name: nginx-ingress-controller
+  namespace: kubegems-installer
+spec:
+  chart: nginx-ingress-controller
+  installNamespace: ingress-nginx
+  kind: template
+  url: http://<YOUR IP>:8000
+  values: {}
+  valuesFrom:
+  - kind: ConfigMap
+    name: kubegems-global-values
+    optional: true
+    prefix: global.
+  version: 9.3.25
+```
+
+需要特别注意的是：
+
+- 由于 webui 展示时是从 kubegems-agent 请求并且会缓存该 chart，如果在更新 chart 后需要再次查看效果的，**可以将版本号增加，或者从 agent 中删除缓存的 chart**。
+- 部署时，是由 kubegems-installer 执行的安装，也会请求并缓存该 chart，如果在更新 chart 后需要再次查看效果的，**可以将版本号增加，或者从 installer 中删除缓存的 chart**
+
+## 发布插件
+
+在所有的工作准备完成后，就可以准备发布插件了。为保证插件正确，可以先执行一次：
+
+```sh
+make generate package check
+```
+
+发布插件只需要将插件的 chart 文件放在对应的目录，然后按照 kubgems 贡献流程提出 PR 即可。
