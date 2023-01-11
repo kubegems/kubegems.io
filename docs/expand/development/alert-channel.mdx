@@ -45,13 +45,14 @@ func Init(cfgs *config.ProxyConfigs) {
 	}
 }
 ```
-3. 将你的告警代理模板，填写在[config/deploy/alertproxy.yaml](config/deploy/alertproxy.yaml)文件中。
+3. 将你的告警代理模板，填写在[config/deploy/alertproxy.yaml](https://github.com/kubegems/alertproxy/blob/main/config/deploy/alertproxy.yaml)文件中。
 - type: 代理类型
 - template: 要渲染的模板内容，你可以在`DoRequest`渲染模板
 
 ### 运行&部署
 1. 本地运行
-自行修改[config/deploy/alertproxy.yaml](config/deploy/alertproxy.yaml)配置
+自行修改[config/deploy/alertproxy.yaml](https://github.com/kubegems/alertproxy/blob/main/config/deploy/alertproxy.yaml)配置
+
 ```bash
 go run main.go serve
 ```

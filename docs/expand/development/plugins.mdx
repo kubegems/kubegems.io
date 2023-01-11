@@ -28,7 +28,7 @@ description: KubeGems 与云原生生态插件开发指导
 ## 了解 Plugin 资源
 
 先来了解一下 `plugin` 资源，插件控制的主要资源就是`plugin`资源，
-plugin crd 由 [kubegems-installer](github.com/kubegems/kubegems/deploy/installer.yaml) 提供和处理的，
+plugin crd 由 [kubegems-installer](https://github.com/kubegems/kubegems/deploy/installer.yaml) 提供和处理的，
 要使用 plugin 需要先安装 installer。
 
 plugin 资源可以用来将一个 helm chart 部署到集群中。
@@ -200,9 +200,23 @@ spec:
 
 要能够部署上述的 plugin，就需要一个插件来生成上述的 plugin。那么上述的 plugin 就被作为被 template 的资源。
 
-> 插件没有模板，新增插件时可以参考 [plugins/cert-manager](plugins/cert-manager) 来编写。
+:::info 提示
+ 插件没有模板，新增插件时可以参考 [plugins/cert-manager](https://github.com/kubegems/plugins/tree/main/plugins/cert-manager) 来编写。
+:::
 
-插件用到的 annotations 可以从 [这里](README.md) 查看。
+插件用到的 annotations 可以从 [这里](https://github.com/kubegems/plugins/blob/main/README.md) 查看。
+
+Annotations used by kubegems plugin system in `Chart.yaml` `.annotations` field:
+
+| name                                    | example                          | desc                                                                 |
+| --------------------------------------- | -------------------------------- | -------------------------------------------------------------------- |
+| `plugins.kubegems.io/is-plugin`         | (required) "true"                | mark this chart is a kubegems plugin                                 |
+| `plugins.kubegems.io/install-namespace` | (required) "kubegems-installer"  | plugin install namespace                                             |
+| `plugins.kubegems.io/category`          | (required) "core/devops"         | 'core' is top category, 'devops' is category                         |
+| `plugins.kubegems.io/values-from`       | (optional) "logging,tracing"     | use values from other plugins                                        |
+| `plugins.kubegems.io/required`          | (optional) "true"                | this plugin is required for init installation and can't be uninstall |
+| `plugins.kubegems.io/health-check`      | (optional) "deployments.apps/\*" | health check targets                                                 |
+
 
 ```yaml
 # plugins/nginx-ingress-controller/Chart.yaml
@@ -246,7 +260,7 @@ spec:
 ```
 
 :::tip 提示
-common.images.repository 在 [plugins/common](plugins/common/templates/_helpers.tpl) 下,更多使用示例可以参照已有使用。
+common.images.repository 在 [plugins/common](https://github.com/kubegems/plugins/blob/main/plugins/common/templates/_helpers.tpl) 下,更多使用示例可以参照已有使用。
 :::
 增加 values 文件，将常用选项提出到 values 中，以便于 web ui 渲染。
 为了 web ui 能够正常渲染还需要使用 [kubegems/tools/helm-schema](https://github.com/kubegems/kubegems/blob/main/tools/helm-schema)来生成 schema，
