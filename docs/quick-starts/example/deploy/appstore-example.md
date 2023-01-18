@@ -1,7 +1,7 @@
 ---
 title: 从应用商店创建一个 MySQL 应用
 hide_title: true
-sidebar_position: 3
+sidebar_position: 1
 description: 本文用于指导用户在KubeGems快速通过应用商店部署一个服务
 keywords: [kubegems,KubeGems,kubernetes,appstore,helm,charts,schema]
 ---
