@@ -24,7 +24,7 @@ keywords: [kubegems, KubeGems, MLOps, AI, Seldon, Modelx]
 ![](./assets/models-plugins.jpg)
 
 :::info 依赖
-KubeGinfo的模型部署流程有 `Seldon Core` 实现，在启用 `kubegems-models` 插件之前，务必保证依赖的插件已部署且运行正常
+KubeGinfo的模型部署流程由 `Seldon Core` 实现，在启用 `kubegems-models` 插件之前，务必保证依赖的插件已部署且运行正常
 :::
 
 参数说明：

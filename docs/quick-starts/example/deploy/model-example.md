@@ -6,6 +6,10 @@ description: 本文用于指导用户在KubeGems模型商店中快速部署一�
 keywords: [kubegems,KubeGems,mlops,seldon,ai,HuggingFace,huggingface]
 ---
 
+## 从模型商店创建一个算法服务
+
+---
+
 ### 目标
 
 本文通过介绍在 KubeGems 中通过在线 HuggingFace 自动下载并部署一个算法应用，并提供简单的预览功能
@@ -57,7 +61,8 @@ keywords: [kubegems,KubeGems,mlops,seldon,ai,HuggingFace,huggingface]
 ![](assets/hg-vqa-7.jpg)
 
 :::tip 提示 
-KubeGems 的算法预览界面和推理框架根据 HuggingFace 的不同任务类型进行了自适配，无需用户在进行编码，开箱即用！
+1. 算法预览界面需要本地浏览器能够通过域名直接访问 算法 API 所在实例，例如图中的地址`http://api.models.kubegems.io:31956/e1/for-img-qa/v2/models/model/infer`
+2. KubeGems 的算法预览界面和推理框架根据 HuggingFace 的不同任务类型进行了自适配，无需用户在进行编码，开箱即用！
 :::
 
 ### 修改算法应用
