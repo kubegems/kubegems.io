@@ -17,8 +17,7 @@ keywords: [kubegems,kubernetes,observablity,istio,devops]
 作为一个面向云原生的通用型云平台，**KubeGems** 从立项开始就把支持多集群、多租户场景下的资源隔离作为其主要实现设计目标。用户可以对接入平台的 Kubernetes 集群做 *租户级* 的自定义资源规划。除此之外，我们提供了比原生 Dashboard 功能更加丰富且人性化操作的 UI 界面，让用户/企业根据自身场景规划平台元数据，而不用担心自己的业务和数据出现错乱。同时 KubeGems 也提供过了众多丰富的功能模块来为个人或企业用户带来更好的使用体验，例如 *访问控制、资源规划、网络隔离、租户网关、存储卷、可观察性、用户审计、证书管理、金丝雀发布、istio治理* 等功能。
 
 ### 功能概览
-
-![](./assets/kubegems.jpg)
+![](./assets/kubegems-1.jpg)
 
 ### 关于KubeGems
 
