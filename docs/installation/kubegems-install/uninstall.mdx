@@ -44,3 +44,22 @@ $ kubectl delete ns kubegems-installer
 :::tip提示
 ${KUBEGEMS_VERSION} 填写您安装的 KubeGems版本
 :::
+
+### 卸载 WebHook 
+
+如果您的集群在卸载 KubeGems 后遇到更新资源报错，例如
+
+![](./assets/webhook-error.png)
+
+造成此报错的原因可能是 Kubernetes 中的 MutateWebhook 没有清除，请手动删除即可
+
+```bash
+kubectl delete mutatingwebhookconfigurations kubegems-local-controller-webhook
+kubectl delete validatingwebhookconfigurations kubegems-local-controller-webhook
+```
+
+:::tip 什么是 Kubernetes Admission Webhook
+[**Admission Webhook**](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/extensible-admission-controllers/) 是一种用于接收准入请求并对其进行处理的 HTTP 回调机制。 可以定义两种类型的准入 webhook，即验证性质的准入 Webhook 和 修改性质的准入 Webhook。 
+- 修改性质的准入 Webhook (MutatingWebhook) 会先被调用。它们可以更改发送到 API 服务器的对象以执行自定义的设置默认值操作。在完成了所有对象修改并且 API 服务器也验证了所传入的对象之后， 
+- 验证性质的 Webhook (ValidatingWebhook) 会被调用，并通过拒绝请求的方式来强制实施自定义的策略。
+:::
