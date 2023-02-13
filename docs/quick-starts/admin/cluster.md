@@ -26,6 +26,10 @@ keywords: [kubegems, KubeGems, kubernetes]
 
 - 点击 【添加集群】，将集群的 kubeconfig 文件粘贴至文本框。
 
+:::info 什么是 Kubeconfig 文件
+Kubernetes 使用名为 kubeconfig 的 YAML 文件存储 kubectl 的集群身份验证信息。kubeconfig 包含 kubectl 在运行命令时引用的上下文列表。默认情况下，该文件保存在 $HOME/.kube/config。
+:::
+
   ![](./assets/cluster-import-2.jpg)
 
 输入集群名称 等其他选项。
