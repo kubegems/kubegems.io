@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[1927],{65954:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"seldon","count":1,"permalink":"/blog/tags/seldon"}')}}]);

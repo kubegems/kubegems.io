@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[7747],{2810:function(e){e.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"mlserver","count":1,"permalink":"/blog/tags/mlserver"}')}}]);

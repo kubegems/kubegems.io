@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[2167],{13641:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"mlops","count":1,"permalink":"/blog/tags/mlops"}')}}]);

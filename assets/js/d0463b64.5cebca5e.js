@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[7305],{48462:function(e){e.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"kubegems","count":5,"permalink":"/blog/tags/kubegems"}')}}]);

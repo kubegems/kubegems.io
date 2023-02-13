@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[5702],{17745:function(e){e.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"huggingface","count":1,"permalink":"/blog/tags/huggingface"}')}}]);
