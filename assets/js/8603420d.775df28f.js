@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[8193],{19365:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"tracing","count":2,"permalink":"/blog/tags/tracing"}')}}]);

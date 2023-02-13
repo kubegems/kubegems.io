@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkubegems_docs=self.webpackChunkkubegems_docs||[]).push([[3929],{71629:function(s){s.exports=JSON.parse('{"allTagsPath":"/blog/tags","name":"promtheus","count":1,"permalink":"/blog/tags/promtheus"}')}}]);
