@@ -41,7 +41,7 @@ KubeGems 离线部署方案由 SealOS 社区提供技术支持，非常感谢 [c
 :::
 
 离线镜像包包含:
-- kubegems-<需要安装的版本>.tar
+- kubegems-stack-<需要安装的版本>.tar
 - kubernetes-v1.23.15.tar
 - coredns-v0.0.1.tar
 - helm-v3.8.2.tar 
@@ -50,9 +50,7 @@ KubeGems 离线部署方案由 SealOS 社区提供技术支持，非常感谢 [c
 
 :::info 提示（非必须下载）
 如需启用 KubeGems 算法模型商店，需下载额外的 AI 扩展镜像包
-- kubegems-<需要安装的版本>-ai1.tar
-- kubegems-<需要安装的版本>-ai2.tar
-- kubegems-<需要安装的版本>-ai3.tar
+- kubegems-stack-ai<需要安装的版本>.tar
 :::
   </TabItem>
 
@@ -68,7 +66,7 @@ $ wget https://github.com/labring/sealos/releases/download/v4.0.0/sealos_4.0.0_l
 2. 下载镜像包
 
 ```bash
-$ sealos pull labring/kubegems:<需要安装的版本>
+$ sealos pull kubegems/kubegems-stack:<需要安装的版本>
 $ sealos pull labring/kubernetes:v1.23.15
 $ sealos pull labring/coredns:v0.0.1
 $ sealos pull labring/helm:v3.8.2
@@ -80,9 +78,7 @@ $ sealos pull labring/openebs:v1.9.0
 如需启用 KubeGems 算法模型商店，需下载额外的 AI 扩展镜像包
 
 ```bash
-$ sealos pull labring/kubegems:<需要安装的版本>-ai1    (~5.5GB)
-$ sealos pull labring/kubegems:<需要安装的版本>-ai2    (~5GB)
-$ sealos pull labring/kubegems:<需要安装的版本>-ai3    (~11GB)
+$ sealos pull kubegems/kubegems-stack-ai:<需要安装的版本>    (~>20GB)
 ```
 
 *说明： SealOS Build 在线镜像存在容量限制，AI 扩展镜像包推荐在百度网盘上下载*
@@ -91,7 +87,7 @@ $ sealos pull labring/kubegems:<需要安装的版本>-ai3    (~11GB)
 3. 导出镜像包
 
 ```bash
-$ sealos save -o kubegems.tar labring/kubegems:<需要安装的版本>
+$ sealos save -o kubegems.tar kubegems/kubegems-stack:<需要安装的版本>
 $ sealos save -o kubernetes-v1.23.15.tar labring/kubernetes:v1.23.15
 $ sealos save -o coredns-v0.0.1.tar labring/coredns:v0.0.1
 $ sealos save -o helm-v3.8.2.tar labring/helm:v3.8.2
@@ -131,7 +127,7 @@ $ wget https://github.com/labring/sealos/releases/download/v4.0.0/sealos_4.0.0_l
 3. 导入镜像包
 
 ```bash
-$ sealos load -i kubegems-<需要安装的版本>.tar
+$ sealos load -i kubegems-stack-<需要安装的版本>.tar
 $ sealos load -i kubernetes-v1.23.15.tar
 $ sealos load -i coredns-v0.0.1.tar
 $ sealos load -i helm-v3.8.2.tar
@@ -143,9 +139,7 @@ $ sealod load -i openebs-v1.9.0.tar
 如需启用 KubeGems 算法模型商店，需导入额外的 AI 扩展镜像包
 
 ```bash
-$ sealos load -i kubegems-<需要安装的版本>-ai1.tar
-$ sealos load -i kubegems-<需要安装的版本>-ai2.tar
-$ sealos load -i kubegems-<需要安装的版本>-ai3.tar
+$ sealos load -i kubegems-stack-ai-<需要安装的版本>.tar
 :::
 
 4. 使用命令 `sealos images` 可查看 sealos 导入的镜像包信息
@@ -160,7 +154,7 @@ $ sealos run \
   labring/calico:v3.22.1 \
   labring/coredns:v0.0.1 \
   labring/openebs:v1.9.0 \
-  labring/kubegems:<需要安装的版本>
+  kubegems/kubegems-stack:<需要安装的版本>
 ```
 
 :::info 提示（非必须安装）
@@ -174,10 +168,8 @@ $ sealos run \
   labring/calico:v3.22.1 \
   labring/coredns:v0.0.1 \
   labring/openebs:v1.9.0 \
-  labring/kubegems:<需要安装的版本> \
-  labring/kubegems:<需要安装的版本>-ai1 \
-  labring/kubegems:<需要安装的版本>-ai2 \
-  labring/kubegems:<需要安装的版本>-ai3 
+  kubegems/kubegems-stack:<需要安装的版本> \
+  kubegems/kubegems-stack-ai:<需要安装的版本>
 :::
 
 :::caution 重要提示
@@ -198,8 +190,8 @@ REVISION: 1
 TEST SUITE: None
 NOTES:
 CHART NAME: kubegems-installer
-CHART VERSION: 1.22.2
-APP VERSION: 1.22.2
+CHART VERSION: 1.23.0
+APP VERSION: 1.23.0
 
 ** Please be patient while the chart is being deployed **
 
@@ -213,8 +205,8 @@ REVISION: 1
 TEST SUITE: None
 NOTES:
 CHART NAME: kubegems
-CHART VERSION: 1.22.2
-APP VERSION: 1.22.2
+CHART VERSION: 1.23.0
+APP VERSION: 1.23.0
 
 ** Please be patient while the chart is being deployed **
 

@@ -96,6 +96,14 @@ spec:
         cpu: 100m
         memory: 100Mi
     upgradeStrategy: RollingUpdate # deployment strategy
+    # pod相关属性,containers名称必须设置为 model
+    podSpec:
+      contaienrs:
+        - name: model
+      # 其余 pod 的特性可参考 podspec api 描述
+      # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podspec-v1-core
+      nodeSelector:
+        kubernetes.io/hostname: kubegems-gpu-1
   # ingress 配置
   ingress:
     host: api.models.kubegems.io # ingress host
