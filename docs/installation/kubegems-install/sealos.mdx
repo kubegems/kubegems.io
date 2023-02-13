@@ -119,6 +119,34 @@ visit http://172.31.136.79:32529, user: admin password: demo!@#admin
 
 ```
 
+### 访问 KubeGems 仪表盘
+
+执行命令`kubectl get svc -n kubegems`，获取`kubegems-dashboard`服务的 nodeport 端口
+
+```sh
+NAME                              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                       AGE
+kubegems-api                      ClusterIP   10.96.3.233   <none>        80/TCP,9100/TCP               6h20m
+kubegems-argo-cd-app-controller   ClusterIP   10.96.0.14    <none>        8082/TCP                      6h20m
+kubegems-argo-cd-repo-server      ClusterIP   10.96.2.128   <none>        8081/TCP                      6h20m
+kubegems-argo-cd-server           ClusterIP   10.96.3.171   <none>        80/TCP,443/TCP                6h20m
+kubegems-chartmuseum              ClusterIP   10.96.3.226   <none>        8080/TCP                      6h20m
+kubegems-dashboard                NodePort    10.96.3.13    <none>        80:31347/TCP,9100:32409/TCP   6h20m
+kubegems-gitea-http               ClusterIP   None          <none>        3000/TCP                      6h20m
+kubegems-gitea-ssh                ClusterIP   None          <none>        22/TCP                        6h20m
+kubegems-msgbus                   ClusterIP   10.96.3.235   <none>        80/TCP,9100/TCP               6h20m
+kubegems-mysql                    ClusterIP   10.96.3.7     <none>        3306/TCP                      6h20m
+kubegems-mysql-headless           ClusterIP   None          <none>        3306/TCP                      6h20m
+kubegems-redis-headless           ClusterIP   None          <none>        6379/TCP                      6h20m
+kubegems-redis-master             ClusterIP   10.96.2.114   <none>        6379/TCP                      6h20m
+kubegems-worker                   ClusterIP   10.96.2.239   <none>        80/TCP,9100/TCP               6h20m
+```
+
+:::tip登录信息
+您可以通过在浏览器输入： http://<Master_IP>:31347 ，即可访问仪表盘 <br/>
+用户名: admin  <br/>
+登录密码: demo!@#admin
+:::
+
 ### 下一步
 
-请移步 [快速入门](../../category/快速入门) 进行平台设置
+请移步 [快速入门](../../category/快速入门) 进行 [Kubernetes集群导入](../../quick-starts/admin/cluster) 设置
