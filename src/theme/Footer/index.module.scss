@@ -1,0 +1,32 @@
+.footer {
+  &__left {
+    float: left;
+    
+    @media (max-width: 996px) {
+      margin-left: 10px;
+    }
+  }
+
+  &__right {
+    float: right;
+
+    @media (max-width: 996px) {
+      float: left;
+    }
+  }
+
+  &__clear {
+    clear: both;
+  }
+
+  &__title {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 150%;
+    /* identical to box height, or 21px */
+  
+    color: #4A4A4A;
+  }
+}

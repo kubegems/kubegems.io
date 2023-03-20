@@ -131,3 +131,15 @@ html[data-theme='dark'] {
     height: calc(100vh) !important;
   }
 }
+
+.col--6 {
+  position: relative;
+}
+
+.col--12 {
+  position: relative;
+}
+
+.navbar {
+  box-shadow: none;
+}

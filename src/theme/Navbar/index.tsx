@@ -42,10 +42,6 @@ const Navbar = (): JSX.Element => {
     <nav
       ref={navbarRef}
       className={clsx("navbar", "navbar--fixed-top",
-        hideOnScroll && [
-          styles.navbarHideable,
-          !isNavbarVisible && styles.navbarHidden,
-        ],
         {
           "navbar--dark": style === "dark",
           "navbar--primary": style === "primary",
@@ -89,7 +85,7 @@ const Navbar = (): JSX.Element => {
               />
             }
 
-            <Link
+            {/* <Link
               key="console"
               className="navbar__login button button--primary"
               to="https://demo.kubegems.io"
@@ -100,7 +96,7 @@ const Navbar = (): JSX.Element => {
             <div className="navbar__login__account">
               <div className="navbar__login__info">账号: admin</div>
               <div className="navbar__login__info">密码: demo!@#admin</div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
