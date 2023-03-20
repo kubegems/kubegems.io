@@ -4,12 +4,11 @@ import { debounce } from '../../utils';
 import styles from './index.module.scss';
 
 const PAGE_IDS = [
-  'welcome',
-  'whykubegems1',
-  // 'whykubegems2',
-  'documents',
-  'resources',
-  'footer'
+  'home',
+  'cloudNative',
+  'ai',
+  'benefit',
+  'team',
 ]
 
 const PageNav = (): JSX.Element => {
@@ -62,7 +61,7 @@ const PageNav = (): JSX.Element => {
     const fx = debounce(scrollFunc, 100, true);
     browserWindow.current.addEventListener('mousewheel', fx);
     document.body.classList.add(styles.pagenav__document);
-  
+
     return () => {
       unmounted.current = true;
       browserWindow.current.removeEventListener('mousewheel', fx);
@@ -72,7 +71,7 @@ const PageNav = (): JSX.Element => {
   }
 
   const setIndexOnHash = () => {
-    browserWindow.current.location.hash = browserWindow.current.location.hash || '#/welcome';
+    browserWindow.current.location.hash = browserWindow.current.location.hash || '#/home';
     const hash = browserWindow.current.location.hash.replace('#/', '');
     const i = PAGE_IDS.indexOf(hash);
     index.current = i === -1 ? 0 : i;

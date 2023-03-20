@@ -1,0 +1,39 @@
+.team {
+  height: calc(100vh - var(--ifm-navbar-height));
+  background: url("/img/page/bg-r.png") no-repeat;
+  position: relative;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+
+  @media (max-width: 996px) {
+    height: auto;
+  }
+
+  &__main {
+    height: calc(100vh - var(--ifm-navbar-height));
+    padding: 5rem 0;
+  }
+
+  &__title {
+    color: #333;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  &__item {
+    margin-top: 2rem;
+  }
+
+  &__subtitle {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 120%;
+    /* identical to box height, or 58px */
+    text-align: center;
+
+    color: #1E88E5;
+    margin-top: 30px;
+  }
+}

@@ -3,7 +3,8 @@
 
   &__main {
     position: relative;
-    background: linear-gradient(135deg,var(--ifm-color-primary-lightest) 0%, var(--ifm-color-primary) 76%);
+    // background: linear-gradient(135deg,var(--ifm-color-primary-lightest) 0%, var(--ifm-color-primary) 76%);
+    background-color: #F5F7F9;
     background-size: 100% 100vh;
     background-attachment: fixed;
   }
