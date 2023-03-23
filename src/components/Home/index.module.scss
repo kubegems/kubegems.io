@@ -21,7 +21,7 @@
 
   &__title {
     margin: 8%;
-    margin-top: 23%;
+    margin-top: 33%;
 
     @media (max-width: 996px) {
       margin-top: 15%;
@@ -29,7 +29,7 @@
   }
 
   &__subtitle {  
-    font-family: 'Roboto';
+    font-family: 'kubegems';
     font-style: normal;
     font-weight: 700;
     font-size: 32px;
@@ -41,10 +41,10 @@
   }
 
   &__fisrttitle {
-    font-family: 'Roboto';
+    font-family: 'kubegems';
     font-style: normal;
-    font-weight: 700;
-    font-size: 56px;
+    font-weight: 400;
+    font-size: 60px;
     line-height: 120%;
     /* or 67px */
   
@@ -66,21 +66,6 @@
   }
 
   &__fontcolor {
-    color: #000000;
-  }
-
-  &__partner {
-    margin-top: 5%;
-    text-align: center;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 150%;
-    /* identical to box height, or 27px */
-    text-align: center;
-  
-    /* Black */
     color: #000000;
   }
 

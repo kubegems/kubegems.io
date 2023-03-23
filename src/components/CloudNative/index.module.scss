@@ -1,5 +1,5 @@
 .cloud {
-  height: calc(100vh - var(--ifm-navbar-height));
+  // height: calc(100vh - var(--ifm-navbar-height));
   background: url("/img/page/bg.png") no-repeat;
   position: relative;
   background-size: 100% 100%;
@@ -11,7 +11,7 @@
 
   &__img {
     &__right {
-      margin-left: 40%;
+      margin-left: 35%;
       width: 55%;
       margin-top: 7%;
 
@@ -23,7 +23,7 @@
     }
 
     &__left {
-      margin-left: 10%;
+      margin-left: 15%;
       width: 55%;
       margin-top: 5%;
 
@@ -52,9 +52,9 @@
   }
 
   &__subtitle {
-    font-family: 'Roboto';
+    font-family: 'kubegems';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 28px;
     line-height: 120%;
     /* or 38px */
@@ -64,9 +64,9 @@
   }
 
   &__fisrttitle {
-    font-family: 'Roboto';
+    font-family: 'kubegems';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 48px;
     line-height: 120%;
     /* or 67px */
@@ -79,7 +79,7 @@
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 200%;
     /* or 28px */
 
@@ -92,23 +92,43 @@
     color: #000000;
   }
 
-  &__core {
-    font-family: 'Roboto';
+  &__partner {
+    margin-top: 20px;
+    text-align: center;
+    font-family: 'kubegems';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 150%;
+    /* identical to box height, or 27px */
+    text-align: center;
+
+    /* Black */
+    color: #1E88E5;
+
+    &__item {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  }
+
+  &__core {
+    font-family: 'kubegems';
+    font-style: normal;
+    font-weight: 400;
     font-size: 36px;
     line-height: 120%;
     /* identical to box height, or 58px */
     text-align: center;
   
     color: #1E88E5;
-    margin-top: 30px;
+    margin-top: 80px;
 
     &__desc {
       font-family: 'Roboto';
       font-style: normal;
       font-weight: 400;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 150%;
       /* identical to box height, or 21px */
       text-align: center;
