@@ -1,5 +1,9 @@
 @import './font-icon/iconfont.css';
 @import 'rc-texty/assets/index.css';
+@font-face {
+  font-family: 'kubegems';
+  src: url('/font/PangMenZhengDaoBiaoTiTi.ttf');
+}
 
 /* 自定义主题覆盖 */
 :root {

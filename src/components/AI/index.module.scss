@@ -1,5 +1,5 @@
 .ai {
-  height: calc(100vh - var(--ifm-navbar-height));
+  // height: calc(100vh - var(--ifm-navbar-height));
   background: url("/img/page/bg-r.png") no-repeat;
   position: relative;
   background-size: 100% 100%;
@@ -11,9 +11,9 @@
 
   &__img {
     &__right {
-      margin-left: 40%;
+      margin-left: 35%;
       width: 55%;
-      margin-top: 15%;
+      margin-top: 6%;
 
       @media (max-width: 996px) {
         width: 80%;
@@ -23,7 +23,7 @@
     }
 
     &__left {
-      margin-left: 10%;
+      margin-left: 15%;
       width: 55%;
       margin-top: 8%;
 
@@ -47,14 +47,14 @@
     &__right {
       margin-left: 15%;
       margin-right: 15%;
-      margin-top: 18%;
+      margin-top: 10%;
     }
   }
 
   &__subtitle {
-    font-family: 'Roboto';
+    font-family: 'kubegems';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 28px;
     line-height: 120%;
     /* or 38px */
@@ -64,9 +64,9 @@
   }
 
   &__fisrttitle {
-    font-family: 'Roboto';
+    font-family: 'kubegems';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 48px;
     line-height: 120%;
     /* or 67px */
@@ -79,7 +79,7 @@
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 200%;
     /* or 28px */
 

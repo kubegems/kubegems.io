@@ -1,9 +1,11 @@
 .team {
-  height: calc(100vh - var(--ifm-navbar-height));
+  // height: calc(100vh - var(--ifm-navbar-height));
   background: url("/img/page/bg-r.png") no-repeat;
   position: relative;
   background-size: 100% 100%;
   background-attachment: fixed;
+  margin-top: 30px;
+  padding-bottom: 100px;
 
   @media (max-width: 996px) {
     height: auto;
@@ -25,9 +27,9 @@
   }
 
   &__subtitle {
-    font-family: 'Roboto';
+    font-family: 'kubegems';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 36px;
     line-height: 120%;
     /* identical to box height, or 58px */
