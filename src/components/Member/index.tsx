@@ -58,6 +58,33 @@ const Team = () => {
     },
   ]
 
+  const brands = [
+    {
+      id: '1',
+      brand: './img/page/brand/earthquake.png',
+    },
+    {
+      id: '2',
+      brand: './img/page/brand/hpe.png',
+    },
+    {
+      id: '3',
+      brand: './img/page/brand/msxf.png',
+    },
+    {
+      id: '4',
+      brand: './img/page/brand/qax.png',
+    },
+    {
+      id: '5',
+      brand: './img/page/brand/zkzh.png',
+    },
+    {
+      id: '6',
+      brand: './img/page/brand/jz.png',
+    },
+  ]
+
   return (
     <section id='team' className={styles.team}>
       <div className='row' style={{ marginBottom: '50px' }}>
@@ -76,6 +103,25 @@ const Team = () => {
           </div>
         ))}
       </QueueAnim>
+
+      <div className='row'>
+        <div className='col col--12'>
+          <div className={styles.team__partner}>
+            <div style={{ marginBottom: '20px' }}>用户</div>
+            <div
+              className='row'>
+              <div className='col col--1'></div>
+              <div className='col col--1'></div>
+              <div className='col col--1'></div>
+              {brands.map(item => (
+                <div key={item.id} className={clsx(styles.team__partner__item, 'col col--1')}>
+                  <img src={item.brand}></img>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   )
 }

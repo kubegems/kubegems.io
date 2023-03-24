@@ -1,55 +1,20 @@
+/*
+ * @Author: leon.chen imchensl@163.com
+ * @Date: 2023-03-16 15:43:44
+ * @LastEditors: leon.chen imchensl@163.com
+ * @LastEditTime: 2023-03-24 13:26:50
+ * @FilePath: /kubegems.io/src/components/CloudNative/index.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import React from 'react';
 import styles from './index.module.scss';
 import clsx from 'clsx';
 
 const CloudNative = (props) => {
-  const brands = [
-    {
-      id: '1',
-      brand: './img/page/brand/1.png',
-    },
-    {
-      id: '2',
-      brand: './img/page/brand/2.png',
-    },
-    {
-      id: '3',
-      brand: './img/page/brand/3.png',
-    },
-    {
-      id: '4',
-      brand: './img/page/brand/4.png',
-    },
-    {
-      id: '5',
-      brand: './img/page/brand/5.png',
-    },
-    {
-      id: '6',
-      brand: './img/page/brand/6.png',
-    },
-  ]
 
   return (
     <section id='cloudNative' className={styles.cloud}>
       <div className='row'>
-        <div className='col col--12'>
-          <div className={styles.cloud__partner}>
-            <div style={{ marginBottom: '20px' }}>合作伙伴</div>
-            <div
-              className='row'>
-              <div className='col col--1'></div>
-              <div className='col col--1'></div>
-              <div className='col col--1'></div>
-              {brands.map(item => (
-                <div key={item.id} className={clsx(styles.cloud__partner__item, 'col col--1')}>
-                  <img src={item.brand}></img>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
         <div className='col col--12'>
           <div className={styles.cloud__core}>
             <div>核心功能</div>
