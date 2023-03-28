@@ -27,10 +27,10 @@
   }
 
   &__subtitle {
-    font-family: 'kubegems';
+    // font-family: 'kubegems';
     font-style: normal;
-    font-weight: 400;
-    font-size: 36px;
+    font-weight: 700;
+    font-size: 56px;
     line-height: 120%;
     /* identical to box height, or 58px */
     text-align: center;
@@ -42,10 +42,10 @@
   &__partner {
     margin-top: 80px;
     text-align: center;
-    font-family: 'kubegems';
+    // font-family: 'kubegems';
     font-style: normal;
-    font-weight: 400;
-    font-size: 36px;
+    font-weight: 700;
+    font-size: 56px;
     line-height: 150%;
     /* identical to box height, or 27px */
     text-align: center;
@@ -56,6 +56,13 @@
     &__item {
       padding-left: 0 !important;
       padding-right: 0 !important;
+      float: left;
+      width: 200px;
+
+
+      @media (max-width: 996px) {
+        margin-left: 2%;
+      }
     }
   }
 }

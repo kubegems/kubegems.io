@@ -1,14 +1,8 @@
-/*
- * @Author: leon.chen imchensl@163.com
- * @Date: 2023-03-16 15:43:44
- * @LastEditors: leon.chen imchensl@163.com
- * @LastEditTime: 2023-03-24 13:26:50
- * @FilePath: /kubegems.io/src/components/CloudNative/index.tsx
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import React from 'react';
 import styles from './index.module.scss';
 import clsx from 'clsx';
+import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 const CloudNative = (props) => {
 
@@ -24,16 +18,34 @@ const CloudNative = (props) => {
         <div className='col col--6'>
           <img src='./img/page/cloud-native.png' className={styles.cloud__img__right}></img>
           <div className={styles.cloud__title__left}>
-            <div className={styles.cloud__subtitle}>CloudNative</div>
-            <div className={styles.cloud__fisrttitle}><abbr className={styles.cloud__fontcolor}>云原生生态</abbr></div>
-            <div className={styles.cloud__desc}>以插件的⽅式对云原⽣⽣态内应⽤实现即时插拔。内置丰富的应⽤市场、控制器和服务治理套件，实现对应⽤的⽣命周期、CI/CD和服务治理的全⾯控制</div>
+            <div className={styles.cloud__fisrttitle}><abbr className={styles.cloud__fontcolor}>可观测性</abbr></div>
+            <div className={styles.cloud__subtitle}>Observability</div>
+            <div className={styles.cloud__desc}>⽀持多种开发语⾔ SDK 集成，兼容OpenTelemetry 协议。内置丰富的监控告警模版与订阅渠道，可满⾜企业多样化的监控系统可视化需求</div>
+            <Link
+              key='start'
+              className={clsx(
+                'button--primary',
+              )}
+              style={{ marginBottom: '30px', fontWeight: 700 }}
+              to={useBaseUrl('docs/concepts/function/observability')}>
+              详情{['>']}
+            </Link>
           </div>
         </div>
         <div className='col col--6'>
           <div className={styles.cloud__title__right}>
-            <div className={styles.cloud__subtitle}>Observability</div>
-            <div className={styles.cloud__fisrttitle}><abbr className={styles.cloud__fontcolor}>可观测性</abbr></div>
-            <div className={styles.cloud__desc}>⽀持多种开发语⾔ SDK 集成，兼容OpenTelemetry 协议。内置丰富的监控告警模版与订阅渠道，可满⾜企业多样化的监控系统可视化需求</div>
+            <div className={styles.cloud__fisrttitle}><abbr className={styles.cloud__fontcolor}>云原生生态</abbr></div>
+            <div className={styles.cloud__subtitle}>CloudNative</div>
+            <div className={styles.cloud__desc}>以插件的⽅式对云原⽣⽣态内应⽤实现即时插拔。内置丰富的应⽤市场、控制器和服务治理套件，实现对应⽤的⽣命周期、CI/CD和服务治理的全⾯控制</div>
+            <Link
+              key='start'
+              className={clsx(
+                'button--primary',
+              )}
+              style={{ marginBottom: '30px', fontWeight: 700 }}
+              to={useBaseUrl('docs/concepts/function/apps')}>
+              详情{['>']}
+            </Link>
           </div>
           <img src='./img/page/observability.png' className={styles.cloud__img__left}></img>
         </div>

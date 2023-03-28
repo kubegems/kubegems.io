@@ -7,7 +7,7 @@ const Benefit = (props) => {
       <div className='row'>
         <div className='col col--12'>
           <div className={styles.benefit__title}>
-            <div>客户增益</div>
+            <div>KubeGems Prime</div>
           </div>
         </div>
         <div className='col col--4'>

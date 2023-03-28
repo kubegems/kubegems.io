@@ -38,12 +38,12 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          lastVersion: 'current',
-          versions: {
-            current: {
-              label: 'v1.23',
-            },
-          },
+          // lastVersion: 'current',
+          // versions: {
+          //   current: {
+          //     label: 'v1.23',
+          //   },
+          // },
           // Please change this to your repo.
           editUrl: 'https://github.com/kubegems/kubegems.io/edit/main/',
           showLastUpdateAuthor: true,
@@ -170,12 +170,12 @@ const config = {
             position: 'left',
             key: 'contact'
           },
-          {
-            type: 'docsVersionDropdown',
-            position: 'right',
-            dropdownActiveClassDisabled: false,
-            key: 'version'
-          },
+          // {
+          //   type: 'docsVersionDropdown',
+          //   position: 'right',
+          //   dropdownActiveClassDisabled: false,
+          //   key: 'version'
+          // },
           // {
           //   type: 'localeDropdown',
           //   position: 'right',

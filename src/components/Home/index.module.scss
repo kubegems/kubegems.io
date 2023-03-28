@@ -5,14 +5,47 @@
   background-size: 100% 100%;
   background-attachment: fixed;
 
+  &__login {
+  
+    &:hover + &__account {
+      display: block;
+    }
+
+    &__account {
+      display: none;
+      position: absolute;
+      right: 322px;
+      top: 52px;
+      background-color: #fff;
+      padding: 0.4rem 0.5rem;
+      border-radius: 0.4rem;
+      box-shadow: 0 5px 40px rgba(0, 0, 0, .2);
+      transition-duration: 200ms;
+      transition-property: opacity, transform, visibility;
+      transition-timing-function: cubic-bezier(0.08, 0.52, 0.52, 1);
+      font-size: 0.9rem;
+
+      &:hover {
+        display: block;
+      }
+    }
+
+    &__info {
+      background-color: rgba(0, 0, 0, .05);
+      padding: 0.3rem 0.5rem;
+      border-radius: 0.2rem;
+      margin: 0.3rem 0;
+    }
+  }
+
   @media (max-width: 996px) {
     height: auto;
   }
 
   &__img {
-    margin-left: 7%;
-    width: 85%;
-    margin-top: 10%;
+    margin-left: 2%;
+    width: 90%;
+    margin-top: 15%;
 
     @media (max-width: 996px) {
       margin-top: 5%;
@@ -21,7 +54,9 @@
 
   &__title {
     margin: 8%;
-    margin-top: 33%;
+    margin-left: 15%;
+    margin-right: 5%;
+    margin-top: 32%;
 
     @media (max-width: 996px) {
       margin-top: 15%;
@@ -31,25 +66,25 @@
   &__subtitle {  
     font-family: 'kubegems';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 32px;
     line-height: 120%;
     /* or 38px */
   
     color: #1E88E5;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
   }
 
   &__fisrttitle {
-    font-family: 'kubegems';
+    font-family: 'Microsoft YaHei';
     font-style: normal;
-    font-weight: 400;
-    font-size: 60px;
+    font-weight: 700;
+    font-size: 68px;
     line-height: 120%;
     /* or 67px */
   
-    color: #1E88E5;
-    margin-bottom: 60px;
+    color: #000000;
+    margin-bottom: 20px;
   }
 
   &__desc {  
