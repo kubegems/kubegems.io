@@ -107,17 +107,18 @@ const Team = () => {
       <div className='row'>
         <div className='col col--12'>
           <div className={styles.team__partner}>
-            <div style={{ marginBottom: '20px' }}>用户</div>
+            <div style={{ marginBottom: '60px' }}>用户案例</div>
             <div
               className='row'>
               <div className='col col--1'></div>
               <div className='col col--1'></div>
-              <div className='col col--1'></div>
               {brands.map(item => (
-                <div key={item.id} className={clsx(styles.team__partner__item, 'col col--1')}>
+                <div key={item.id} className={clsx(styles.team__partner__item)}>
                   <img src={item.brand}></img>
                 </div>
               ))}
+              <div className='col col--1'></div>
+              <div className='col col--1'></div>
             </div>
           </div>
         </div>

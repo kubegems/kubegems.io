@@ -1,11 +1,3 @@
-/*
- * @Author: leon.chen imchensl@163.com
- * @Date: 2023-03-16 13:40:38
- * @LastEditors: leon.chen imchensl@163.com
- * @LastEditTime: 2023-03-24 16:28:34
- * @FilePath: /kubegems.io/src/pages/index.tsx
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import React, { useRef } from 'react';
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -16,6 +8,7 @@ import CloudNative from '../components/CloudNative'
 import AI from '../components/AI'
 import Benefit from '../components/Benefit'
 import Member from '../components/Member'
+import Comment from '../components/Comment'
 import styles from './index.module.scss';
 
 export default function Home(): JSX.Element {
@@ -34,6 +27,7 @@ export default function Home(): JSX.Element {
           <CloudNative />
           <AI />
           <Benefit />
+          {/* <Comment /> */}
           <Member />
         </div>
       </main>

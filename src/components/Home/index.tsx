@@ -12,10 +12,12 @@ const HomePage = (props) => {
       <div className='row'>
         <div className='col col--6'>
           <div className={styles.home__title}>
+            <div className={styles.home__fisrttitle}>更便捷<abbr className={styles.home__fontcolor}>的云原生
+              <div>容器云平台</div>
+            </abbr></div>
             <div className={styles.home__subtitle}>Let cloudnative management more easily</div>
-            <div className={styles.home__fisrttitle}>“更便捷”<abbr className={styles.home__fontcolor}>的云原生管理平台</abbr></div>
             <TweenOne
-              style={{ opacity: 0, marginBottom: -100 }}
+              style={{ opacity: 0, marginBottom: -100, position: 'relative' }}
               animation={{ opacity: 1, marginBottom: 0 }}
             >
               <Link
@@ -23,20 +25,26 @@ const HomePage = (props) => {
                 className={clsx(
                   'button button--primary button--lg',
                 )}
-                style={{ marginRight: '15px', marginTop: '5px', float: 'left' }}
+                style={{ marginRight: '15px', marginTop: '5px', float: 'left', width: '150px' }}
                 to={useBaseUrl('docs/installation/kubegems-install/self-hosted')}>
-                Kubernetes 安装
+                安装
               </Link>
 
               <Link
                 key='start'
                 className={clsx(
                   'button button--primary button--lg',
+                  styles.home__login,
                 )}
-                style={{ marginRight: '15px', marginTop: '5px', float: 'left' }}
+                style={{ marginRight: '15px', marginTop: '5px', float: 'left', width: '150px' }}
                 to="https://demo.kubegems.io">
-                一键体验demo
+                在线demo
               </Link>
+
+              <div className={styles.home__login__account}>
+                <div className={styles.home__login__info}>账号: admin</div>
+                <div className={styles.home__login__info}>密码: demo!@#admin</div>
+              </div>
 
               <div
                 style={{ marginRight: '15px', marginTop: '5px', float: 'left', lineHeight: '46px' }}

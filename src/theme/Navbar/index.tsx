@@ -38,10 +38,18 @@ const Navbar = (): JSX.Element => {
 
   const mobileSidebar = useNavbarMobileSidebar();
 
+  const isHomePage = location.pathname === '/'
+
   return (
     <nav
       ref={navbarRef}
       className={clsx("navbar", "navbar--fixed-top",
+        // !isNavbarVisible && styles.navbarShown,
+        // !hideOnScroll || [
+        //   styles.navbarHideable,
+        //   isNavbarVisible && styles.navbarHidden,
+        // ],
+        // !isHomePage && styles.navbarShown,
         {
           "navbar--dark": style === "dark",
           "navbar--primary": style === "primary",
