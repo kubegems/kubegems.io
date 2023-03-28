@@ -9,25 +9,39 @@ const Footer = (): JSX.Element => {
 
   return (
     <footer className='footer' id='footer'>
-      <div>
-        <div className={styles.footer__left}>
+      <div className='row'>
+        <div className='col col--2'>
           <img src='./img/logo.svg' style={{ marginTop: '25px' }}></img>
         </div>
-        <div className={styles.footer__right}>
-          <div style={{ marginTop: '10px', marginLeft: '15px' }}>
+        <div className='col col--7'>
+          {/* <div className='row'>
+            <div className='col col--3'></div>
+            <div className='col col--3'>
+              产品
+            </div>
+            <div className='col col--3'>
+              关于
+            </div>
+            <div className='col col--3'>
+              联系我们
+            </div>
+          </div> */}
+        </div>
+        <div className='col col--1'>
+          <img src='./img/page/qrcode.png'></img>
+        </div>
+        <div className='col col--2'>
+          <div >
             <div>Web: https://kubegems.io</div>
             <div>Email: support@kubegems.io</div>
           </div>
-          <div style={{ marginTop: '5px', marginLeft: '15px' }}>
+          <div style={{ marginTop: '5px' }}>
             <div className={styles.footer__title}>更便捷的云原生管理平台</div>
             <div>Let cloudnative management more easily</div>
           </div>
         </div>
-        <div className={styles.footer__right}>
-          <img src='./img/page/qrcode.png'></img>
-        </div>
       </div>
-      <div className={styles.footer__clear}></div>
+
       <div className='text--center'>{copyright}</div>
     </footer >
   )
