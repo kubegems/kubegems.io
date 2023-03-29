@@ -59,6 +59,10 @@
       float: left;
       width: 200px;
 
+      &__r {
+        margin-right: 20px;
+      }
+
 
       @media (max-width: 996px) {
         margin-left: 2%;
