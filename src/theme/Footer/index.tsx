@@ -14,7 +14,7 @@ const Footer = (): JSX.Element => {
     <footer className='footer' id='footer'>
       <div className='row'>
         <div className='col col--2'>
-          <img src='/img/logo.svg' style={{ marginTop: '25px' }}></img>
+          <img src='/img/logo.svg' style={{ marginTop: '35px' }}></img>
         </div>
         <div className='col col--7'>
           <div className='row'>
@@ -69,7 +69,7 @@ const Footer = (): JSX.Element => {
               </div>
 
               <div className={clsx(styles.footer__div)}>
-                <div className={clsx(styles.footer__link, styles.footer__link__font)}>Community</div>
+                <div className={clsx(styles.footer__link)}>社区</div>
                 <div>
                   <Link
                     key='start'
@@ -79,6 +79,7 @@ const Footer = (): JSX.Element => {
                     )}
                     style={{ marginBottom: '30px', }}
                     to={useBaseUrl('https://github.com/kubegems')}>
+                    <img width="16px" style={{ marginRight: '5px' }} src="/img/page/github-icon.svg"></img>
                     Github
                   </Link>
                 </div>
@@ -91,6 +92,7 @@ const Footer = (): JSX.Element => {
                     )}
                     style={{ marginBottom: '30px', }}
                     to={useBaseUrl('https://kubegems.slack.com/')}>
+                    <img width="16px" style={{ marginRight: '5px' }} src="/img/page/slack-icon.svg"></img>
                     Slack
                   </Link>
                 </div>
@@ -103,6 +105,7 @@ const Footer = (): JSX.Element => {
                     )}
                     style={{ marginBottom: '30px', }}
                     to={useBaseUrl('https://twitter.com/KubeGems')}>
+                    <img width="16px" style={{ marginRight: '5px' }} src="/img/page/twitter.svg"></img>
                     Twitter
                   </Link>
                 </div>
@@ -115,6 +118,7 @@ const Footer = (): JSX.Element => {
                     )}
                     style={{ marginBottom: '30px', }}
                     to={useBaseUrl('https://www.youtube.com/@LinkMaq1')}>
+                    <img width="16px" style={{ marginRight: '5px' }} src="/img/page/youtube-icon.svg"></img>
                     YouTube
                   </Link>
                 </div>
@@ -127,13 +131,14 @@ const Footer = (): JSX.Element => {
                     )}
                     style={{ marginBottom: '30px', }}
                     to={useBaseUrl('https://space.bilibili.com/316793859')}>
+                    <img width="16px" style={{ marginRight: '5px' }} src="/img/page/bilibili.png"></img>
                     Bilibili
                   </Link>
                 </div>
               </div>
 
               <div className={clsx(styles.footer__div)}>
-                <div className={clsx(styles.footer__link, styles.footer__link__font)}>More</div>
+                <div className={clsx(styles.footer__link)}>更多</div>
                 <div>
                   <Link
                     key='start'
@@ -173,10 +178,10 @@ const Footer = (): JSX.Element => {
             </div>
           </div>
         </div>
-        <div className='col col--1'>
+        <div className='col col--1' style={{ marginTop: '20px' }}>
           <img src='/img/page/qrcode.png'></img>
         </div>
-        <div className='col col--2'>
+        <div className='col col--2' style={{ marginTop: '20px' }}>
           <div >
             <div>Web: https://kubegems.io</div>
             <div>Email: support@kubegems.io</div>

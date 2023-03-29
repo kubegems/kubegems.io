@@ -113,7 +113,7 @@ const Team = () => {
               <div className='col col--1'></div>
               <div className='col col--1'></div>
               {brands.map(item => (
-                <div key={item.id} className={clsx(styles.team__partner__item)}>
+                <div key={item.id} className={clsx(styles.team__partner__item, item.id === '1' ? styles.team__partner__item__r : '')}>
                   <img src={item.brand}></img>
                 </div>
               ))}
