@@ -38,8 +38,6 @@ const Navbar = (): JSX.Element => {
 
   const mobileSidebar = useNavbarMobileSidebar();
 
-  const isHomePage = location.pathname === '/'
-
   return (
     <nav
       ref={navbarRef}
