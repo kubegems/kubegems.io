@@ -7,13 +7,13 @@ import styles from './index.module.scss';
 
 const Team = () => {
   const members = [
-    {
-      id: '1',
-      avatar: 'https://github.com/KinglyWayne.png',
-      name: '王伟 (Wayne Wang)',
-      post: '⾸席解决⽅案架构师',
-      intro: '国内⼈⼯智能独⻆兽公司⾼级技术总监。《Kubernetes 权威指南》、《企业级容器云架构实战开发指南》作者之⼀',
-    },
+    // {
+    //   id: '1',
+    //   avatar: 'https://github.com/KinglyWayne.png',
+    //   name: '王伟 (Wayne Wang)',
+    //   post: '⾸席解决⽅案架构师',
+    //   intro: '国内⼈⼯智能独⻆兽公司⾼级技术总监。《Kubernetes 权威指南》、《企业级容器云架构实战开发指南》作者之⼀',
+    // },
     {
       id: '2',
       avatar: 'https://github.com/LinkMaq.png',
@@ -83,6 +83,10 @@ const Team = () => {
       id: '6',
       brand: './img/page/brand/jz.png',
     },
+    {
+      id: '7',
+      brand: './img/page/brand/feita.png',
+    },
   ]
 
   return (
@@ -110,7 +114,6 @@ const Team = () => {
             <div style={{ marginBottom: '60px' }}>用户案例</div>
             <div
               className='row'>
-              <div className='col col--1'></div>
               <div className='col col--1'></div>
               {brands.map(item => (
                 <div key={item.id} className={clsx(styles.team__partner__item, item.id === '1' ? styles.team__partner__item__r : '')}>
