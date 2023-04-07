@@ -6,7 +6,7 @@ import clsx from 'clsx';
 const People = ({ avatar, name, post, intro }): JSX.Element => {
   return (
     <div className={styles.member}>
-      <div className={styles.member__intro}> {intro} </div>
+      {/* <div className={styles.member__intro}> {intro} </div> */}
       <div className={clsx('row', styles.member__n)}>
         <div className='col col--4'>
           <img src={avatar} alt={name} className={styles.member__avatar} />
