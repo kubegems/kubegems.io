@@ -1,5 +1,9 @@
 @import './font-icon/iconfont.css';
 @import 'rc-texty/assets/index.css';
+@font-face {
+  font-family: 'kubegems';
+  src: url('/font/PangMenZhengDaoBiaoTiTi.ttf');
+}
 
 /* 自定义主题覆盖 */
 :root {
@@ -130,4 +134,16 @@ html[data-theme='dark'] {
   .theme-doc-sidebar-container {
     height: calc(100vh) !important;
   }
+}
+
+.col--6 {
+  position: relative;
+}
+
+.col--12 {
+  position: relative;
+}
+
+.navbar {
+  box-shadow: none;
 }

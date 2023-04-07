@@ -1,0 +1,125 @@
+.cloud {
+  // height: calc(100vh - var(--ifm-navbar-height));
+  background: url("/img/page/bg.png") no-repeat;
+  position: relative;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+
+  @media (max-width: 996px) {
+    height: auto;
+  }
+
+  &__img {
+    &__right {
+      margin-left: 20%;
+      width: 75%;
+      margin-top: 7%;
+
+      @media (max-width: 996px) {
+        width: 80%;
+        margin-left: 10%;
+        margin-top: 2%;
+      }
+    }
+
+    &__left {
+      margin-left: 5%;
+      width: 75%;
+      margin-top: 5%;
+
+      @media (max-width: 996px) {
+        width: 80%;
+        margin-left: 10%;
+        margin-top: 0%;
+      }
+    }
+  }
+
+
+  &__title {
+    &__left {
+      margin-left: 15%;
+      margin-right: 15%;
+      margin-top: 10%;
+      text-align: right;
+    }
+
+    &__right {
+      margin-left: 15%;
+      margin-right: 15%;
+      margin-top: 20%;
+    }
+  }
+
+  &__subtitle {
+    font-family: 'kubegems';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 120%;
+    /* or 38px */
+
+    color: #1E88E5;
+    margin-bottom: 10px;
+  }
+
+  &__fisrttitle {
+    // font-family: 'kubegems';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 120%;
+    /* or 67px */
+
+    color: #FECA03;
+  }
+
+  &__desc {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 200%;
+    /* or 28px */
+
+    /* Black */
+    color: #000000;
+    margin-bottom: 10px;
+  }
+
+  &__fontcolor {
+    color: #1E88E5;
+  }
+
+  &__core {
+    // font-family: 'kubegems';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 120%;
+    /* identical to box height, or 58px */
+    text-align: center;
+  
+    color: #1E88E5;
+    margin-top: 80px;
+
+    &__desc {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 150%;
+      /* identical to box height, or 21px */
+      text-align: center;
+    
+      /* Black */
+      color: #000000;
+      margin-top: 10px;
+
+      @media (max-width: 996px) {
+        margin-left: 5%;
+        margin-right: 5%;
+      }
+    }
+  }
+}

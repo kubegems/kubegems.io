@@ -1,0 +1,60 @@
+.footer {
+  &__left {
+    float: left;
+    
+    @media (max-width: 996px) {
+      margin-left: 10px;
+    }
+  }
+
+  &__right {
+    float: right;
+
+    @media (max-width: 996px) {
+      float: left;
+    }
+  }
+
+  &__clear {
+    clear: both;
+  }
+
+  &__title {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 150%;
+    /* identical to box height, or 21px */
+  
+    color: #4A4A4A;
+  }
+
+  &__link {
+    font-size: 14px;
+    color: #1E88E5;
+    font-weight: 700;
+    margin-bottom: 15px;
+
+    &__font {
+      font-family: 'kubegems';
+      font-weight: 400;
+    }
+
+    &__color {
+      color: grey;
+      font-size: 14px;
+      line-height: 30px;
+    }
+  }
+
+  &__div {
+    float: left;
+    width: 250px;
+
+    @media (max-width: 996px) {
+      padding: 20px !important;
+      width: 130px;
+    }
+  }
+}

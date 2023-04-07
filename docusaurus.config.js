@@ -38,12 +38,12 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          lastVersion: 'current',
-          versions: {
-            current: {
-              label: 'v1.23',
-            },
-          },
+          // lastVersion: 'current',
+          // versions: {
+          //   current: {
+          //     label: 'v1.23',
+          //   },
+          // },
           // Please change this to your repo.
           editUrl: 'https://github.com/kubegems/kubegems.io/edit/main/',
           showLastUpdateAuthor: true,
@@ -118,13 +118,13 @@ const config = {
           content: 'kubegems.io/ingress-nginx-operator https://github.com/kubegems/ingress-nginx-operator https://github.com/kubegems/ingress-nginx-operator/tree/master{/dir} https://github.com/kubegems/ingress-nginx-operator/blob/master{/dir}/{file}#L{line}'
         },
       ],
-      announcementBar: {
-        id: 'support_us',
-        content:
-          '⭐️ <b>If you like KubeGems, give it a star on <a target="_blank" href="https://github.com/kubegems/kubegems">GitHub</a> and follow us on <a target="_blank" href="https://twitter.com/KubeGems">Twitter</a>  <a title="Twitter, Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;, via Wikimedia Commons" href="https://twitter.com/KubeGems"><img width="16" height="13" alt="Twitter-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Twitter-logo.svg/32px-Twitter-logo.svg.png"></a></b> ',
-        backgroundColor: 'rgba(0, 0, 0, 0.03)',
-        isCloseable: false,
-      },
+      // announcementBar: {
+      //   id: 'support_us',
+      //   content:
+      //     '⭐️ <b>If you like KubeGems, give it a star on <a target="_blank" href="https://github.com/kubegems/kubegems">GitHub</a> and follow us on <a target="_blank" href="https://twitter.com/KubeGems">Twitter</a>  <a title="Twitter, Apache License 2.0 &lt;http://www.apache.org/licenses/LICENSE-2.0&gt;, via Wikimedia Commons" href="https://twitter.com/KubeGems"><img width="16" height="13" alt="Twitter-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Twitter-logo.svg/32px-Twitter-logo.svg.png"></a></b> ',
+      //   backgroundColor: 'rgba(0, 0, 0, 0.03)',
+      //   isCloseable: false,
+      // },
       hideableSidebar: true,
       autoCollapseSidebarCategories: true,
       zoom: {
@@ -170,23 +170,23 @@ const config = {
             position: 'left',
             key: 'contact'
           },
-          {
-            type: 'docsVersionDropdown',
-            position: 'right',
-            dropdownActiveClassDisabled: false,
-            key: 'version'
-          },
-          {
-            type: 'localeDropdown',
-            position: 'right',
-            key: 'locale'
-          },
+          // {
+          //   type: 'docsVersionDropdown',
+          //   position: 'right',
+          //   dropdownActiveClassDisabled: false,
+          //   key: 'version'
+          // },
+          // {
+          //   type: 'localeDropdown',
+          //   position: 'right',
+          //   key: 'locale'
+          // },
         ],
       },
-      footer: {
-        style: 'light',
-        copyright: `Copyright © ${new Date().getFullYear()} KubeGems.io .`,
-      },
+      // footer: {
+      //   style: 'light',
+      //   copyright: `Copyright © ${new Date().getFullYear()} KubeGems.io .`,
+      // },
       // hideableSidebar: true,
       prism: {
         theme: lightCodeTheme,
