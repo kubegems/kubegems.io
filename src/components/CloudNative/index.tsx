@@ -20,10 +20,10 @@ const CloudNative = (props) => {
           <div className={styles.cloud__title__left}>
             <div className={styles.cloud__fisrttitle}><abbr className={styles.cloud__fontcolor}>可观测性</abbr></div>
             <div className={styles.cloud__subtitle}>Observability</div>
-            <div className={styles.cloud__desc}>与 Rancher k3s联合，支持云边一体化管理。内置了边缘设备的统一注册和认证机制。支持边缘应用的异步批量化更新。极大地提高企业 IoT 和边缘架构下的应用控制和管理效率</div>
+            <div className={styles.cloud__desc}>提供租户级的监控、日志、事件、审计搜索和分析功能，⽀持 OpenTelemetry 协议以及个开发语言的 SDK 接入。内置丰富的监控、告警等模版和多种通知通道，可满⾜企业日常多样化的监控和可视化场景</div>
             <Link
               key='start'
-              className={clsx(
+              className={clsx(~
                 'button--primary',
               )}
               style={{ marginBottom: '30px', fontWeight: 700 }}
