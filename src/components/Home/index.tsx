@@ -15,7 +15,7 @@ const HomePage = (props) => {
             <div className={styles.home__fisrttitle}>更便捷<abbr className={styles.home__fontcolor}>的云原生
               <div>容器云平台</div>
             </abbr></div>
-            <div className={styles.home__subtitle}>Let cloudnative management more easily</div>
+            <div className={styles.home__subtitle}>Simplify your cloud native journey</div>
             <TweenOne
               style={{ opacity: 0, marginBottom: -100, position: 'relative' }}
               animation={{ opacity: 1, marginBottom: 0 }}
@@ -27,7 +27,7 @@ const HomePage = (props) => {
                 )}
                 style={{ marginRight: '15px', marginTop: '5px', float: 'left', width: '150px' }}
                 to={useBaseUrl('docs/installation/kubegems-install/self-hosted')}>
-                安装
+                快速开始
               </Link>
 
               <Link
@@ -38,7 +38,7 @@ const HomePage = (props) => {
                 )}
                 style={{ marginRight: '15px', marginTop: '5px', float: 'left', width: '150px' }}
                 to="https://demo.kubegems.io">
-                在线demo
+                在线演示
               </Link>
 
               <div className={styles.home__login__account}>
@@ -54,7 +54,7 @@ const HomePage = (props) => {
                   float: 'right',
                   fontFamily: 'Roboto',
                   fontSize: '16px'
-                }}>观看介绍视频</div>
+                }}>介绍视频</div>
               </div>
               <div style={{ clear: 'both' }} />
             </TweenOne>
