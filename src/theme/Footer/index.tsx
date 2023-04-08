@@ -188,7 +188,7 @@ const Footer = (): JSX.Element => {
           </div>
           <div style={{ marginTop: '5px' }}>
             <div className={styles.footer__title}>更便捷的云原生管理平台</div>
-            <div>Let cloudnative management more easily</div>
+            <div>Simplify your cloud native journey</div>
           </div>
         </div>
       </div>
