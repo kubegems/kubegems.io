@@ -74,10 +74,6 @@ const Team = () => {
     },
     {
       id: '6',
-      brand: './img/page/brand/qax.png',
-    },
-    {
-      id: '6',
       brand: './img/page/brand/zkzh.png',
     },
     {
@@ -87,6 +83,10 @@ const Team = () => {
     {
       id: '8',
       brand: './img/page/brand/feita.png',
+    },
+    {
+      id: '6',
+      brand: './img/page/brand/qax.png',
     },
   ]
 
@@ -121,13 +121,13 @@ const Team = () => {
               slidesToScroll: 1,
               autoplay: true,
               arrows: false,
-              speed: 2000,
-              autoplaySpeed: 500,
+              speed: 2500,
+              autoplaySpeed: 10,
               cssEase: "linear"
             }}>
               {brands.map(item => (
                 <div key={item.id} className={clsx(styles.team__partner__item, item.id === '1' ? styles.team__partner__item__r : '')}>
-                  <img src={item.brand}></img>
+                  <img className={clsx(item.id === '3' ? styles.team__partner__item__t : '', styles.team__partner__item__img)} src={item.brand}></img>
                 </div>
               ))}
             </Slider>
