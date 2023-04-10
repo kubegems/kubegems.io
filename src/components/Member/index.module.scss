@@ -62,13 +62,21 @@
     }
 
     &__item {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
+      padding-left: 15px !important;
+      padding-right: 15px !important;
       float: left;
-      width: 200px;
+      width: 212px;
 
       &__r {
-        margin-right: 20px;
+        width: 152px;
+      }
+
+      &__t {
+        margin-top: 20px !important;
+      }
+
+      &__img {
+        max-height: 88px;
       }
 
 
