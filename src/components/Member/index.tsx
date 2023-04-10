@@ -4,6 +4,10 @@ import clsx from 'clsx';
 import QueueAnim from 'rc-queue-anim';
 import People from './components/People';
 import styles from './index.module.scss';
+import Slider from "react-slick";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const Team = () => {
   const members = [
@@ -62,22 +66,26 @@ const Team = () => {
     },
     {
       id: '3',
-      brand: './img/page/brand/msxf.png',
+      brand: './img/page/brand/cloudminds.png',
     },
     {
       id: '4',
-      brand: './img/page/brand/qax.png',
-    },
-    {
-      id: '5',
-      brand: './img/page/brand/zkzh.png',
+      brand: './img/page/brand/msxf.png',
     },
     {
       id: '6',
-      brand: './img/page/brand/jz.png',
+      brand: './img/page/brand/qax.png',
+    },
+    {
+      id: '6',
+      brand: './img/page/brand/zkzh.png',
     },
     {
       id: '7',
+      brand: './img/page/brand/jz.png',
+    },
+    {
+      id: '8',
       brand: './img/page/brand/feita.png',
     },
   ]
@@ -105,7 +113,25 @@ const Team = () => {
         <div className='col col--12'>
           <div className={styles.team__partner}>
             <div style={{ marginBottom: '60px' }}>用户案例</div>
-            <div
+
+            <Slider {...{
+              dots: false,
+              infinite: true,
+              slidesToShow: 7,
+              slidesToScroll: 1,
+              autoplay: true,
+              arrows: false,
+              speed: 2000,
+              autoplaySpeed: 500,
+              cssEase: "linear"
+            }}>
+              {brands.map(item => (
+                <div key={item.id} className={clsx(styles.team__partner__item, item.id === '1' ? styles.team__partner__item__r : '')}>
+                  <img src={item.brand}></img>
+                </div>
+              ))}
+            </Slider>
+            {/* <div
               className='row'>
               <div className='col col--1'></div>
               {brands.map(item => (
@@ -114,8 +140,7 @@ const Team = () => {
                 </div>
               ))}
               <div className='col col--1'></div>
-              <div className='col col--1'></div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
