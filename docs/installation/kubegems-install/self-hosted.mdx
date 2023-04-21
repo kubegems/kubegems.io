@@ -153,7 +153,7 @@ $ kubectl -n kubegems port-forward svc/kubegems-dashboard 8080:80
 你需要编辑 kubegems 插件，为 dashbnoard 组件开启 nodeport
 
 ```sh
-$ kubectl -n kubegems edit plugins.plugins.kubegems.io kubegems
+$ kubectl -n kubegems-installer edit plugins.plugins.kubegems.io kubegems
 ```
 
 示例:
@@ -186,7 +186,7 @@ kubegems 默认创建了 hostname 为 `dashboard.kubegems.io` 的 ingress, 同�
 :::
 
 ```sh
-kubectl -n kubegems edit plugins.plugins.kubegems.io kubegems
+kubectl -n kubegems-installer edit plugins.plugins.kubegems.io kubegems
 ```
 
 示例:
