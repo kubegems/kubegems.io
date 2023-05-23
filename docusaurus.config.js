@@ -106,6 +106,10 @@ const config = {
           content: 'kubegems.io/modelx git https://github.com/kubegems/modelx'
         },
         {
+          name: 'go-import',
+          content: 'kubegems.io/library git https://github.com/kubegems/library'
+        },
+        {
           name: 'go-source', 
           content: 'kubegems.io/kubegems https://github.com/kubegems/kubegems https://github.com/kubegems/kubegems/tree/master{/dir} https://github.com/kubegems/kubegems/blob/master{/dir}/{file}#L{line}'
         },
@@ -125,6 +129,10 @@ const config = {
           name: 'go-source',
           content: 'kubegems.io/modelx https://github.com/kubegems/modelx https://github.com/kubegems/modelx/tree/main{/dir} https://github.com/kubegems/modelx/blob/main{/dir}/{file}#L{line}'
         },
+        {
+          name: 'go-source',
+          content: 'kubegems.io/library https://github.com/kubegems/library https://github.com/kubegems/library/tree/main{/dir} https://github.com/kubegems/library/blob/main{/dir}/{file}#L{line}'
+        }
       ],
       // announcementBar: {
       //   id: 'support_us',
