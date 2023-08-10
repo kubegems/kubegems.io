@@ -399,7 +399,7 @@ spec:
 
 需要特别注意的是：
 
-- 由于 webui 展示时是从 kubegems-agent 请求并且会缓存该 chart，如果在更新 chart 后需要再次查看效果的，**可以将版本号增加，或者从 agent 中删除缓存的 chart**。
+- 由于 webui 展示时是从 kubegems-installer namespace下的 plugin-repository前缀的对应repo secret中 读取plugins index缓存，如果在更新 chart 后需要再次查看效果的，**可以将版本号增加，或者从secret中删除缓存的chart index**
 - 部署时，是由 kubegems-installer 执行的安装，也会请求并缓存该 chart，如果在更新 chart 后需要再次查看效果的，**可以将版本号增加，或者从 installer 中删除缓存的 chart**
 
 ## 发布插件
