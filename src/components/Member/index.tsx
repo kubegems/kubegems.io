@@ -64,10 +64,10 @@ const Team = () => {
       id: '2',
       brand: './img/page/brand/hpe.png',
     },
-    {
-      id: '3',
-      brand: './img/page/brand/cloudminds.png',
-    },
+    // {
+    //   id: '3',
+    //   brand: './img/page/brand/cloudminds.png',
+    // },
     {
       id: '4',
       brand: './img/page/brand/msxf.png',

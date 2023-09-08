@@ -22,9 +22,9 @@ sidebar_position: 3
 
 [掘金](https://juejin.cn/user/3218961614770414) / [CSDN](https://blog.csdn.net/weixin_49366475?type=blog) / [简书](https://www.jianshu.com/users/732d97337566/timeline)
  
-### 🏢 企业
+<!-- ### 🏢 企业
 
 
 | 公司 | 介绍 |
 | --- | --- |
-|[CloudMinds](https://cloudminds.com)| Operator of cloud-based systems for intelligent robots |
+|[CloudMinds](https://cloudminds.com)| Operator of cloud-based systems for intelligent robots | -->
