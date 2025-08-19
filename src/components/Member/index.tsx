@@ -64,7 +64,7 @@ const Team = () => {
       id: '8',
       avatar: 'https://github.com/torresyhy.png',
       name: 'Joe ye',
-      post: 'KubeGems 核心研发',
+      post: 'KubeGems 核心成员',
       intro: '主攻 AI 应用智能体方向，有丰富的教育行业场景研发经验',
     },
   ]
