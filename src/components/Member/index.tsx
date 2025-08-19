@@ -52,6 +52,20 @@ const Team = () => {
       name: 'Ruitao Liu',
       post: '高级存储工程师 & 云原生分布式存储方向',
       intro: '主攻 Ceph 分布式存储和对象存储⽅向',
+    },    
+    {
+      id: '7',
+      avatar: 'https://github.com/zhengkes.png',
+      name: 'Ke Zheng',
+      post: '高级存储工程师 & 云原生分布式存储方向',
+      intro: '主攻 Ceph 分布式存储和对象存储⽅向',
+    },
+    {
+      id: '8',
+      avatar: 'https://github.com/torresyhy.png',
+      name: 'Joe ye',
+      post: 'KubeGems 核心研发',
+      intro: '主攻 AI 应用智能体方向，有丰富的教育行业场景研发经验',
     },
   ]
 
