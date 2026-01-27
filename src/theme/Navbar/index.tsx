@@ -39,9 +39,76 @@ const Navbar = (): JSX.Element => {
   const mobileSidebar = useNavbarMobileSidebar();
 
   return (
-    <nav
-      ref={navbarRef}
-      className={clsx("navbar", "navbar--fixed-top",
+    <>
+      {/* 全站商业版本迁移通知 */}
+      <div style={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        padding: '8px 20px',
+        textAlign: 'center',
+        boxShadow: '0 2px 8px rgba(102, 126, 234, 0.25)',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        fontSize: '14px'
+      }}>
+        <div style={{ 
+          maxWidth: '1400px', 
+          margin: '0 auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '10px',
+          flexWrap: 'wrap'
+        }}>
+          <span style={{
+            background: 'rgba(255, 255, 255, 0.2)',
+            padding: '2px 10px',
+            borderRadius: '12px',
+            fontSize: '13px',
+            fontWeight: '600'
+          }}>
+            📢 通知
+          </span>
+          <span style={{ fontSize: '14px', fontWeight: '500' }}>
+            由于运营压力，KubeGems 社区版已停更，感谢大家的支持
+          </span>
+          <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>|</span>
+          <span style={{ fontSize: '14px' }}>
+            访问：
+            <a 
+              href="https://poxiaoshi.cn" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                color: '#fff',
+                textDecoration: 'none',
+                fontWeight: '600',
+                marginLeft: '6px',
+                padding: '4px 12px',
+                background: 'rgba(255, 255, 255, 0.25)',
+                borderRadius: '4px',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.35)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
+              }}
+            >
+              poxiaoshi.cn →
+            </a>
+            {' '}获取商业版支持
+          </span>
+        </div>
+      </div>
+      <nav
+        ref={navbarRef}
+        style={{ top: '38px' }}
+        className={clsx("navbar", "navbar--fixed-top",
         // !isNavbarVisible && styles.navbarShown,
         // !hideOnScroll || [
         //   styles.navbarHideable,
@@ -110,6 +177,7 @@ const Navbar = (): JSX.Element => {
       <NavbarBackdrop onClick={mobileSidebar.toggle} />
       <NavbarMobileSidebar />
     </nav>
+    </>
   );
 };
 
